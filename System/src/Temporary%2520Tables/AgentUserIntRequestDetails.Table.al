@@ -17,7 +17,7 @@ table 2000000286 "Agent User Int Request Details"
 {
     Caption = 'Agent Task User Intervention Request Details';
     ReplicateData = false;
-    Scope = OnPrem; // TODO(agent) - This should change to Cloud when ready to expose agents.
+    Scope = Cloud;
     TableType = Temporary;
 
     fields
@@ -59,6 +59,39 @@ table 2000000286 "Agent User Int Request Details"
         {
             Caption = 'Record ID';
             Tooltip = 'Specifies the ID of the record the intervention request is intended for.';
+        }
+        /// <summary>
+        /// The user intervention request title.
+        /// </summary>
+        /// <remarks>
+        /// This information is currently not available in <see cref="IAgentTaskExecution.GetAgentTaskUserInterventionSuggestions"/>.
+        /// </remarks>
+        field(6; Title; Text[2048])
+        {
+            Caption = 'Title';
+            ToolTip = 'Specifies the user intervention request title.';
+        }
+        /// <summary>
+        /// The user intervention request message.
+        /// </summary>
+        /// <remarks>
+        /// This information is currently not available in <see cref="IAgentTaskExecution.GetAgentTaskUserInterventionSuggestions"/>.
+        /// </remarks>
+        field(7; Message; Text[2048])
+        {
+            Caption = 'Message';
+            ToolTip = 'Specifies the user intervention request message.';
+        }
+        /// <summary>
+        /// The Message ID for which the user intervention request is sent. This applies to Review Message requests only.
+        /// </summary>
+        /// <remarks>
+        /// This information is currently not available in <see cref="IAgentTaskExecution.GetAgentTaskUserInterventionSuggestions"/>.
+        /// </remarks>
+        field(8; "Message ID"; Guid)
+        {
+            Caption = 'Message ID';
+            ToolTip = 'Specifies the user intervention request message ID.';
         }
     }
 

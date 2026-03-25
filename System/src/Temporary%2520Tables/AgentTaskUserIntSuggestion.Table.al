@@ -17,7 +17,7 @@ table 2000000279 "Agent Task User Int Suggestion"
 {
     Caption = 'Agent Task User Intervention Suggestion';
     ReplicateData = false;
-    Scope = OnPrem; // TODO(agent) - This should change to Cloud when ready to expose agents.
+    Scope = Cloud;
     TableType = Temporary;
 
     fields

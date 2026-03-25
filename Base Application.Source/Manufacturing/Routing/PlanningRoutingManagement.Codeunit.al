@@ -76,6 +76,8 @@ codeunit 99000808 PlanningRoutingManagement
         PlanningRtngLine2: Record "Planning Routing Line";
         SequenceNo: Integer;
     begin
+        OnBeforeSetRtngLineSequenceBack(RoutingType, PlanningRtngLine, MaxSequences, ActSequences, TotalCalculation);
+
         if RoutingType = RoutingType::Parallel then begin
             if (Actsequences - 1) > Maxsequences then
                 ErrorInRouting(
@@ -138,6 +140,8 @@ codeunit 99000808 PlanningRoutingManagement
         PlanningRtngLine2: Record "Planning Routing Line";
         SequenceNo: Integer;
     begin
+        OnBeforeSetRtngLineSequenceForward(RoutingType, PlanningRtngLine, MaxSequences, ActSequences, TotalCalculation);
+
         if RoutingType = RoutingType::Parallel then begin
             if ActSequences > MaxSequences then
                 ErrorInRouting(
@@ -238,6 +242,8 @@ codeunit 99000808 PlanningRoutingManagement
         PlanningRtngLine2: Record "Planning Routing Line";
         MaxSeq: Integer;
     begin
+        OnBeforeCalcSequenceFromActual(PlanningRtngLine, Direction, ReqLine);
+
         if NeedsCalculation(
              ReqLine."Worksheet Template Name",
              ReqLine."Journal Batch Name",
@@ -452,14 +458,14 @@ codeunit 99000808 PlanningRoutingManagement
         OnAfterCalculatePlanningLineDates(ReqLine2);
     end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Planning Line Management", 'OnGetResiliencyErrorOnRouting', '', false, false)]
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Planning Line Management", 'OnGetResiliencyErrorOnRouting', '', true, false)]
     local procedure OnGetResiliencyErrorOnRouting(var PlanningErrorLog: Record "Planning Error Log"; var ShouldExit: Boolean)
     begin
         if CalculatePlanningRouteLine.GetResiliencyError(PlanningErrorLog) then
             ShouldExit := true;
     end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Planning Line Management", 'OnBeforeRecalculateWithOptionalModify', '', false, false)]
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Planning Line Management", 'OnBeforeRecalculateWithOptionalModify', '', true, false)]
     local procedure OnBeforeRecalculateWithOptionalModify(var RequisitionLine: Record "Requisition Line"; Direction: Option Forward,Backward)
     begin
         CalculateRouting(RequisitionLine, Direction);
@@ -586,6 +592,21 @@ codeunit 99000808 PlanningRoutingManagement
 
     [IntegrationEvent(false, false)]
     local procedure OnAfterCalculatePlanningLineDates(var RequisitionLine: Record "Requisition Line")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeSetRtngLineSequenceBack(RoutingType: Option Serial,Parallel; var PlanningRoutingLine: Record "Planning Routing Line"; MaxSequences: Integer; ActSequences: Integer; TotalCalculation: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeSetRtngLineSequenceForward(RoutingType: Option Serial,Parallel; var PlanningRoutingLine: Record "Planning Routing Line"; MaxSequences: Integer; ActSequences: Integer; TotalCalculation: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeCalcSequenceFromActual(PlanningRoutingLine: Record "Planning Routing Line"; Direction: Option Forward,Backward; var RequisitionLine: Record "Requisition Line")
     begin
     end;
 }

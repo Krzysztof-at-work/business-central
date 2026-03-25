@@ -179,7 +179,13 @@ codeunit 99000774 "Calculate Routing Line"
         RemainNeedQtyBase: Decimal;
         StartingTime: Time;
         StopLoop: Boolean;
+        IsHandled: Boolean;
     begin
+        IsHandled := false;
+        OnBeforeCreateLoadBack(RemainNeedQty, CalendarEntry, TimeType, Write, FirstEntry, WaitTimeOnly, CurrentWorkCenterNo, ProdStartingDate, ProdStartingTime, ProdEndingDate, ProdEndingTime, IsHandled);
+        if IsHandled then
+            exit;
+
         xConCurrCap := 1;
         if (RemainNeedQty = 0) and ((not FirstEntry) or (not Write) or WaitTimeOnly) then
             exit;
@@ -276,6 +282,11 @@ codeunit 99000774 "Calculate Routing Line"
         StopLoop: Boolean;
         IsHandled: Boolean;
     begin
+        IsHandled := false;
+        OnBeforeCreateLoadForward(RemainNeedQty, CalendarEntry, TimeType, Write, LoadFactor, FirstEntry, WaitTimeOnly, CurrentWorkCenterNo, ProdStartingDate, ProdStartingTime, ProdEndingDate, ProdEndingTime, IsHandled);
+        if IsHandled then
+            exit;
+
         xConCurrCap := 1;
         if (RemainNeedQty = 0) and ((not FirstEntry) or (not Write) or WaitTimeOnly) then
             exit;
@@ -360,7 +371,7 @@ codeunit 99000774 "Calculate Routing Line"
                         CalendarEntry := OldCalendarEntry;
                         StopLoop := CalendarEntry.Next() = 0;
                     end;
-                OnCreateLoadForwardOnBeforeEndStopLoop(ProdOrderRoutingLine, TimeType, StopLoop);
+                OnCreateLoadForwardOnBeforeEndStopLoop(ProdOrderRoutingLine, TimeType, StopLoop, FirstEntry, WaitTimeOnly, ProdStartingDate, ProdStartingTime, ProdEndingDate, ProdEndingTime, RemainNeedQty, RemainNeedQtyBase, Write, LoadFactor, CurrentWorkCenterNo, CurrentTimeFactor, CurrentRounding, CalendarEntry);
             until StopLoop;
             RemainNeedQty := Round(RemainNeedQtyBase / CurrentTimeFactor, CurrentRounding);
         end;
@@ -2373,7 +2384,7 @@ codeunit 99000774 "Calculate Routing Line"
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnCreateLoadForwardOnBeforeEndStopLoop(ProdOrderRoutingLine: Record "Prod. Order Routing Line"; TimeType: Enum "Routing Time Type"; var StopLoop: Boolean)
+    local procedure OnCreateLoadForwardOnBeforeEndStopLoop(ProdOrderRoutingLine: Record "Prod. Order Routing Line"; TimeType: Enum "Routing Time Type"; var StopLoop: Boolean; FirstEntry: Boolean; WaitTimeOnly: Boolean; ProdStartingDate: Date; ProdStartingTime: Time; ProdEndingDate: Date; ProdEndingTime: Time; var RemainNeedQty: Decimal; var RemainNeedQtyBase: Decimal; Write: Boolean; LoadFactor: Decimal; CurrentWorkCenterNo: Code[20]; CurrentTimeFactor: Decimal; CurrentRounding: Decimal; var CalendarEntry: Record "Calendar Entry")
     begin
     end;
 
@@ -2534,6 +2545,16 @@ codeunit 99000774 "Calculate Routing Line"
 
     [IntegrationEvent(false, false)]
     local procedure OnBeforeCalcAvailQtyBase(CalendarEntry: Record "Calendar Entry"; RoutingTimeType: Enum "Routing Time Type"; var AvQtyBase: Decimal; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeCreateLoadBack(var RemainNeedQty: Decimal; CalendarEntry: Record "Calendar Entry"; TimeType: Enum "Routing Time Type"; Write: Boolean; FirstEntry: Boolean; WaitTimeOnly: Boolean; CurrentWorkCenterNo: Code[20]; ProdStartingDate: Date; ProdStartingTime: Time; ProdEndingDate: Date; ProdEndingTime: Time; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeCreateLoadForward(var RemainNeedQty: Decimal; CalendarEntry: Record "Calendar Entry"; TimeType: Enum "Routing Time Type"; Write: Boolean; LoadFactor: Decimal; FirstEntry: Boolean; WaitTimeOnly: Boolean; CurrentWorkCenterNo: Code[20]; ProdStartingDate: Date; ProdStartingTime: Time; ProdEndingDate: Date; ProdEndingTime: Time; var IsHandled: Boolean)
     begin
     end;
 }

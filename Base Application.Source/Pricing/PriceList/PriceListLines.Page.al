@@ -7,6 +7,7 @@ namespace Microsoft.Pricing.PriceList;
 using Microsoft.Pricing.Source;
 using Microsoft.Projects.Project.Pricing;
 using Microsoft.Sales.Pricing;
+using System.Environment;
 using System.Environment.Configuration;
 using System.Integration.Excel;
 
@@ -335,6 +336,7 @@ page 7001 "Price List Lines"
         Rec.SetNewRecord(true);
         Rec.Validate("Asset Type", xRec."Asset Type");
         UpdateSourceType();
+        SetFieldEditableForClientTypeOdata();
     end;
 
     protected procedure GetHeader(): Boolean
@@ -486,7 +488,18 @@ page 7001 "Price List Lines"
         CurrPage.Update(true);
     end;
 
-    [IntegrationEvent(false, false)]
+    local procedure SetFieldEditableForClientTypeOdata()
+    var
+        ClientTypeManagement: Codeunit "Client Type Management";
+    begin
+        if not (ClientTypeManagement.GetCurrentClientType() in [CLIENTTYPE::OData, CLIENTTYPE::ODataV4]) then
+            exit;
+
+        SetEditable();
+        SetMandatoryAmount();
+    end;
+
+    [IntegrationEvent(true, false)]
     local procedure OnAfterUpdateColumnVisibility(PriceListHeader: Record "Price List Header"; var SourceTypeVisible: Boolean; var JobSourceTypeVisible: Boolean)
     begin
     end;

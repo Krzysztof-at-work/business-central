@@ -1305,18 +1305,21 @@ codeunit 427 ICInboxOutboxMgt
                 PurchLine.Description := ICInboxPurchLine.Description;
                 PurchLine."Description 2" := ICInboxPurchLine."Description 2";
                 IsHandled := false;
-                OnCreatePurchLinesOnBeforeCalcPriceAndAmounts(PurchHeader, PurchLine, IsHandled);
+                OnCreatePurchLinesOnBeforeCalcPriceAndAmounts(PurchHeader, PurchLine, IsHandled, ICInboxPurchLine);
                 if not IsHandled then begin
-                    PurchLine.Validate("Direct Unit Cost", ICInboxPurchLine."Direct Unit Cost");
-                    PurchLine."Amount Including VAT" := ICInboxPurchLine."Amount Including VAT";
+                    if PurchHeader."Prices Including VAT" then begin
+                        if ICInboxPurchLine.Quantity <> 0 then
+                            PurchLine.Validate("Direct Unit Cost", Round((ICInboxPurchLine."Amount Including VAT" + ICInboxPurchLine."Line Discount Amount" + ICInboxPurchLine."Inv. Discount Amount") / ICInboxPurchLine.Quantity, Precision))
+                        else
+                            PurchLine.Validate("Direct Unit Cost", ICInboxPurchLine."Direct Unit Cost");
+                    end else begin
+                        PurchLine.Validate("Direct Unit Cost", ICInboxPurchLine."Direct Unit Cost");
+                        PurchLine."Amount Including VAT" := ICInboxPurchLine."Amount Including VAT";
+                    end;
                     PurchLine.Validate("Line Discount Amount", ICInboxPurchLine."Line Discount Amount");
                     PurchLine.Validate("Inv. Discount Amount", ICInboxPurchLine."Inv. Discount Amount");
                     PurchLine."VAT Base Amount" := Round(ICInboxPurchLine."Amount Including VAT" / (1 + (PurchLine."VAT %" / 100)), Precision2);
                     PurchLine."VAT Difference" := ICInboxPurchLine."VAT Difference";
-                    if PurchHeader."Prices Including VAT" then
-                        PurchLine."Line Amount" := ICInboxPurchLine."Amount Including VAT"
-                    else
-                        PurchLine."Line Amount" := ICInboxPurchLine."Line Amount";
                 end;
                 PurchLine.Validate("Requested Receipt Date", ICInboxPurchLine."Requested Receipt Date");
                 PurchLine.Validate("Promised Receipt Date", ICInboxPurchLine."Promised Receipt Date");
@@ -3826,7 +3829,7 @@ codeunit 427 ICInboxOutboxMgt
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnCreatePurchLinesOnBeforeCalcPriceAndAmounts(var PurchaseHeader: Record "Purchase Header"; var PurchaseLine: Record "Purchase Line"; var IsHandled: Boolean)
+    local procedure OnCreatePurchLinesOnBeforeCalcPriceAndAmounts(var PurchaseHeader: Record "Purchase Header"; var PurchaseLine: Record "Purchase Line"; var IsHandled: Boolean; var ICInboxPurchLine: Record "IC Inbox Purchase Line")
     begin
     end;
 

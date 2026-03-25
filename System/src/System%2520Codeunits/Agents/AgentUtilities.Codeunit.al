@@ -88,13 +88,54 @@ codeunit 2000000022 "Agent Utilities"
     end;
 
     /// <summary>
-    /// Updates the access controls assigned to a custom agent.
+    /// Replaces the existing access controls for the agent with those provided in the buffer.
     /// </summary>
+    /// <remarks>
+    /// This removes any existing access controls assigned to the agent and replaces them.
+    /// </remarks>
+    /// <param name="AgentUserSecurityId">The agent user security ID.</param>
+    /// <param name="TempAccessControlBuffer">The temporary access control buffer.</param>
+    [Native]
+    [Scope('OnPrem')]
+    procedure UpdateAccessControl(AgentUserSecurityId: Guid; var TempAccessControlBuffer: Record "Access Control Buffer" temporary)
+    begin
+    end;
+
+    /// <summary>
+    /// Replaces the existing access controls for the custom agent with those provided in the buffer.
+    /// </summary>
+    /// <remarks>
+    /// This removes any existing access controls assigned to the agent and replaces them.
+    /// To be removed in favor of UpdateAccessControl.
+    /// </remarks>
     /// <param name="AgentUserSecurityId">The agent user security ID.</param>
     /// <param name="TempAccessControlBuffer">The temporary access control buffer.</param>
     [Native]
     [Scope('OnPrem')]
     procedure UpdateCustomAgentAccessControls(AgentUserSecurityId: Guid; var TempAccessControlBuffer: Record "Access Control Buffer" temporary)
+    begin
+    end;
+
+    /// <summary>
+    /// Deletes the specified custom agent, if the user has sufficient permissions.
+    /// </summary>
+    /// <param name="AgentUserSecurityId">The agent user security ID.</param>
+    [Native]
+    [Scope('OnPrem')]
+    procedure DeleteCustomAgent(AgentUserSecurityId: Guid)
+    begin
+    end;
+
+    /// <summary>
+    /// Gets the agent publisher info for the specified agent metadata provider.
+    /// </summary>
+    /// <param name="AgentMetadataProvider">The agent metadata provider.</param>
+    /// <param name="AgentPublisherName">The agent publisher name.</param>
+    /// <param name="AgentPublisherType">The agent publisher type.</param>
+    /// <returns>True if the publisher info could be found, false otherwise.</returns>
+    [Native]
+    [Scope('OnPrem')]
+    procedure TryGetAgentPublisherInfo(AgentMetadataProvider: Enum "Agent Metadata Provider"; var AgentPublisherName: Text[250]; var AgentPublisherType: Enum "Agent Publisher Type"): Boolean
     begin
     end;
 }

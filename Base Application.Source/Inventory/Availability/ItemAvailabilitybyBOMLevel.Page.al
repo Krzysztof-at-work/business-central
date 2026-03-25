@@ -544,6 +544,7 @@ page 5871 "Item Availability by BOM Level"
         Item.SetFilter("Location Filter", LocationFilter);
         Item.SetFilter("Variant Filter", VariantFilter);
         Item.SetFilter("No.", ItemFilter);
+        OnRefreshPageOnAfterSetItemFilters(Item);
         CalculateBOMTree.SetItemFilter(Item);
 
         CalculateBOMTree.SetShowTotalAvailability(ShowTotalAvailability);
@@ -646,8 +647,13 @@ page 5871 "Item Availability by BOM Level"
     begin
     end;
 
-    [IntegrationEvent(false, false)]
+    [IntegrationEvent(true, false)]
     local procedure OnOpenPageOnBeforeRefreshPage(var BOMBuffer: Record "BOM Buffer")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnRefreshPageOnAfterSetItemFilters(var Item: Record Item)
     begin
     end;
 }

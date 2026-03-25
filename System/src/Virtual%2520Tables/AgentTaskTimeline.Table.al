@@ -151,6 +151,14 @@ table 2000000278 "Agent Task Timeline"
             Caption = 'Current Page Exists';
             ToolTip = 'Specifies whether the current page exists.';
         }
+        /// <summary>
+        /// The query string used to access the primary page associated with the current timeline step.
+        /// </summary>
+        field(15; "Current Page Query"; Blob)
+        {
+            Caption = 'Current Page Query';
+            ToolTip = 'Specifies the client query string of the page associated with the current timeline step.';
+        }
     }
 
     keys

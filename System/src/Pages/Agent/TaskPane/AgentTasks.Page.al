@@ -32,6 +32,9 @@ page 2000000100 "Agent Tasks"
                 field(TaskId; Rec."Task ID")
                 {
                 }
+                field(AgentId; Rec."Agent User Security ID")
+                {
+                }
                 field(TaskNeedsAttention; Rec."Needs Attention")
                 {
                 }
@@ -86,6 +89,12 @@ page 2000000100 "Agent Tasks"
                     Caption = 'Current Page Exists';
                     ToolTip = 'Indicates whether the current page associated with this timeline step exists.';
                 }
+                field(TaskCurrentPageQuery; CurrentPageQuery)
+                {
+                    Caption = 'Current Page Query';
+                    ToolTip = 'Specifies the client query string of the page associated with the current timeline step.';
+                }
+
             }
         }
 
@@ -125,6 +134,28 @@ page 2000000100 "Agent Tasks"
                     AgentTask.StopTask(AgentTaskRecord, AgentTaskRecord."Status"::"Stopped by User", false);
                 end;
             }
+
+#pragma warning disable AW0005
+            action(StopAllTasks)
+#pragma warning restore AW0005
+            {
+                Caption = 'Stop all tasks';
+                ToolTip = 'Stop all tasks that need attention for this agent so they no longer require action.';
+                trigger OnAction()
+                var
+                    AgentTaskRecord: Record "Agent Task";
+                    AgentId: Guid;
+                begin
+                    if Rec.GetFilter("Agent User Security ID") <> '' then
+                        AgentId := Rec."Agent User Security ID"
+                    else begin
+                        Message(TasksCanBeStoppedOnlyIfAgentIdFilterIsSet);
+                        exit;
+                    end;
+
+                    AgentTask.StopAllNeedsAttentionTasks(AgentId, AgentTaskRecord."Status"::"Stopped by User", true);
+                end;
+            }
         }
     }
 
@@ -140,12 +171,19 @@ page 2000000100 "Agent Tasks"
     begin
         // Clear old values
         Clear(TaskSummary);
+        Clear(CurrentPageQuery);
         GlobalCreatedBy := '';
 
         Rec.CalcFields("Summary");
         if Rec."Summary".HasValue() then begin
             Rec."Summary".CreateInStream(InStream, AgentTask.GetDefaultEncoding());
             TaskSummary.Read(InStream);
+        end;
+
+        Rec.CalcFields("Current Page Query");
+        if Rec."Current Page Query".HasValue() then begin
+            Rec."Current Page Query".CreateInStream(InStream, AgentTask.GetDefaultEncoding());
+            CurrentPageQuery.Read(InStream);
         end;
 
         User.SetRange("User Security ID", Rec."Created By");
@@ -159,5 +197,7 @@ page 2000000100 "Agent Tasks"
     var
         AgentTask: Codeunit "Agent Task Internal";
         TaskSummary: BigText;
+        CurrentPageQuery: BigText;
         GlobalCreatedBy: Text[250];
+        TasksCanBeStoppedOnlyIfAgentIdFilterIsSet: Label 'Tasks can only be stopped if an agent id filter is set.';
 }

@@ -123,6 +123,15 @@ table 2000000282 "Agent Task Log Entry"
             Caption = 'Reason';
             ToolTip = 'Specifies the reasoning behind the operation related to this log entry';
         }
+
+        /// <summary>
+        /// Additional troubleshooting information for the log entry.
+        /// </summary>
+        field(12; "Troubleshooting Info"; Blob)
+        {
+            Caption = 'Troubleshooting Info';
+            ToolTip = 'Specifies additional troubleshooting information for the log entry.';
+        }
     }
 
     keys

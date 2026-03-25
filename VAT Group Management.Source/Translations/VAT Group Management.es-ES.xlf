@@ -1919,6 +1919,13 @@
           <note from="Xliff Generator" annotates="general" priority="3" />
           <note from="ObjectTarget" annotates="general" priority="5">Table 2925949834</note>
         </trans-unit>
+        <trans-unit id="TableExtension 4146260181 - NamedType 1857290209" maxwidth="0" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The Group Representative API URL must start with https://api.businesscentral.dynamics.com or https://api.businesscentral.dynamics-tie.com</source>
+          <target state="translated">La URL de la API de representante de grupo debe comenzar con https://api.businesscentral.dynamics.com o https://api.businesscentral.dynamics-tie.com</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3" />
+          <note from="ObjectTarget" annotates="general" priority="5">TableExtension 4146260181</note>
+        </trans-unit>
       </group>
     </body>
   </file>

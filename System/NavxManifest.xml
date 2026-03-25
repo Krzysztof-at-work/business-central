@@ -1,5 +1,5 @@
 <Package xmlns="http://schemas.microsoft.com/navx/2015/manifest">
-  <App Id="8874ed3a-0643-4247-9ced-7a7002f7135d" Name="System" Publisher="Microsoft" Brief="" Description="" Version="27.0.43593.0" CompatibilityId="0.0.0.0" PrivacyStatement="" EULA="" Help="" HelpBaseUrl="" Url="" Logo="" Runtime="16.0" Target="OnPrem" ShowMyCode="False" />
+  <App Id="8874ed3a-0643-4247-9ced-7a7002f7135d" Name="System" Publisher="Microsoft" Brief="" Description="" Version="27.0.46760.0" CompatibilityId="0.0.0.0" PrivacyStatement="" EULA="" Help="" HelpBaseUrl="" Url="" Logo="" Runtime="16.0" Target="OnPrem" ShowMyCode="False" />
   <IdRanges>
     <IdRange MinObjectId="2000000000" MaxObjectId="2000001000" />
   </IdRanges>
@@ -22,6 +22,6 @@
   <ResourceExposurePolicy AllowDebugging="true" AllowDownloadingSource="true" IncludeSourceInSymbolFile="true" ApplyToDevExtension="true" />
   <KeyVaultUrls />
   <Source />
-  <Build Timestamp="2025-12-16T13:17:54.1958819Z" CompilerVersion="16.2.30.19826" />
+  <Build Timestamp="2026-02-25T19:48:44.9543034Z" CompilerVersion="16.4.33.4744" />
   <AlternateIds />
 </Package>

@@ -3054,7 +3054,7 @@ page 6510 "Item Tracking Lines"
     var
         IsHandled: Boolean;
     begin
-        OnBeforeAssignNewLotNo(Rec, IsHandled, SourceTrackingSpecification);
+        OnBeforeAssignNewLotNo(Rec, IsHandled, SourceTrackingSpecification, FunctionsSupplyVisible);
         if IsHandled then
             exit;
 
@@ -3105,7 +3105,8 @@ page 6510 "Item Tracking Lines"
     begin
         if IncStr(CustomizedSN) = '' then
             Error(UnincrementableStringErr, CustomizedSN);
-        NoSeries.TestManual(Item."Serial Nos.");
+        if Item."Serial Nos." <> '' then
+            NoSeries.TestManual(Item."Serial Nos.");
 
         if QtyToCreate <= 0 then
             Error(Text009);
@@ -3341,6 +3342,7 @@ page 6510 "Item Tracking Lines"
         SetBinCode();
         OnSelectEntriesOnBeforeSelectMultipleTrackingNo(ItemTrackingDataCollection, CurrentSignFactor);
         ItemTrackingDataCollection.SelectMultipleTrackingNo(Rec, MaxQuantity, CurrentSignFactor);
+        OnSelectEntriesOnAfterSelectMultipleTrackingNo(ItemTrackingDataCollection);
         Rec."Bin Code" := '';
         if Rec.FindSet() then
             repeat
@@ -3941,7 +3943,7 @@ page 6510 "Item Tracking Lines"
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnBeforeAssignNewLotNo(var TrackingSpecification: Record "Tracking Specification"; var IsHandled: Boolean; var SourceTrackingSpecification: Record "Tracking Specification")
+    local procedure OnBeforeAssignNewLotNo(var TrackingSpecification: Record "Tracking Specification"; var IsHandled: Boolean; var SourceTrackingSpecification: Record "Tracking Specification"; FunctionsSupplyVisible: Boolean)
     begin
     end;
 
@@ -4212,6 +4214,11 @@ page 6510 "Item Tracking Lines"
 
     [IntegrationEvent(false, false)]
     local procedure OnSelectEntriesOnBeforeSelectMultipleTrackingNo(var ItemTrackingDataCollection: Codeunit "Item Tracking Data Collection"; CurrentSignFactor: Integer)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnSelectEntriesOnAfterSelectMultipleTrackingNo(var ItemTrackingDataCollection: Codeunit "Item Tracking Data Collection")
     begin
     end;
 

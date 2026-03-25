@@ -19,7 +19,7 @@ using System.Security.AccessControl;
 /// </remarks>
 interface IAgentFactory
 {
-    Scope = OnPrem; // TODO(agent) - This should change to Cloud when ready to expose agents.
+    Scope = Cloud;
 
     /// <summary>
     /// Returns the initials to be displayed on the icon triggering the agent setup.

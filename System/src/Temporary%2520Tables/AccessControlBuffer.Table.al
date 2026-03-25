@@ -12,7 +12,7 @@ using System.Environment;
 table 2000000291 "Access Control Buffer"
 {
     TableType = Temporary;
-    Scope = OnPrem; // TODO(agent) - This should change to Cloud when ready to expose agents.
+    Scope = Cloud;
 
     fields
     {

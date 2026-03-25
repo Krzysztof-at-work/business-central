@@ -12,26 +12,22 @@
 			"name": "Base",
 			"path": "Base Application.Source"
 		},
-				{
+		{
 			"name": "Business Foundation",
 			"path": "Business Foundation.Source"
 		},
-		
 		{
 			"name": "System Application",
 			"path": "System Application.Source"
-		}
-		,
+		},
 		{
 			"name": "System",
 			"path": "System"
-		}
-		,
+		},
 		{
 			"name": "Application",
 			"path": "Application.Source"
-		}
-		,
+		},
 		{
 			"name": "API2",
 			"path": "_Exclude_APIV2_.Source"
@@ -41,15 +37,21 @@
 			"path":"Enforced Digital Vouchers.Source"
 		},
 		{
-			"name":"Cross Env. IC",
-			"path":"Cross Environment Intercompany"
-		},
-		{
 			"name":"VAT Group Management",
 			"path":"VAT Group Management.Source"
-		}
-
-		
+		},
+		{
+			"name":"External File Storage - Azure Blob Service Connector",
+			"path":"External File Storage - Azure Blob Service Connector.Source"
+		},
+		{
+			"name":"External File Storage - Azure File Service Connector",
+			"path":"External File Storage - Azure File Service Connector.Source"
+		},
+		{
+			"name":"External File Storage - SharePoint Connector",
+			"path":"External File Storage - SharePoint Connector.Source"
+		}	
 	],
 	"settings": {
 		"al.codeAnalyzers": [

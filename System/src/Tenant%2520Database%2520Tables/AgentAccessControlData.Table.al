@@ -4,6 +4,7 @@
 // ------------------------------------------------------------------------------------------------
 namespace System.Agents.Internal;
 
+using System.Environment;
 using System.Security.AccessControl;
 
 /// <summary>
@@ -31,7 +32,7 @@ table 2000000259 "Agent Access Control Data"
         field(1; "Agent User Security ID"; Guid)
         {
             Caption = 'Agent User Security ID';
-            TableRelation = "Agent Data"."User Security ID"; // TODO where("License Type" = filter('Agent'));
+            TableRelation = "Agent Data"."User Security ID";
         }
         /// <summary>
         /// Security ID of the user who has access to configure the agent.
@@ -48,11 +49,22 @@ table 2000000259 "Agent Access Control Data"
         {
             Caption = 'Can Configure Agent';
         }
+        /// <summary>
+        /// Name of the company where the permission set assignment applies.
+        /// </summary>
+        field(4; "Company Name"; Text[30])
+        {
+            Caption = 'Company Name';
+            TableRelation = Company.Name;
+            ToolTip = 'Specifies the company context for this access control entry.';
+        }
     }
 
     keys
     {
-        key(PK; "Agent User Security ID", "User Security ID")
+#pragma warning disable AS0009 // Required to make the table per company
+        key(PK; "Agent User Security ID", "User Security ID", "Company Name")
+#pragma warning restore AS0009
         {
             Clustered = true;
         }

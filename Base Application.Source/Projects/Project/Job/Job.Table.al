@@ -1346,10 +1346,12 @@ table 167 Job
     trigger OnRename()
     var
         CommentLine: Record "Comment Line";
+        JobArchiveManagement: Codeunit "Job Archive Management";
     begin
         UpdateJobNoInReservationEntries();
         DimMgt.RenameDefaultDim(Database::Job, xRec."No.", "No.");
         CommentLine.RenameCommentLine(CommentLine."Table Name"::Job, xRec."No.", "No.");
+        JobArchiveManagement.RenameJobArchieve(xRec."No.", Rec."No.");
         "Last Date Modified" := Today;
     end;
 
@@ -1757,7 +1759,7 @@ table 167 Job
         JobPlanningLine.LockTable();
         if JobPlanningLine.Find('-') then
             repeat
-                OnCurrencyUpdatePlanningLinesOnBeforeUpdateJobPlanningLine(Job, JobPlanningLine);
+                OnCurrencyUpdatePlanningLinesOnBeforeUpdateJobPlanningLine(Rec, JobPlanningLine);
                 if JobPlanningLine."Qty. Transferred to Invoice" <> 0 then
                     Error(AssociatedEntriesExistErr, FieldCaption("Currency Code"), TableCaption);
                 JobPlanningLine.Validate("Currency Code", "Currency Code");
@@ -2096,6 +2098,8 @@ table 167 Job
                 end;
                 JobTask.Modify();
             until JobTask.Next() = 0;
+
+        OnAfterUpdateJobTaskDimension(Rec, FieldNumber, ShortcutDimCode);
     end;
 
     procedure UpdateOverBudgetValue(JobNo: Code[20]; Usage: Boolean; Cost: Decimal)
@@ -3166,6 +3170,11 @@ table 167 Job
 
     [IntegrationEvent(false, false)]
     local procedure OnBeforeUpdateJobTaskDimension(var Job: Record Job; FieldNumber: Integer; ShortcutDimCode: Code[20]; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterUpdateJobTaskDimension(var Job: Record Job; FieldNumber: Integer; ShortcutDimCode: Code[20])
     begin
     end;
 

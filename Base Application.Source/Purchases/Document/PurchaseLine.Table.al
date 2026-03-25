@@ -188,7 +188,9 @@ table 39 "Purchase Line"
             else
             if (Type = const("Charge (Item)")) "Item Charge"
             else
-            if (Type = const(Item)) Item
+            if (Type = const(Item), "Document Type" = filter(<> "Credit Memo" & <> "Return Order")) Item where(Blocked = const(false), "Purchasing Blocked" = const(false))
+            else
+            if (Type = const(Item), "Document Type" = filter("Credit Memo" | "Return Order")) Item where(Blocked = const(false))
             else
             if (Type = const("Allocation Account")) "Allocation Account"
             else
@@ -462,7 +464,9 @@ table 39 "Purchase Line"
             else
             if (Type = const("G/L Account"), "System-Created Entry" = const(true)) "G/L Account".Name
             else
-            if (Type = const(Item)) Item.Description
+            if (Type = const(Item), "Document Type" = filter(<> "Credit Memo" & <> "Return Order")) Item.Description where(Blocked = const(false), "Purchasing Blocked" = const(false))
+            else
+            if (Type = const(Item), "Document Type" = filter("Credit Memo" | "Return Order")) Item.Description where(Blocked = const(false))
             else
             if (Type = const("Fixed Asset")) "Fixed Asset".Description
             else
@@ -1372,8 +1376,12 @@ table 39 "Purchase Line"
             TableRelation = "Gen. Business Posting Group";
 
             trigger OnValidate()
+            var
+                ValidateVATBusPostingGroup: Boolean;
             begin
-                if xRec."Gen. Bus. Posting Group" <> "Gen. Bus. Posting Group" then
+                ValidateVATBusPostingGroup := xRec."Gen. Bus. Posting Group" <> "Gen. Bus. Posting Group";
+                OnValidateGenBusPostingGroupOnBeforeValidateVATBusPostingGroup(Rec, ValidateVATBusPostingGroup);
+                if ValidateVATBusPostingGroup then
                     if GenBusPostingGrp.ValidateVatBusPostingGroup(GenBusPostingGrp, "Gen. Bus. Posting Group") then
                         Validate("VAT Bus. Posting Group", GenBusPostingGrp."Def. VAT Bus. Posting Group");
             end;
@@ -3490,6 +3498,11 @@ table 39 "Purchase Line"
             Caption = 'Prepmt. on-Deductible VAT Amount';
             Editable = false;
         }
+        field(6206; "Item Charge Has Non.Ded. VAT"; Boolean)
+        {
+            Caption = 'Item Charge Has Non-Deductible VAT';
+            Editable = false;
+        }
         field(6600; "Return Shipment No."; Code[20])
         {
             Caption = 'Return Shipment No.';
@@ -3633,7 +3646,7 @@ table 39 "Purchase Line"
             begin
                 if "No. of Fixed Asset Cards" <> 0 then begin
                     TestField(Type, Type::"Fixed Asset");
-                    TestField("FA Posting Type", "FA Posting Type"::"Acquisition Cost");
+                    CheckAcquisitionCost();
                     if not ("Document Type" in ["Purchase Document Type"::Invoice, "Purchase Document Type"::Order]) then
                         Error(InvoiceOrOrderDocTypeErr, FieldCaption("Document Type"), "Purchase Document Type"::Invoice, "Purchase Document Type"::Order);
                 end;
@@ -3857,6 +3870,7 @@ table 39 "Purchase Line"
     trigger OnInsert()
     begin
         TestStatusOpen();
+
         if Quantity <> 0 then begin
             OnBeforeVerifyReservedQty(Rec, xRec, 0);
             PurchLineReserve.VerifyQuantity(Rec, xRec);
@@ -3894,6 +3908,13 @@ table 39 "Purchase Line"
     begin
         Error(Text000, TableCaption);
     end;
+
+#if not CLEAN28
+    [Obsolete('Not used for anything', '28.0')]
+    procedure SetSkipEnsurePositiveLineNo(NewSkipEnsurePositiveLineNo: Boolean)
+    begin
+    end;
+#endif    
 
     var
         PurchHeader: Record "Purchase Header";
@@ -4948,6 +4969,9 @@ table 39 "Purchase Line"
             UpdateAmounts();
 
         ShouldExit := ((CalledByFieldNo <> CurrFieldNo) and (CurrFieldNo <> 0)) or IsProdOrder();
+
+        OverturnExitConditionForNoViaDescription(CalledByFieldNo, ShouldExit);
+        OverturnExitConditionForDefaultGLAccountQuantityValidation(ShouldExit);
         OnUpdateDirectUnitCostByFieldOnAfterCalcShouldExit(Rec, xRec, CalledByFieldNo, CurrFieldNo, ShouldExit);
         if ShouldExit then
             exit;
@@ -5880,7 +5904,7 @@ table 39 "Purchase Line"
     begin
         IsHandled := false;
         ResultDate := 0D;
-        OnBeforeGetDate(ResultDate, IsHandled);
+        OnBeforeGetDate(Rec, ResultDate, IsHandled);
         if IsHandled then
             exit(ResultDate);
 
@@ -6245,8 +6269,8 @@ table 39 "Purchase Line"
         ItemChargeAssgntPurch: Record "Item Charge Assignment (Purch)";
         AssignItemChargePurch: Codeunit "Item Charge Assgnt. (Purch.)";
         ItemChargeAssgnts: Page "Item Charge Assignment (Purch)";
-        ItemChargeAssgntLineAmt: Decimal;
-        IsHandled: Boolean;
+        ItemChargeAssgntLineAmt, NonDedVATAmount : Decimal;
+        IsHandled, IncludeNonDedVATAmount : Boolean;
     begin
         Get("Document Type", "Document No.", "Line No.");
         CheckNoAndQuantityForItemChargeAssgnt();
@@ -6264,9 +6288,14 @@ table 39 "Purchase Line"
         if ("Inv. Discount Amount" = 0) and
            ("Line Discount Amount" = 0) and
            (not PurchHeader."Prices Including VAT")
-        then
-            ItemChargeAssgntLineAmt := "Line Amount" + NonDeductibleVAT.GetNonDeductibleVATAmountForItemCost(Rec)
-        else
+        then begin
+            ItemChargeAssgntLineAmt := "Line Amount";
+            NonDedVATAmount := NonDeductibleVAT.GetNonDeductibleVATAmountForItemCost(Rec);
+            if NonDedVATAmount <> 0 then begin
+                ItemChargeAssgntLineAmt += NonDedVATAmount;
+                IncludeNonDedVATAmount := true;
+            end;
+        end else
             if PurchHeader."Prices Including VAT" then
                 ItemChargeAssgntLineAmt :=
                   Round(CalcLineAmount() / (1 + GetVATPct() / 100), Currency."Amount Rounding Precision") + NonDeductibleVAT.GetNonDeductibleVATAmountForItemCost(Rec)
@@ -6299,6 +6328,12 @@ table 39 "Purchase Line"
         else
             AssignItemChargePurch.CreateDocChargeAssgnt(ItemChargeAssgntPurch, "Receipt No.");
         Clear(AssignItemChargePurch);
+
+        if IncludeNonDedVATAmount then begin
+            Rec."Item Charge Has Non.Ded. VAT" := IncludeNonDedVATAmount;
+            Rec.Modify();
+        end;
+
         Commit();
 
         ItemChargeAssgnts.Initialize(Rec, ItemChargeAssgntLineAmt);
@@ -8277,13 +8312,16 @@ table 39 "Purchase Line"
     procedure IsServiceCharge(): Boolean
     var
         VendorPostingGroup: Record "Vendor Posting Group";
+        ServiceCharged: Boolean;
     begin
         if Type <> Type::"G/L Account" then
             exit(false);
 
         GetPurchHeader();
-        VendorPostingGroup.Get(PurchHeader."Vendor Posting Group");
-        exit(VendorPostingGroup."Service Charge Acc." = "No.");
+        ServiceCharged := VendorPostingGroup.Get(PurchHeader."Vendor Posting Group");
+        ServiceCharged := VendorPostingGroup."Service Charge Acc." = "No.";
+        OnAfterIsServiceCharge(Rec, ServiceCharged);
+        exit(ServiceCharged);
     end;
 
     /// <summary>
@@ -8856,9 +8894,10 @@ table 39 "Purchase Line"
     /// Determines if the document type of the line is order or invoice.
     /// </summary>
     /// <returns>True if the document type is order or invoice, otherwise false.</returns>
-    procedure IsInvoiceDocType(): Boolean
+    procedure IsInvoiceDocType() Result: Boolean
     begin
-        exit("Document Type" in ["Document Type"::Order, "Document Type"::Invoice]);
+        Result := "Document Type" in ["Document Type"::Order, "Document Type"::Invoice];
+        OnAfterIsInvoiceDocType(Rec, Result);
     end;
 
     /// <summary>
@@ -9709,6 +9748,24 @@ table 39 "Purchase Line"
             StrSubstNo(QtyReceiveActionDescriptionLbl, Rec.FieldCaption("Qty. to Receive"), Rec.Quantity)));
     end;
 
+    local procedure OverturnExitConditionForNoViaDescription(CalledByFieldNo: Integer; var ShouldExit: Boolean)
+    begin
+        if (CalledByFieldNo = FieldNo("No.")) and (CurrFieldNo = FieldNo(Description)) and (ShouldExit) then
+            ShouldExit := false;
+    end;
+
+    local procedure OverturnExitConditionForDefaultGLAccountQuantityValidation(var ShouldExit: Boolean)
+    begin
+        if not ShouldExit then
+            exit;
+
+        if Quantity <> 1 then
+            exit;
+
+        if QuantityDefaultedFromGLAccount() then
+            ShouldExit := false;
+    end;
+
     procedure IsProdOrder() Result: Boolean
     begin
         OnIsProdOrder(Rec, Result);
@@ -9794,6 +9851,17 @@ table 39 "Purchase Line"
             exit;
 
         Rec.TestField("Job Task No.");
+    end;
+
+    local procedure CheckAcquisitionCost()
+    var
+        IsHandled: Boolean;
+    begin
+        IsHandled := false;
+        OnBeforeCheckAcquisitionCost(Rec, IsHandled);
+        if IsHandled then
+            exit;
+        TestField("FA Posting Type", "FA Posting Type"::"Acquisition Cost");
     end;
 
     [IntegrationEvent(false, false)]
@@ -11145,6 +11213,11 @@ table 39 "Purchase Line"
     end;
 
     [IntegrationEvent(false, false)]
+    local procedure OnAfterIsInvoiceDocType(var PurchaseLine: Record "Purchase Line"; var Result: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
     local procedure OnValidateQuantityOnBeforeCheckRcptRetShptRelation(var PurchaseLine: Record "Purchase Line"; CurrentFieldNo: Integer)
     begin
     end;
@@ -11570,7 +11643,7 @@ table 39 "Purchase Line"
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnBeforeGetDate(var ResultDate: Date; var IsHandled: Boolean)
+    local procedure OnBeforeGetDate(var PurchaseLine: Record "Purchase Line"; var ResultDate: Date; var IsHandled: Boolean)
     begin
     end;
 
@@ -11853,6 +11926,21 @@ table 39 "Purchase Line"
 
     [IntegrationEvent(false, false)]
     local procedure OnUpdateItemChargeAssgntOnBeforeItemChargeAssignmentPurchModify(var PurchaseLine: Record "Purchase Line"; var ItemChargeAssignmentPurch: Record "Item Charge Assignment (Purch)")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeCheckAcquisitionCost(var PurchaseLine: Record "Purchase Line"; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterIsServiceCharge(var PurchaseLine: Record "Purchase Line"; var ServiceCharged: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnValidateGenBusPostingGroupOnBeforeValidateVATBusPostingGroup(var PurchaseLine: Record "Purchase Line"; var ValidateVATBusPostingGroup: Boolean)
     begin
     end;
 }

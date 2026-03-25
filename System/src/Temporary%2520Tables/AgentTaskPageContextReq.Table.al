@@ -8,7 +8,7 @@ table 2000000290 "Agent Task Page Context Req."
 {
     Caption = 'Agent Task Page Context Request';
     ReplicateData = false;
-    Scope = OnPrem; // TODO(agent) - This should change to Cloud when ready to expose agents.
+    Scope = Cloud;
     TableType = Temporary;
 
     fields

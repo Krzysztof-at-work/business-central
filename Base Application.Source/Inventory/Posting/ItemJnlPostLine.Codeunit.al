@@ -844,7 +844,7 @@ codeunit 22 "Item Jnl.-Post Line"
                     GlobalItemLedgEntry.Modify();
                 IsHandled := false;
                 xValueEntryNo := ValueEntryNo;
-                OnItemValuePostingOnBeforeInsertOHValueEntry(ItemJnlLine, GlobalValueEntry, GlobalItemLedgEntry, ValueEntryNo, IsHandled, VarianceAmount, VarianceAmountACY, OverheadAmount, OverheadAmountACY);
+                OnItemValuePostingOnBeforeInsertOHValueEntry(ItemJnlLine, GlobalValueEntry, GlobalItemLedgEntry, ValueEntryNo, IsHandled, VarianceAmount, VarianceAmountACY, OverheadAmount, OverheadAmountACY, VarianceRequired);
                 ValidateSequenceNo(ValueEntryNo, xValueEntryNo, Database::"Value Entry");
                 if not IsHandled then
                     if ((GlobalValueEntry."Valued Quantity" > 0) or
@@ -867,7 +867,7 @@ codeunit 22 "Item Jnl.-Post Line"
 
             IsHandled := false;
             xValueEntryNo := ValueEntryNo;
-            OnItemValuePostingOnBeforeInsertOHValueEntry(ItemJnlLine, GlobalValueEntry, GlobalItemLedgEntry, ValueEntryNo, IsHandled, VarianceAmount, VarianceAmountACY, OverheadAmount, OverheadAmountACY);
+            OnItemValuePostingOnBeforeInsertOHValueEntry(ItemJnlLine, GlobalValueEntry, GlobalItemLedgEntry, ValueEntryNo, IsHandled, VarianceAmount, VarianceAmountACY, OverheadAmount, OverheadAmountACY, VarianceRequired);
             ValidateSequenceNo(ValueEntryNo, xValueEntryNo, Database::"Value Entry");
             if not IsHandled then
                 if ((GlobalValueEntry."Valued Quantity" > 0) or
@@ -2189,7 +2189,7 @@ codeunit 22 "Item Jnl.-Post Line"
             exit;
 
         IsHandled := false;
-        OnBeforePostValueEntryToGL(ValueEntry, IsHandled);
+        OnBeforePostValueEntryToGL(ValueEntry, IsHandled, PostToGL);
         if IsHandled then
             exit;
         PostValueEntryToGL(ValueEntry);
@@ -3084,6 +3084,8 @@ codeunit 22 "Item Jnl.-Post Line"
                 ValueEntry."Cost per Unit" := 0;
                 ValueEntry."Cost per Unit (ACY)" := 0;
             end;
+
+            OnInitTransValueEntryOnAfterCalcAdjustedCost(ValueEntry, GlobalValueEntry);
 
             GlobalValueEntry."Cost Amount (Actual)" := GlobalValueEntry."Cost Amount (Actual)" - ValueEntry."Cost Amount (Actual)";
             if GLSetup."Additional Reporting Currency" <> '' then
@@ -4649,7 +4651,7 @@ codeunit 22 "Item Jnl.-Post Line"
         IsHandled: Boolean;
     begin
         IsHandled := false;
-        OnBeforeCheckSerialNo(ItemJnlLine, IsHandled);
+        OnBeforeCheckSerialNo(ItemJnlLine, IsHandled, SkipSerialNoQtyValidation);
         if IsHandled then
             exit;
 
@@ -5769,7 +5771,8 @@ codeunit 22 "Item Jnl.-Post Line"
            (ItemJnlLine."Value Entry Type" = ItemJnlLine."Value Entry Type"::"Direct Cost") and
            (ItemJnlLine."Item Charge No." = '') and
            (ItemJnlLine."Applies-from Entry" = 0) and
-           not ItemJnlLine.Adjustment and (ItemJnlLine."Document Type" <> ItemJnlLine."Document Type"::"Inventory Receipt") then
+           not ItemJnlLine.Adjustment and (ItemJnlLine."Document Type" <> ItemJnlLine."Document Type"::"Inventory Receipt") and
+           (ItemJnlLine."Entry Type" <> ItemJnlLine."Entry Type"::Sale) then
             exit(true);
 
         exit(false);
@@ -6274,7 +6277,7 @@ codeunit 22 "Item Jnl.-Post Line"
 #endif
 
     [IntegrationEvent(false, false)]
-    local procedure OnBeforeCheckSerialNo(ItemJournalLine: Record "Item Journal Line"; var IsHandled: Boolean)
+    local procedure OnBeforeCheckSerialNo(ItemJournalLine: Record "Item Journal Line"; var IsHandled: Boolean; var SkipSerialNoQtyValidation: Boolean)
     begin
     end;
 
@@ -7110,7 +7113,7 @@ codeunit 22 "Item Jnl.-Post Line"
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnBeforePostValueEntryToGL(var ValueEntry: Record "Value Entry"; var IsHandled: Boolean)
+    local procedure OnBeforePostValueEntryToGL(var ValueEntry: Record "Value Entry"; var IsHandled: Boolean; PostToGL: Boolean)
     begin
     end;
 
@@ -7982,7 +7985,7 @@ codeunit 22 "Item Jnl.-Post Line"
     end;
 
     [IntegrationEvent(true, false)]
-    local procedure OnItemValuePostingOnBeforeInsertOHValueEntry(var ItemJnlLine: Record "Item Journal Line"; var GlobalValueEntry: Record "Value Entry"; var GlobalItemLedgEntry: Record "Item Ledger Entry"; var ValueEntryNo: Integer; var IsHandled: Boolean; var VarianceAmount: Decimal; var VarianceAmountACY: Decimal; var OverheadAmount: Decimal; var OverheadAmountACY: Decimal)
+    local procedure OnItemValuePostingOnBeforeInsertOHValueEntry(var ItemJnlLine: Record "Item Journal Line"; var GlobalValueEntry: Record "Value Entry"; var GlobalItemLedgEntry: Record "Item Ledger Entry"; var ValueEntryNo: Integer; var IsHandled: Boolean; var VarianceAmount: Decimal; var VarianceAmountACY: Decimal; var OverheadAmount: Decimal; var OverheadAmountACY: Decimal; var VarianceRequired: Boolean)
     begin
     end;
 
@@ -8036,7 +8039,7 @@ codeunit 22 "Item Jnl.-Post Line"
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnCodeOnBeforeCheckItemTracking(var ItemJnlLine: Record "Item Journal Line"; DisableItemTracking: Boolean; var IsHandled: Boolean; var TempTrackingSpecification: Record "Tracking Specification"; var ItemTrackingSetup: Record "Item Tracking Setup")
+    local procedure OnCodeOnBeforeCheckItemTracking(var ItemJnlLine: Record "Item Journal Line"; var DisableItemTracking: Boolean; var IsHandled: Boolean; var TempTrackingSpecification: Record "Tracking Specification"; var ItemTrackingSetup: Record "Item Tracking Setup")
     begin
     end;
 
@@ -8299,6 +8302,11 @@ codeunit 22 "Item Jnl.-Post Line"
 
     [IntegrationEvent(false, false)]
     local procedure OnInitTransValueEntryOnBeforeCalcAdjustedCost(OldItemLedgEntry: Record "Item Ledger Entry"; var ValueEntry: Record "Value Entry"; var AdjCostInvoicedLCY: Decimal; var AdjCostInvoicedACY: Decimal; var DiscountAmount: Decimal; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnInitTransValueEntryOnAfterCalcAdjustedCost(var ValueEntry: Record "Value Entry"; var GlobalValueEntry: Record "Value Entry")
     begin
     end;
 

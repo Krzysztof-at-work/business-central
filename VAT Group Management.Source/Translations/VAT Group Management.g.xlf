@@ -1333,6 +1333,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension VAT Report Header Extension - Field VAT Group Status - Property Caption</note>
         </trans-unit>
+        <trans-unit id="TableExtension 4146260181 - NamedType 1857290209" size-unit="char" translate="yes" xml:space="preserve" al-object-target="TableExtension 4146260181">
+          <source>The Group Representative API URL must start with https://api.businesscentral.dynamics.com or https://api.businesscentral.dynamics-tie.com</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension VAT Report Setup Extension - NamedType InvalidURLErr</note>
+        </trans-unit>
         <trans-unit id="TableExtension 4146260181 - Field 148869180 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 456029390">
           <source>Approved Members</source>
           <note from="Developer" annotates="general" priority="2"></note>

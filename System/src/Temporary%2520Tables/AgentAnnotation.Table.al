@@ -17,7 +17,7 @@ table 2000000283 "Agent Annotation"
 {
     Caption = 'Agent Annotation';
     ReplicateData = false;
-    Scope = OnPrem; // TODO(agent) - This should change to Cloud when ready to expose agents.
+    Scope = Cloud;
     TableType = Temporary;
 
     fields

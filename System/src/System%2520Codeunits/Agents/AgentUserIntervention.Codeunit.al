@@ -16,6 +16,21 @@ codeunit 2000000019 "Agent User Intervention"
     InherentPermissions = X;
 
     /// <summary>
+    /// Get the user intervention details for the specified log entry.
+    /// </summary>
+    /// <param name="UserInterventionRequestEntry">The agent task log entry.</param>
+    /// <param name="UserInterventionRequestDetails">The user interevention request details.</param>
+    /// <param name="AgentAnnotations">The annotations on the user intervention request.</param>
+    [Scope('OnPrem')]
+    [Native]
+    procedure GetUserInterventionRequestDetails(
+        UserInterventionRequestEntry: Record "Agent Task Log Entry";
+        var UserInterventionRequestDetails: Record "Agent User Int Request Details" temporary;
+        var AgentAnnotations: Record "Agent Annotation" temporary)
+    begin
+    end;
+
+    /// <summary>
     /// Creates a user intervention response for an agent task log entry without additional input.
     /// </summary>
     /// <param name="UserInterventionRequestEntry">The agent task log entry that requested user intervention.</param>

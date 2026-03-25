@@ -4,7 +4,7 @@
         <id>8874ed3a-0643-4247-9ced-7a7002f7135d</id>
         <name>System</name>
         <publisher>Microsoft</publisher>
-        <version>27.0.43593.0</version>
+        <version>27.0.46760.0</version>
     </application>
     <members>
         <member name="NS:System#System">
@@ -3084,6 +3084,16 @@
             The application package's hash.
             </summary>
         </member>
+        <member name="F:Table::System#Apps#Tenant Application Storage.Published As">
+            <summary>
+            Indicates the scope of the extension i.e. how the application was published.
+            </summary>
+        </member>
+        <member name="F:Table::System#Apps#Tenant Application Storage.Package Type">
+            <summary>
+            Indicates the type of the package.
+            </summary>
+        </member>
         <member name="O:Table::System#Apps#Extension Database Snapshot">
             <summary>
             Virtual table containing snapshot information about extension database states and deployment history.
@@ -4313,6 +4323,17 @@
             <summary>
             The English language description of the feature for reference and translation purposes.
             </summary>
+        </member>
+        <member name="O:Codeunit::System#Environment#Configuration#Designer Utilities">
+            <summary>
+            Provides functionality for managing designer configurations.
+            </summary>
+        </member>
+        <member name="M:Codeunit::System#Environment#Configuration#Designer Utilities.RepairAllCustomizationsIfNeeded:Boolean">
+            <summary>
+            Recompiles the customizations for the profiles and users for which a recompilation is needed.
+            </summary>
+            <returns>Returns true if customizations are all up-to-date or all successfully recompiled; otherwise, false.</returns>
         </member>
         <member name="O:Table::System#Environment#Consumption#User AI Consumption Data">
             <summary>
@@ -6318,6 +6339,22 @@
             </summary>
             <param name="ThrowError">If an error should be thrown if unavailable.</param>
             <returns>True if enabled, false otherwise.</returns>
+        </member>
+        <member name="M:Codeunit::System#Environment#Feature Access Management.IsSandboxEnvironmentOrFirstPartyCode(Boolean):Boolean">
+            <summary>
+            Checks if the environment is an evaluation environment or if the code is first-party code.
+            </summary>
+        </member>
+        <member name="M:Codeunit::System#Environment#Feature Access Management.IsEnvironmentPositiveListed:Boolean">
+            <summary>
+            Checks if the current environment is positive listed.
+            </summary>
+            <returns>True if yes, false otherwise.</returns>
+        </member>
+        <member name="M:Codeunit::System#Environment#Feature Access Management.IsSandboxEnvironment:Boolean">
+            <summary>
+            Checks if the environment is a sandbox environment.
+            </summary>
         </member>
         <member name="O:Table::System#Security#AccessControl#Entitlement">
             <summary>
@@ -8692,6 +8729,11 @@
             Indicates whether the user has permission to configure the agent's settings and behavior.
             </summary>
         </member>
+        <member name="F:Table::System#Agents#Internal#Agent Access Control Data.Company Name[30]">
+            <summary>
+            Name of the company where the permission set assignment applies.
+            </summary>
+        </member>
         <member name="O:Table::System#Agents#Internal#Agent Data">
             <summary>
             Stores configuration and metadata for AI agents in the system, including their instructions, properties, and metadata provider settings.
@@ -9328,6 +9370,71 @@
             The ID of the record related to this user intervention, if any.
             </summary>
         </member>
+        <member name="O:Table::System#Agents#Internal#Agent Troubleshoot Info Data">
+            <summary>
+            Stores troubleshooting information for agent tasks, providing debugging and diagnostic data for agent execution.
+            </summary>
+            <remarks>
+            This table implements the troubleshooting system for agent tasks, storing diagnostic information that helps
+            with debugging and analyzing agent task execution issues.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Internal#Agent Troubleshoot Info Data.ID">
+            <summary>
+            Unique identifier for the troubleshooting info entry.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Internal#Agent Troubleshoot Info Data.Task ID">
+            <summary>
+            Identifier of the agent task this troubleshooting info belongs to.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Internal#Agent Troubleshoot Info Data.Memory Entry ID">
+            <summary>
+            Identifier for the memory entry ID associated with this troubleshooting info.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Internal#Agent Troubleshoot Info Data.Troubleshooting Info">
+            <summary>
+            A blob containing detailed troubleshooting information.
+            It is expected to contain a JSON structure with the following data:
+            1. Page snapshot: schema and data on the page
+            2. Agent tools available on the page
+            3. Memorized data
+            4. Page stack
+            5. Agent settings
+            </summary>
+        </member>
+        <member name="M:Codeunit::System#Agents#TaskPane#Task Pane.ShowAgent(Agent)">
+            <summary>
+            Show the specified agent in the task pane.
+            </summary>
+            <param name="Agent">The agent record.</param>
+        </member>
+        <member name="M:Codeunit::System#Agents#TaskPane#Task Pane.ShowAgent(Enum::System#Agents#Agent Metadata Provider)">
+            <summary>
+            Show the agent with the specified agent metadata ID in the task pane.
+            </summary>
+            <param name="AgentMetadataID">The agent metadata ID.</param>
+        </member>
+        <member name="M:Codeunit::System#Agents#TaskPane#Task Pane.ShowAgent(Guid)">
+            <summary>
+            Show the agent with the specified agent user security ID in the task pane.
+            </summary>
+            <param name="AgentUserID">The agent user security ID.</param>
+        </member>
+        <member name="M:Codeunit::System#Agents#TaskPane#Task Pane.ShowTask(Agent Task)">
+            <summary>
+            Show the specified agent task in the task pane.
+            </summary>
+            <param name="AgentTask">The agent task record.</param>
+        </member>
+        <member name="M:Codeunit::System#Agents#TaskPane#Task Pane.ShowTask(BigInteger)">
+            <summary>
+            Show the specified agent task in the task pane.
+            </summary>
+            <param name="TaskID">The agent task ID.</param>
+        </member>
         <member name="O:Codeunit::System#Agents#Agent Default Task Execution">
             <summary>
             The default implementation for the Agent Task Execution.
@@ -9343,6 +9450,21 @@
             Supports extensibility for custom agent providers while maintaining type safety.
             Default implementations provided for validation and experimental functionality.
             </remarks>
+        </member>
+        <member name="E:Enum::System#Agents#Agent Publisher Type.Third Party">
+            <summary>
+            An agent provided by a 3rd party publisher.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Agents#Agent Publisher Type.First Party">
+            <summary>
+            An agent provided by Microsoft.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Agents#Agent Publisher Type.User">
+            <summary>
+            An agent that was created without involvement of an AL extension publisher.
+            </summary>
         </member>
         <member name="O:Enum::System#Agents#Agent Task Log Entry Type">
             <summary>
@@ -9856,6 +9978,30 @@
             Record identifier for the specific record requiring user intervention.
             </summary>
         </member>
+        <member name="F:Table::System#Agents#Agent User Int Request Details.Title[2048]">
+            <summary>
+            The user intervention request title.
+            </summary>
+            <remarks>
+            This information is currently not available in <see cref="IAgentTaskExecution.GetAgentTaskUserInterventionSuggestions"/>.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent User Int Request Details.Message[2048]">
+            <summary>
+            The user intervention request message.
+            </summary>
+            <remarks>
+            This information is currently not available in <see cref="IAgentTaskExecution.GetAgentTaskUserInterventionSuggestions"/>.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent User Int Request Details.Message ID">
+            <summary>
+            The Message ID for which the user intervention request is sent. This applies to Review Message requests only.
+            </summary>
+            <remarks>
+            This information is currently not available in <see cref="IAgentTaskExecution.GetAgentTaskUserInterventionSuggestions"/>.
+            </remarks>
+        </member>
         <member name="O:Table::System#Agents#Agent">
             <summary>
             Virtual table that provides information about AI agents configured in the system.
@@ -9923,7 +10069,7 @@
         </member>
         <member name="F:Table::System#Agents#Agent.Tasks Needing Attention">
             <summary>
-            The number of tasks assigned to this agent that currently require user attention or intervention.
+            The number of tasks assigned to this agent that currently require user attention or intervention in the current company.
             </summary>
         </member>
         <member name="F:Table::System#Agents#Agent.Can Current User Use Agent">
@@ -9944,6 +10090,21 @@
         <member name="F:Table::System#Agents#Agent.Initials[4]">
             <summary>
             The initials displayed on the agent's icon in the timeline and user interface.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent.Current Company Name[30]">
+            <summary>
+            Specifies the name of the company in which the table is currently invoked.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent.Publisher Name[250]">
+            <summary>
+            Specifies the Publisher Name of the extension that declared the agent.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent.Publisher Type">
+            <summary>
+            Specifies the Publisher Type of the agent.
             </summary>
         </member>
         <member name="O:Table::System#Agents#Agent Access Control">
@@ -9971,6 +10132,11 @@
         <member name="F:Table::System#Agents#Agent Access Control.Can Configure Agent">
             <summary>
             Indicates whether the user has permission to configure and modify the agent settings.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Access Control.Company Name[30]">
+            <summary>
+            Name of the company where the permission set assignment applies.
             </summary>
         </member>
         <member name="O:Table::System#Agents#Agent Task">
@@ -10164,6 +10330,11 @@
         <member name="F:Table::System#Agents#Agent Task Log Entry.Reason[2048]">
             <summary>
             The reasoning for why the agent took the decision to do this operation.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Log Entry.Troubleshooting Info">
+            <summary>
+            Additional troubleshooting information for the log entry.
             </summary>
         </member>
         <member name="O:Table::System#Agents#Agent Task Memory Entry">
@@ -10418,6 +10589,11 @@
             Indicates whether the current page exists.
             </summary>
         </member>
+        <member name="F:Table::System#Agents#Agent Task Timeline.Current Page Query">
+            <summary>
+            The query string used to access the primary page associated with the current timeline step.
+            </summary>
+        </member>
         <member name="O:Table::System#Agents#Agent Task Timeline Step">
             <summary>
             Virtual table that stores detailed information about individual steps in agent task timelines.
@@ -10588,12 +10764,28 @@
             <param name="AgentTaskStatus">The target status to set for the agent task when stopping it.</param>
             <param name="UserConfirm">Specifies whether to show a confirmation dialog to the user before stopping the task.</param>
         </member>
+        <member name="M:Codeunit::System#Agents#Agent Task Internal.StopAllNeedsAttentionTasks(Guid,Enum::System#Agents#Agent Task Status,Boolean)">
+            <summary>
+            Stops all agent tasks that need attention for the given agent by updating their status and clearing attention flags.
+            </summary>
+            <param name="AgentId">The unique identifier of the agent whose tasks are to be stopped.</param>
+            <param name="AgentTaskStatus">The target status to set for the agent tasks when stopping them.</param>
+            <param name="UserConfirm">Specifies whether to show a confirmation dialog to the user before stopping all tasks.</param>
+        </member>
         <member name="O:Codeunit::System#Agents#Agent User Intervention">
             <summary>
             Provides functionality for creating and managing user interventions in agent tasks.
             This codeunit handles the creation of user intervention responses to agent requests,
             including processing user input and suggestion selections.
             </summary>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent User Intervention.GetUserInterventionRequestDetails(Agent Task Log Entry,Agent User Int Request Details@,Agent Annotation@)">
+            <summary>
+            Get the user intervention details for the specified log entry.
+            </summary>
+            <param name="UserInterventionRequestEntry">The agent task log entry.</param>
+            <param name="UserInterventionRequestDetails">The user interevention request details.</param>
+            <param name="AgentAnnotations">The annotations on the user intervention request.</param>
         </member>
         <member name="M:Codeunit::System#Agents#Agent User Intervention.CreateUserIntervention(Agent Task Log Entry)">
             <summary>
@@ -10668,12 +10860,41 @@
             </summary>
             <returns>The agent metadata provider type, if any, -1 otherwise.</returns>
         </member>
-        <member name="M:Codeunit::System#Agents#Agent Utilities.UpdateCustomAgentAccessControls(Guid,Access Control Buffer@)">
+        <member name="M:Codeunit::System#Agents#Agent Utilities.UpdateAccessControl(Guid,Access Control Buffer@)">
             <summary>
-            Updates the access controls assigned to a custom agent.
+            Replaces the existing access controls for the agent with those provided in the buffer.
             </summary>
+            <remarks>
+            This removes any existing access controls assigned to the agent and replaces them.
+            </remarks>
             <param name="AgentUserSecurityId">The agent user security ID.</param>
             <param name="TempAccessControlBuffer">The temporary access control buffer.</param>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent Utilities.UpdateCustomAgentAccessControls(Guid,Access Control Buffer@)">
+            <summary>
+            Replaces the existing access controls for the custom agent with those provided in the buffer.
+            </summary>
+            <remarks>
+            This removes any existing access controls assigned to the agent and replaces them.
+            To be removed in favor of UpdateAccessControl.
+            </remarks>
+            <param name="AgentUserSecurityId">The agent user security ID.</param>
+            <param name="TempAccessControlBuffer">The temporary access control buffer.</param>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent Utilities.DeleteCustomAgent(Guid)">
+            <summary>
+            Deletes the specified custom agent, if the user has sufficient permissions.
+            </summary>
+            <param name="AgentUserSecurityId">The agent user security ID.</param>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent Utilities.TryGetAgentPublisherInfo(Enum::System#Agents#Agent Metadata Provider,Text[250]@,Enum::System#Agents#Agent Publisher Type@):Boolean">
+            <summary>
+            Gets the agent publisher info for the specified agent metadata provider.
+            </summary>
+            <param name="AgentMetadataProvider">The agent metadata provider.</param>
+            <param name="AgentPublisherName">The agent publisher name.</param>
+            <param name="AgentPublisherType">The agent publisher type.</param>
+            <returns>True if the publisher info could be found, false otherwise.</returns>
         </member>
         <member name="O:Enum::System#AI#Copilot Capability">
             <summary>

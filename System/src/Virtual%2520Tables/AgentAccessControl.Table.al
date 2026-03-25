@@ -4,6 +4,7 @@
 // ------------------------------------------------------------------------------------------------
 namespace System.Agents;
 
+using System.Environment;
 using System.Security.AccessControl;
 
 /// <summary>
@@ -16,12 +17,13 @@ using System.Security.AccessControl;
 /// for agent administration while maintaining security boundaries between different user roles.
 /// Scoped to OnPrem and not replicated for security considerations.
 /// </remarks>
+
 table 2000000261 "Agent Access Control"
 {
     Caption = 'Agent Access Control';
     DataPerCompany = false;
     ReplicateData = false;
-    Scope = OnPrem;
+    Scope = Cloud;
 
     fields
     {
@@ -51,11 +53,22 @@ table 2000000261 "Agent Access Control"
             Caption = 'Can Configure Agent';
             Tooltip = 'Specifies whether the user can configure this agent.';
         }
+        /// <summary>
+        /// Name of the company where the permission set assignment applies.
+        /// </summary>
+        field(4; "Company Name"; Text[30])
+        {
+            Caption = 'Company Name';
+            TableRelation = Company.Name;
+            ToolTip = 'Specifies the company context for this access control entry.';
+        }
     }
 
     keys
     {
-        key(PK; "Agent User Security ID", "User Security ID")
+#pragma warning disable AS0009 // Required to make the table per company
+        key(PK; "Agent User Security ID", "User Security ID", "Company Name")
+#pragma warning restore AS0009
         {
             Clustered = true;
         }

@@ -93,6 +93,8 @@ table 2000000264 "Agent Task Memory Entry"
         /// </summary>
         field(8; "Context"; Blob)
         {
+            ObsoleteState = Pending;
+            ObsoleteReason = 'The Context field is no longer used and will be removed in future versions. Use the one from agent task log entry.';
             Caption = 'Context';
             ToolTip = 'Specifies the context of the entry. It contains contextual data about the state of the agent when the entry was saved.';
         }

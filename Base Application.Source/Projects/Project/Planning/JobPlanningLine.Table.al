@@ -146,6 +146,9 @@ table 1003 "Job Planning Line"
                     "Work Type Code" := '';
                     "Gen. Bus. Posting Group" := '';
                     "Gen. Prod. Posting Group" := '';
+                    Description := '';
+                    "Description 2" := '';
+                    Reserve := Reserve::Never;
                     DeleteAmounts();
                     "Cost Factor" := 0;
                     if Type = Type::Item then begin
@@ -2209,9 +2212,15 @@ table 1003 "Job Planning Line"
 
             ApplyPrice(PriceType::Sale, CalledByFieldNo);
             ApplyPrice(PriceType::Purchase, CalledByFieldNo);
-            if Type = Type::Resource then begin
-                "Unit Cost (LCY)" := ConvertAmountToLCY("Unit Cost", UnitAmountRoundingPrecision);
-                "Direct Unit Cost (LCY)" := ConvertAmountToLCY("Direct Unit Cost (LCY)", UnitAmountRoundingPrecision);
+            case Type of
+                Type::Resource:
+                    begin
+                        "Unit Cost (LCY)" := ConvertAmountToLCY("Unit Cost", UnitAmountRoundingPrecision);
+                        "Direct Unit Cost (LCY)" := ConvertAmountToLCY("Direct Unit Cost (LCY)", UnitAmountRoundingPrecision);
+                    end;
+                Type::"G/L Account":
+                    if "Unit Cost" <> xRec."Unit Cost" then
+                        "Unit Cost (LCY)" := ConvertAmountToLCY("Unit Cost", UnitAmountRoundingPrecision);
             end;
             OnAfterFindPriceAndDiscount(Rec, xRec, CalledByFieldNo);
         end;
@@ -2295,8 +2304,7 @@ table 1003 "Job Planning Line"
             exit;
         end;
 
-        if (Amount <> xAmount) then
-            AmountLCY := ConvertAmountToLCY(Amount, UnitAmountRoundingPrecision);
+        AmountLCY := ConvertAmountToLCY(Amount, UnitAmountRoundingPrecision);
     end;
 
     local procedure ConvertAmountToFCY(AmountLCY: Decimal; Precision: Decimal) AmountFCY: Decimal;

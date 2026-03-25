@@ -3,6 +3,856 @@
   <file datatype="xml" source-language="en-US" target-language="en-US" original="System Application">
     <body>
       <group id="body">
+        <trans-unit id="Table 2866192011 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent JSON Buffer</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Agent JSON Buffer - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2866192011 - Field 415504711 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Id</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Agent JSON Buffer - Field Id - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2866192011 - Field 2719529412 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Json</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Agent JSON Buffer - Field Json - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3481744864 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent Available Tools Part</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Available Tools Part - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1607010720 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent Memorized Data</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Memorized Data Part - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 1607010720 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Displays the memorized key-value data for the agent.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Memorized Data Part - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 1607010720 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent Memorized Data</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Memorized Data Part - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1607010720 - Control 4233707119 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the key of the memorized data entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Memorized Data Part - Control KeyField - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1607010720 - Control 4233707119 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Key</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Memorized Data Part - Control KeyField - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1607010720 - Control 1131619133 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the value of the memorized data.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Memorized Data Part - Control Value - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1607010720 - Control 1131619133 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Value</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Memorized Data Part - Control Value - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 982821421 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent PageStack Part</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent PageStack Part - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 982821421 - Control 1338796320 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the caption of a page in the stack</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent PageStack Part - Control PageName - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 982821421 - Control 1338796320 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Page caption</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent PageStack Part - Control PageName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3930729464 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Context</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Context Part - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3930729464 - Control 3055379090 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of the agent that performed the tasks.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Context Part - Control AgentName - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3930729464 - Control 3055379090 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Context Part - Control AgentName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3930729464 - Control 552006252 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of the company in which the task was executed.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Context Part - Control CompanyName - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3930729464 - Control 552006252 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Context Part - Control CompanyName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3930729464 - Control 3742897076 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the ID of the task that was executed.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Context Part - Control TaskID - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3930729464 - Control 3742897076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Task ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Context Part - Control TaskID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3930729464 - Control 2507416415 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the title of the task that was executed.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Context Part - Control TaskTitle - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3930729464 - Control 2507416415 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Task title</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Context Part - Control TaskTitle - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>About agent task log entry</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use this detailed log of what the AI agent found on the page and how it acted autonomously to troubleshoot agent issues. AI-generated content may be incorrect.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent Task Log Entry (Preview)</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - NamedType 2664063643" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Only users who are assigned the 'Troubleshoot All Agents' permission can view page snapshot data.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - NamedType AgentTroubleshooterMissingPermissionTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - NamedType 650077689" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Log %1 - %2</source>
+          <note from="Developer" annotates="general" priority="2">%1 is the id, and %2 is the description of it.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - NamedType PageCaptionLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1389668301 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What tools the agent had available for the current page and context</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Agent Available Tools - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1389668301 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lists the tools that were available to the agent at this point. The set of available tools may change over time; do not rely on this list being exhaustive or permanent in instructions.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Agent Available Tools - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1389668301 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What tools the agent had access to</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Agent Available Tools - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 2522453389 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What data the agent memorized</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Agent Memorized Data - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 2522453389 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lists the key-value data that the agent had memorized as part of the current task at this point.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Agent Memorized Data - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 2522453389 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What data the agent memorized</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Agent Memorized Data - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 2482076749 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What messages the agent had access to</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control EarlierMessagesPart - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 2482076749 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lists the messages related to the task the agent had access to before taking a decision.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control EarlierMessagesPart - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 2482076749 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What messages the agent had access to</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control EarlierMessagesPart - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 2445482498 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>General information</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control General - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 2445482498 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>General information about the log entry. Click show more to see advanced details about the execution.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control General - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 2445482498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What the agent decided</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control General - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3055379090 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of the agent that performed the tasks.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control AgentName - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3055379090 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control AgentName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3461834954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the description of the log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Description - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 318613646 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the details of the log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Details - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 318613646 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Details</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Details - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 4169216894 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies if the agent made a decision at this point, or whether this was executed as part of a previous decision.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control IsDecision - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 4169216894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Decision Point</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control IsDecision - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3631508203 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies if the operation was successful.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control IsSuccess - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3631508203 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Success</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control IsSuccess - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3369789712 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the reason, provided by the agent, for the log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Reason - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3369789712 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reason</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Reason - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 577209412 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the date and time when the log entry was created.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control SystemCreatedAt - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 577209412 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Timestamp</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control SystemCreatedAt - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3742897076 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the ID of the task that was executed.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control TaskID - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3742897076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Task ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control TaskID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1878130204 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the type of the log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Type - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1878130204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Type</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1459576335 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the full name of the user that was involved</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control UserFullName - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1459576335 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User full name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control UserFullName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1146870918 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>General information</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control GeneralOther - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1146870918 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>General information about the log entry. Click show more to see advanced details about the execution.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control GeneralOther - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1146870918 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What happened</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control GeneralOther - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 438716910 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control DescriptionOther - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3995921290 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the details of the log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control DetailsOther - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3995921290 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Details</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control DetailsOther - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1665302605 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the full name of the user that took the decision.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control NameOther - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1665302605 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User full name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control NameOther - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 958406094 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the date and time when the log entry was created.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control TimestampOther - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 958406094 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Timestamp</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control TimestampOther - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1045306280 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Type</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control TypeOther - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 199603598 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What the agent received</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control InputMessagePart - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 199603598 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows the message the agent received as part of this task.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control InputMessagePart - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 199603598 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What the agent received</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control InputMessagePart - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 452463324 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What other actions were decided at the same time</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control LogsPart - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 452463324 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The agent can take multiple actions from the same decision. This lists the log entries related to the actions taken by the agent for this particular entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control LogsPart - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 452463324 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What other actions were decided at the same time</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control LogsPart - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 2312136821 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What the agent wrote</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control OutputMessagePart - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 2312136821 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows the message the agent wrote as part of this task.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control OutputMessagePart - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 2312136821 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What the agent wrote</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control OutputMessagePart - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3705547639 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What the agent saw</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control PageContentGroup - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3705547639 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The view of the page the agent saw before taking a decision. The data format is subject to change, therefore do not reference it too specifically in instructions.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control PageContentGroup - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3705547639 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What the agent saw</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control PageContentGroup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 3072771582 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Page content</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control PageContent - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 405685023 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>What pages were open below</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control PageStack - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 405685023 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows the pages that were opened at the time of the log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control PageStack - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 405685023 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Page stack</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control PageStack - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 167293302 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Context information about the task and agent</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control TaskContext - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 167293302 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows context information such as the agent name, task ID, and company name.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control TaskContext - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 167293302 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Task context</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control TaskContext - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1328709741 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Task and page settings</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control TaskPageSettings - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1328709741 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows the settings of the page at the time of the log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control TaskPageSettings - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2410510304 - Control 1328709741 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Task and page settings</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry - Control TaskPageSettings - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent Task Log</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - NamedType 2624743697" size-unit="char" translate="yes" xml:space="preserve">
+          <source>AI-generated content may be incorrect.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - NamedType AIGeneratedContentDisclaimerLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 318613646 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the step details.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Details - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 318613646 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Details</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Details - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 3641927271 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the unique identifier of the log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control ID - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 3641927271 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 1789400218 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Level</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Level - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 501693335 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Page Caption</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control PageCaption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 3369789712 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reason</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Reason - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 3742897076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Task ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control TaskID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 2429513770 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the date and time when the log entry was created.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Timestamp - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 2429513770 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Timestamp</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Timestamp - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 1878130204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Type</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 1581469095 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the full name of the user that was involved in performing the step.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control User Full Name - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 1581469095 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User Full Name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control User Full Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 167293302 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Context information about the task and agent</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control TaskContext - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 167293302 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows context information such as the agent name, task ID, and company name.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control TaskContext - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 167293302 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Task context</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control TaskContext - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 2512954401 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Details of the selected log entry</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control TaskLogEntryDetails - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 2512954401 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows details of the selected log entry, including the reason and description provided by the agent.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control TaskLogEntryDetails - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Control 2512954401 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Log entry details</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control TaskLogEntryDetails - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Action 1729919859 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Tell us what you think about the agent and suggest new features or improvements.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Action Feedback - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Action 1729919859 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Give feedback</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Action Feedback - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Action 2026913255 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Refresh the page.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Action Refresh - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Action 2026913255 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Refresh</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Action Refresh - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Action 59167481 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>View details of the selected log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Action ViewDetails - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 105547090 - Action 59167481 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>View details</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Action ViewDetails - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent Task Log</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 986080663 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the date and time when the log entry was created.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control CreatedAt - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 986080663 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Timestamp</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control CreatedAt - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 318613646 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the details.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control Details - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 318613646 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Details</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control Details - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 3641927271 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the unique identifier of the log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control ID - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 3641927271 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 1789400218 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Level</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control Level - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 501693335 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Page caption</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control PageCaption - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 3369789712 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the reason, provided by the agent, for the log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control Reason - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 3369789712 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reason</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control Reason - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 3742897076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Task ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control TaskID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 1878130204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Type</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 2994142618 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of related user.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control Username - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1273629707 - Control 2994142618 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry ListPart - Control Username - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3037207141 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent Task Log Entry</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry Part - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3037207141 - Control 2731845899 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry Part - Control DescriptionGroup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3037207141 - Control 3461834954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the description of the log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry Part - Control Description - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3037207141 - Control 3074384103 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Details</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry Part - Control DetailsGroup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3037207141 - Control 318613646 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the details of the log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry Part - Control Details - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3037207141 - Control 2967543861 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reason</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry Part - Control ReasonGroup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3037207141 - Control 3369789712 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the reason, provided by the agent, for the log entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry Part - Control Reason - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1906705702 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent Task Messages</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message ListPart - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1906705702 - Control 986080663 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the date and time when the message was created.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message ListPart - Control CreatedAt - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1906705702 - Control 986080663 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Created at</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message ListPart - Control CreatedAt - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1906705702 - Control 3846295265 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Created by</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message ListPart - Control CreatedByFullName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1906705702 - Control 2285523946 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the date and time when the message was last modified.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message ListPart - Control LastModifiedAt - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1906705702 - Control 2285523946 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last modified at</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message ListPart - Control LastModifiedAt - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1906705702 - Control 276525482 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message ListPart - Control MessageId - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1906705702 - Control 3076946130 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the message text.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message ListPart - Control MessageText - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1906705702 - Control 3076946130 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Message</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message ListPart - Control MessageText - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1906705702 - Control 39684925 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Type</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message ListPart - Control MessageType - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1906705702 - Control 513339096 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Status</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message ListPart - Control Status - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1906705702 - Control 3742897076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Task ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message ListPart - Control TaskID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Page Settings</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Control 3050372732 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Message settings</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Control Communication - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Control 458623705 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the date format used by the agent when sending messages.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Control CommunicationDateFormat - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Control 458623705 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Date format</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Control CommunicationDateFormat - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Control 2114239183 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies an example of the number format used by the agent when sending messages.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Control CommunicationFormattedNumberExample - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Control 2114239183 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Formatted number example</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Control CommunicationFormattedNumberExample - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Control 4009378478 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the language used by the agent when sending messages.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Control CommunicationLanguage - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Control 4009378478 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Language</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Control CommunicationLanguage - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Control 3665335946 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the time format used by the agent when sending messages.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Control CommunicationTimeFormat - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Control 3665335946 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Time format</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Control CommunicationTimeFormat - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Control 567887726 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the currency code used by the agent.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Control CurrencyCode - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Control 567887726 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Currency code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Control CurrencyCode - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Control 3309994395 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the currency symbol used by the agent.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Control CurrencySymbol - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3239713375 - Control 3309994395 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Currency symbol</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Page Settings Part - Control CurrencySymbol - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1647406986 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Agent Setup Buffer</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -163,11 +1013,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Agent Impl. - NamedType NoAgentsAvailableNotificationLearnMoreLbl</note>
         </trans-unit>
-        <trans-unit id="Codeunit 720521673 - NamedType 1550603661" size-unit="char" translate="yes" xml:space="preserve">
-          <source>One owner must be defined for the agent.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Agent Impl. - NamedType OneOwnerMustBeDefinedForAgentErr</note>
-        </trans-unit>
         <trans-unit id="Codeunit 720521673 - NamedType 3770502154" size-unit="char" translate="yes" xml:space="preserve">
           <source>Setup page with ID %1 must specify a source table.</source>
           <note from="Developer" annotates="general" priority="2">%1 = Setup page ID.</note>
@@ -183,6 +1028,11 @@
           <note from="Developer" annotates="general" priority="2">%1 = Setup page ID, %2 = Required field name.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Agent Impl. - NamedType SetupPageSourceTableMissingFieldErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 720521673 - NamedType 1458235331" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unknown</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Agent Impl. - NamedType UnknownCopilotAvailabilityLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 720521673 - Method 1637101986 - NamedType 3843247874" size-unit="char" translate="yes" xml:space="preserve">
           <source>Navigation menu only.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -192,11 +1042,6 @@
           <source>(User-created)</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Agent Impl. - Method PopulateProfiles - NamedType UserCreatedAppNameTxt</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2016826752 - NamedType 142231955" size-unit="char" translate="yes" xml:space="preserve">
-          <source>attachments_task%1_msg%2.zip</source>
-          <note from="Developer" annotates="general" priority="2">Filename format for downloading multiple attachments as a zip file. %1 = Task ID, %2 = Message ID</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Agent Message Impl. - NamedType AttachmentsFilenameLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 2016826752 - Method 3097883586 - NamedType 1812254642" size-unit="char" translate="yes" xml:space="preserve">
           <source>Download Email Attachment</source>
@@ -212,6 +1057,31 @@
           <source>Download Email Attachment</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Agent Message Impl. - Method ShowOrDownloadAttachment - NamedType DownloadDialogTitleLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 702586964 - NamedType 2350892433" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1\\%2</source>
+          <note from="Developer" annotates="general" priority="2">%1 is the existing summary text, %2 is the text that we are appending to the end</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Agent Setup Impl. - NamedType AppendTextToEndTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 702586964 - NamedType 2098496553" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Language used: %1</source>
+          <note from="Developer" annotates="general" priority="2">%1 is the language name, e.g. English (United States).</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Agent Setup Impl. - NamedType LanguageUsedLbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 702586964 - NamedType 3106040953" size-unit="char" translate="yes" xml:space="preserve">
+          <source>This agent uses AI - review its actions for accuracy.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Agent Setup Impl. - NamedType ReviewForAccuracyAgentUsesAILbl</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 113374717 - NamedType 2881958949" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The task cannot be set to ready because the agent has no access control permissions in the %1 company. The agent has permissions in the following companies: %2. Grant the agent permissions in this company before setting the task to ready.</source>
+          <note from="Developer" annotates="general" priority="2">%1 - Company Name, %2 - List of allowed companies</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Agent Task Builder Impl. - NamedType TaskCannotBeSetToReadyWithoutAccessControlErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 113374717 - NamedType 190498564" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The task cannot be set to ready because it has no messages. Add at least one message to the task before setting it to ready.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Agent Task Builder Impl. - NamedType TaskCannotBeSetToReadyWithoutMessagesErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 113374717 - Method 2255475365 - NamedType 1978720499" size-unit="char" translate="yes" xml:space="preserve">
           <source>Task title is mandatory. Please set the task title before creating task.</source>
@@ -268,46 +1138,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Agent Task Msg. Builder Impl. - Method VerifyMandatoryFieldsSet - NamedType GlobalAgentTaskIDErr</note>
         </trans-unit>
-        <trans-unit id="Page 1667037190 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Agent Access Control</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Access Control - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1667037190 - NamedType 4125312176" size-unit="char" translate="yes" xml:space="preserve">
-          <source>You cannot change the User. Delete and create the entry again.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Access Control - NamedType CannotUpdateUserErr</note>
-        </trans-unit>
-        <trans-unit id="Page 1667037190 - Control 534906919 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies whether the user can configure the agent.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Access Control - Control CanConfigureAgent - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 1667037190 - Control 534906919 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Can Configure</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Access Control - Control CanConfigureAgent - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1667037190 - Control 1459576335 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the Full Name of the User that can access the agent.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Access Control - Control UserFullName - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 1667037190 - Control 1459576335 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>User Full Name</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Access Control - Control UserFullName - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1667037190 - Control 3549826426 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the name of the User that can access the agent.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Access Control - Control UserName - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 1667037190 - Control 3549826426 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>User Name</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Access Control - Control UserName - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 2923590375 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Agent Card</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -347,6 +1177,16 @@
           <source>Type</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Card - Control Agent Metadata Provider - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2923590375 - Control 2336152139 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the availability of the agent.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Card - Control Availability - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2923590375 - Control 2336152139 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Availability</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Card - Control Availability - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2923590375 - Control 2058393039 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the display name of the user that is associated with the agent.</source>
@@ -399,7 +1239,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Card - Control Language - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2923590375 - Control 1501832164 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Agent Permission Sets</source>
+          <source>Agent Permissions</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Card - Control Permissions - Property Caption</note>
         </trans-unit>
@@ -424,7 +1264,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Card - Action AgentTasks - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 2923590375 - Action 4075977129 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Agent Tasks</source>
+          <source>View tasks</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Card - Action AgentTasks - Property Caption</note>
         </trans-unit>
@@ -664,7 +1504,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Consumption Overview - Action Category_Process - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2175064349 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Agents (Preview)</source>
+          <source>Agents</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent List - Property Caption</note>
         </trans-unit>
@@ -677,6 +1517,21 @@
           <source>No agents have been setup. You must set up an agent first.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent List - NamedType NoAgentSetupErr</note>
+        </trans-unit>
+        <trans-unit id="Page 2175064349 - Control 4167135003 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent type</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent List - Control AgentType - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2175064349 - Control 2336152139 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the availability of the agent.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent List - Control Availability - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2175064349 - Control 2336152139 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Availability</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent List - Control Availability - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2175064349 - Control 2058393039 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Display Name</source>
@@ -709,7 +1564,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent List - Action AgentTasks - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 2175064349 - Action 4075977129 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Agent Tasks</source>
+          <source>View tasks</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent List - Action AgentTasks - Property Caption</note>
         </trans-unit>
@@ -738,6 +1593,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Setup Part - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2962692939 - NamedType 1877674175" size-unit="char" translate="yes" xml:space="preserve">
+          <source>By %1</source>
+          <note from="Developer" annotates="general" priority="2">%1 is The agent publisher name</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Setup Part - NamedType AgentPublisherLbl</note>
+        </trans-unit>
         <trans-unit id="Page 2962692939 - NamedType 3434954629" size-unit="char" translate="yes" xml:space="preserve">
           <source>Language and region</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -747,6 +1607,11 @@
           <source>Manage user access</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Setup Part - NamedType ManageUserAccessLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 2962692939 - NamedType 935701056" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Setup Part - NamedType UserCreatedAgentPublisherLbl</note>
         </trans-unit>
         <trans-unit id="Page 2962692939 - Control 923406623 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>The badge of the agent.</source>
@@ -774,7 +1639,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Setup Part - Control State - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2962692939 - Control 1878130204 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the type of the agent.</source>
+          <source>Specifies the publisher/type of the agent.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Setup Part - Control Type - Property ToolTip</note>
         </trans-unit>
@@ -864,7 +1729,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Details - Action DiscardStep - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 596480858 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Agent Tasks (Preview)</source>
+          <source>Agent Tasks</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task List - Property Caption</note>
         </trans-unit>
@@ -1003,80 +1868,35 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task List - Action Category_Process - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 105547090 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Agent Task Log (Preview)</source>
+        <trans-unit id="Page 1133956327 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Attachments</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message Attachments - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 105547090 - Control 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Description</source>
+        <trans-unit id="Page 1133956327 - Method 2808250167 - NamedType 1812254642" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Download Email Attachment</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Description - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message Attachments - Method DownloadAttachment - NamedType DownloadDialogTitleLbl</note>
         </trans-unit>
-        <trans-unit id="Page 105547090 - Control 318613646 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the step details.</source>
+        <trans-unit id="Page 1133956327 - Control 989751795 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of the attachment</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Details - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message Attachments - Control FileName - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 105547090 - Control 318613646 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Details</source>
+        <trans-unit id="Page 1133956327 - Control 989751795 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>File Name</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Details - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message Attachments - Control FileName - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 105547090 - Control 3641927271 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the unique identifier of the log entry.</source>
+        <trans-unit id="Page 1133956327 - Control 100492085 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the size of the attachment</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control ID - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message Attachments - Control FileSize - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 105547090 - Control 3641927271 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>ID</source>
+        <trans-unit id="Page 1133956327 - Control 100492085 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>File Size</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control ID - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 105547090 - Control 501693335 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Page Caption</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control PageCaption - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 105547090 - Control 3742897076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Task ID</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control TaskID - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 105547090 - Control 2429513770 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the date and time when the log entry was created.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Timestamp - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 105547090 - Control 2429513770 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Timestamp</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Timestamp - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 105547090 - Control 1878130204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Type</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control Type - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 105547090 - Control 1581469095 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the full name of the user that was involved in performing the step..</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control User Full Name - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 105547090 - Control 1581469095 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>User Full Name</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Control User Full Name - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 105547090 - Action 2026913255 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Refresh the page.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Action Refresh - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 105547090 - Action 2026913255 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Refresh</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Log Entry List - Action Refresh - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message Attachments - Control FileSize - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2703286189 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Agent Task Message</source>
@@ -1092,6 +1912,11 @@
           <source>Outgoing message</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message Card - NamedType OutgoingMessageTxt</note>
+        </trans-unit>
+        <trans-unit id="Page 2703286189 - Control 1225782422 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Attachments</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message Card - Control Attachments - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2703286189 - Control 3621103723 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the number of attachments that are associated with the message.</source>
@@ -1162,6 +1987,21 @@
           <source>Message</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message Card - Control MessageText - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2703286189 - Control 167293302 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Context information about the task and agent</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message Card - Control TaskContext - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 2703286189 - Control 167293302 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows context information such as the agent name, task ID, and company name.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message Card - Control TaskContext - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 2703286189 - Control 167293302 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Task context</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message Card - Control TaskContext - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2703286189 - Action 2808250167 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Download the attachment.</source>
@@ -1237,6 +2077,21 @@
           <source>Task ID</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message List - Control TaskID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1236636407 - Control 167293302 - Property 1064389655" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Context information about the task and agent</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message List - Control TaskContext - Property AboutTitle</note>
+        </trans-unit>
+        <trans-unit id="Page 1236636407 - Control 167293302 - Property 247559172" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Shows context information such as the agent name, task ID, and company name.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message List - Control TaskContext - Property AboutText</note>
+        </trans-unit>
+        <trans-unit id="Page 1236636407 - Control 167293302 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Task context</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Agent Task Message List - Control TaskContext - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 166475705 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Agent Task Timeline</source>
@@ -1553,45 +2408,325 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Control - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3648797990 - NamedType 1550603661" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 3648797990 - Control 3753778656 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent Access Control</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Control - Control AccessControlPart - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 763964245 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent Access Control</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Ctrl Part - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 763964245 - NamedType 1550603661" size-unit="char" translate="yes" xml:space="preserve">
           <source>One owner must be defined for the agent.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Control - NamedType OneOwnerMustBeDefinedForAgentErr</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Ctrl Part - NamedType OneOwnerMustBeDefinedForAgentErr</note>
         </trans-unit>
-        <trans-unit id="Page 3648797990 - Control 534906919 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 763964245 - NamedType 248006988" size-unit="char" translate="yes" xml:space="preserve">
+          <source>This agent currently has permissions in only one company. By showing the Company field, you will be able to assign access controls in other companies where the agent is not available.\\Do you want to continue?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Ctrl Part - NamedType ShowSingleCompanyQst</note>
+        </trans-unit>
+        <trans-unit id="Page 763964245 - Control 534906919 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies whether the user can configure the agent.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Control - Control CanConfigureAgent - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Ctrl Part - Control CanConfigureAgent - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3648797990 - Control 534906919 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Can configure</source>
+        <trans-unit id="Page 763964245 - Control 534906919 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Can Configure</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Control - Control CanConfigureAgent - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Ctrl Part - Control CanConfigureAgent - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3648797990 - Control 1459576335 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 763964245 - Control 3133801257 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the company in which the user has access to the agent.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Ctrl Part - Control Company - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 763964245 - Control 3133801257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Ctrl Part - Control Company - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 763964245 - Control 1459576335 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the Full Name of the User that can access the agent.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Control - Control UserFullName - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Ctrl Part - Control UserFullName - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3648797990 - Control 1459576335 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 763964245 - Control 1459576335 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>User Full Name</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Control - Control UserFullName - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Ctrl Part - Control UserFullName - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3648797990 - Control 3549826426 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 763964245 - Control 3549826426 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the name of the User that can access the agent.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Control - Control UserName - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Ctrl Part - Control UserName - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3648797990 - Control 3549826426 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 763964245 - Control 3549826426 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>User Name</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Control - Control UserName - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Ctrl Part - Control UserName - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 383571445 - NamedType 248006988" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 16014886">
+        <trans-unit id="Page 763964245 - Action 1951826591 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show or hide the company name.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Ctrl Part - Action AgentShowHideCompany - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 763964245 - Action 1951826591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show/hide company</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Access Ctrl Part - Action AgentShowHideCompany - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1010837515 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Edit Agent Permissions</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1010837515 - Control 3123527090 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent tasks use permissions shared by both the agent and the task creator/approver.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions - Control Info - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1010837515 - Control 3561210905 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent permissions</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions - Control PermissionsPart - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent permissions</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - NamedType 3146882720" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The permission set %1 is defined multiple times in this context. Use the lookup button to select the relevant permission set.</source>
+          <note from="Developer" annotates="general" priority="2">%1 will be replaced with a Role ID code value from the Permission Set table</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - NamedType MultipleRoleIDErr</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - NamedType 2095898575" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Role ID must be filled in.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - NamedType RoleIdMustBeFilledInErr</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - NamedType 248006988" size-unit="char" translate="yes" xml:space="preserve">
           <source>This agent currently has permissions in only one company. By showing the Company field, you will be able to assign permissions in other companies, making the agent available there. The agent may not have been designed to work cross companies.\\Do you want to continue?</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension Agent User Subform - NamedType ShowSingleCompanyQst</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - NamedType ShowSingleCompanyQst</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Control 3959405189 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent permissions</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Control Main - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Control 3133801257 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of the company that this role is limited to for this Windows login.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Control Company - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Control 3133801257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Control Company - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Control 3461834954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of the security role that has been given to this Windows login in the current database.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Control Description - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Control 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Control Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Control 4023602082 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of the extension.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Control ExtensionName - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Control 4023602082 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Extension Name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Control ExtensionName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Control 1585787771 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the scope of the permission set.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Control PermissionScope - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Control 1585787771 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Permission Scope</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Control PermissionScope - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Control 4088713267 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the ID of a security role that has been assigned to this Windows login in the current database.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Control PermissionSet - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Control 4088713267 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Permission Set</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Control PermissionSet - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Action 1951826591 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show or hide the company name.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Action AgentShowHideCompany - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 300823634 - Action 1951826591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show/hide company</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Select Agent Permissions Part - Action AgentShowHideCompany - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3753208169 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent Access Control</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Access Control - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3753208169 - Control 534906919 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies whether the user can configure the agent.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Access Control - Control CanConfigureAgent - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3753208169 - Control 534906919 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Can Configure</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Access Control - Control CanConfigureAgent - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3753208169 - Control 3133801257 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the company in which the user has access to the agent.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Access Control - Control Company - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3753208169 - Control 3133801257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Access Control - Control Company - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3753208169 - Control 1459576335 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the Full Name of the User that can access the agent.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Access Control - Control UserFullName - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3753208169 - Control 1459576335 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User Full Name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Access Control - Control UserFullName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3753208169 - Control 3549826426 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of the User that can access the agent.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Access Control - Control UserName - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3753208169 - Control 3549826426 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User Name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Access Control - Control UserName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3753208169 - Action 1951826591 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show or hide the company name.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Access Control - Action AgentShowHideCompany - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3753208169 - Action 1951826591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show/hide company</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Access Control - Action AgentShowHideCompany - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3753208169 - Action 616796859 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Edit the users that can access this agent.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Access Control - Action EditUserAccess - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3753208169 - Action 616796859 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Edit user access</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Access Control - Action EditUserAccess - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent Permission Sets</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - NamedType 1276699308" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Permissions can only be edited for inactive agents. Do you want to make the agent inactive now?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - NamedType DeactivateAgentToEditPermissionsQst</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Control 739346273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Agent Permissions</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Control Group - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Control 3133801257 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of the company that this role is limited to for this Windows login.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Control Company - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Control 3133801257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Company</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Control Company - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Control 3461834954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of the security role that has been given to this Windows login in the current database.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Control Description - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Control 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Control Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Control 4023602082 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of the extension.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Control ExtensionName - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Control 4023602082 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Extension Name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Control ExtensionName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Control 1585787771 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the scope of the permission set.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Control PermissionScope - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Control 1585787771 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Permission Scope</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Control PermissionScope - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Control 4088713267 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the ID of a security role that has been assigned to this Windows login in the current database.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Control PermissionSet - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Control 4088713267 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Permission Set</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Control PermissionSet - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Action 1951826591 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show or hide the company name.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Action AgentShowHideCompany - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Action 1951826591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show/hide company</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Action AgentShowHideCompany - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Action 1670227992 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Edit the permission sets assigned to this agent.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Action EditPermissions - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3921065144 - Action 1670227992 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Edit agent permissions</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page View Agent Permissions - Action EditPermissions - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 383571445 - Action 1951826591 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 383571445">
           <source>Show or hide the company name.</source>
@@ -1622,6 +2757,16 @@
           <source>App Id</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table Copilot Settings - Field App Id - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 632553577 - Field 2424681819 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>App Installed</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Copilot Settings - Field App Installed - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 632553577 - Field 1606374689 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>App Publisher</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table Copilot Settings - Field App Publisher - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 632553577 - Field 2336152139 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Availability</source>

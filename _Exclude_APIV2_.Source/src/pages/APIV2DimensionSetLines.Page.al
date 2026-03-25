@@ -23,7 +23,7 @@ page 30022 "APIV2 - Dimension Set Lines"
     SourceTableTemporary = true;
     Extensible = false;
     ODataKeyFields = "Dimension Id";
-    AboutText = 'Provides full CRUD access to individual dimension set line records, enabling external systems to manage dimension assignments for transactions such as journal entries, sales, and purchases. Supports retrieval and modification of dimension codes, values, and parent relationships to ensure precise financial tracking and categorization for reporting and cost allocation integrations.';
+    AboutText = 'Provides access to individual dimension set line records, enabling external systems to manage dimension assignments for transactions such as journal entries, sales, and purchases. Supports full CRUD operations for retrieval and modification of dimension codes, values, and parent relationships to ensure precise financial tracking and categorization for reporting and cost allocation integrations.';
 
     layout
     {
@@ -331,6 +331,8 @@ page 30022 "APIV2 - Dimension Set Lines"
                             SalesCrMemoHeader.SetRange("Draft Cr. Memo SystemId", ParentIdFilter);
                             if SalesCrMemoHeader.FindFirst() then
                                 exit(SalesCrMemoHeader."Dimension Set ID");
+                            if SalesCrMemoHeader.GetBySystemId(ParentIdFilter) then
+                                exit(SalesCrMemoHeader."Dimension Set ID");
                         end;
                 end;
             DimensionSetEntryBufferParentType::"Sales Invoice":
@@ -504,6 +506,13 @@ page 30022 "APIV2 - Dimension Set Lines"
                         end else begin
                             SalesCrMemoHeader.SetRange("Draft Cr. Memo SystemId", ParentIdFilter);
                             if SalesCrMemoHeader.FindFirst() then begin
+                                SalesCrMemoHeader."Dimension Set ID" := DimensionManagement.GetDimensionSetID(TempDimensionSetEntry);
+                                DimensionManagement.UpdateGlobalDimFromDimSetID(
+                                    SalesCrMemoHeader."Dimension Set ID", SalesCrMemoHeader."Shortcut Dimension 1 Code", SalesCrMemoHeader."Shortcut Dimension 2 Code");
+                                SalesCrMemoHeader.Modify(true);
+                                exit;
+                            end;
+                            if SalesCrMemoHeader.GetBySystemId(ParentIdFilter) then begin
                                 SalesCrMemoHeader."Dimension Set ID" := DimensionManagement.GetDimensionSetID(TempDimensionSetEntry);
                                 DimensionManagement.UpdateGlobalDimFromDimSetID(
                                     SalesCrMemoHeader."Dimension Set ID", SalesCrMemoHeader."Shortcut Dimension 1 Code", SalesCrMemoHeader."Shortcut Dimension 2 Code");

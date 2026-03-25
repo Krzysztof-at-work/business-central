@@ -14,7 +14,7 @@ namespace System.Agents;
 /// </remarks>
 interface IAgentTaskExecution
 {
-    Scope = OnPrem; // TODO(agent) - This should change to Cloud when ready to expose agents.
+    Scope = Cloud;
 
     /// <summary>
     /// Analyzes the content of an agent task message and its attachments.

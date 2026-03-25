@@ -5,6 +5,7 @@
 namespace System.Agents;
 
 using System.Reflection;
+using System.Environment;
 
 /// <summary>
 /// Virtual table that provides information about AI agents configured in the system.
@@ -23,7 +24,7 @@ table 2000000260 "Agent"
 {
     Caption = 'Agent';
     DataPerCompany = false;
-    Scope = OnPrem; // TODO(agent) - This should change to Cloud when ready to expose agents.
+    Scope = OnPrem;
 
     fields
     {
@@ -119,15 +120,16 @@ table 2000000260 "Agent"
             Tooltip = 'Specifies whether the agent can access the current company.';
         }
         /// <summary>
-        /// The number of tasks assigned to this agent that currently require user attention or intervention.
+        /// The number of tasks assigned to this agent that currently require user attention or intervention in the current company.
         /// </summary>
         field(11; "Tasks Needing Attention"; Integer)
         {
             Editable = false;
             Caption = 'Tasks Needing Attention';
-            Tooltip = 'The number of tasks for this agent that need attention.';
+            Tooltip = 'The number of tasks for this agent that need attention in the current company.';
             FieldClass = FlowField;
             CalcFormula = count("Agent Task" where("Agent User Security ID" = field("User Security ID"),
+                                                   "Company Name" = field("Current Company Name"),
                                                    "Needs Attention" = const(true)));
         }
         /// <summary>
@@ -163,6 +165,35 @@ table 2000000260 "Agent"
         {
             Caption = 'Initials';
             ToolTip = 'Specifies the initials to be displayed on the icon opening the agent''s timeline.';
+        }
+        /// <summary>
+        /// Specifies the name of the company in which the table is currently invoked.
+        /// </summary>
+        field(16; "Current Company Name"; Text[30])
+        {
+            Access = Local;
+            Caption = 'Current Company Name';
+            Editable = false;
+            TableRelation = Company."Name";
+            Tooltip = 'Specifies the name of the company in which the table is currently invoked.';
+        }
+        /// <summary>
+        /// Specifies the Publisher Name of the extension that declared the agent.
+        /// </summary>
+        field(17; "Publisher Name"; Text[250])
+        {
+            Editable = false;
+            Caption = 'Publisher Name';
+            Tooltip = 'Specifies the Publisher Name of the extension that declared the agent.';
+        }
+        /// <summary>
+        /// Specifies the Publisher Type of the agent.
+        /// </summary>
+        field(18; "Publisher Type"; Enum "Agent Publisher Type")
+        {
+            Editable = false;
+            Caption = 'Publisher Type';
+            Tooltip = 'Specifies the Publisher Type of the agent.';
         }
     }
 

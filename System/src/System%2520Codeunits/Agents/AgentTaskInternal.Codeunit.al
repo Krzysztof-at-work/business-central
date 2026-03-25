@@ -47,6 +47,32 @@ codeunit 2000000018 "Agent Task Internal"
         AgentTask.Modify(true);
     end;
 
+    /// <summary>
+    /// Stops all agent tasks that need attention for the given agent by updating their status and clearing attention flags.
+    /// </summary>
+    /// <param name="AgentId">The unique identifier of the agent whose tasks are to be stopped.</param>
+    /// <param name="AgentTaskStatus">The target status to set for the agent tasks when stopping them.</param>
+    /// <param name="UserConfirm">Specifies whether to show a confirmation dialog to the user before stopping all tasks.</param>
+    [Scope('OnPrem')]
+    procedure StopAllNeedsAttentionTasks(AgentId: Guid; AgentTaskStatus: enum "Agent Task Status"; UserConfirm: Boolean)
+    var
+        AgentTask: Record "Agent Task";
+    begin
+        if UserConfirm then
+            if not Confirm(AreYouSureThatYouWantToStopAllTasksQst) then
+                exit;
+
+        // Filter to tasks that need attention for this agent
+        AgentTask.SetRange("Agent User Security ID", AgentId);
+        AgentTask.SetRange("Needs Attention", true);
+
+        if AgentTask.FindSet() then
+            repeat
+                StopTask(AgentTask, AgentTaskStatus, false);
+            until AgentTask.Next() = 0;
+    end;
+
     var
         AreYouSureThatYouWantToStopTheTaskQst: Label 'Are you sure that you want to stop the task?';
+        AreYouSureThatYouWantToStopAllTasksQst: Label 'All tasks that need attention for this agent will be stopped. Stopped tasks can’t be restarted. Continue?';
 }

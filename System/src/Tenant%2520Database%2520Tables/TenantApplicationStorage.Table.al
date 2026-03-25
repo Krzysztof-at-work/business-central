@@ -90,7 +90,7 @@ table 2000000239 "Tenant Application Storage"
         field(9; "Sync Mode"; Option)
         {
             Caption = 'Sync Mode';
-            OptionMembers = "Add","Force";
+            OptionMembers = "Add","Force","Recreate";
         }
 
         /// <summary>
@@ -117,6 +117,26 @@ table 2000000239 "Tenant Application Storage"
         field(13; "Package Hash"; Text[64])
         {
             Caption = 'Package Hash';
+        }
+
+        /// <summary>
+        /// Indicates the scope of the extension i.e. how the application was published.
+        /// </summary>
+        field(14; "Published As"; Option)
+        {
+            Caption = 'Published As';
+            OptionCaption = 'PTE,Dev';
+            OptionMembers = "PTE","Dev";
+        }
+
+        /// <summary>
+        /// Indicates the type of the package.
+        /// </summary>
+        field(15; "Package Type"; Option)
+        {
+            Caption = 'Package Type';
+            OptionCaption = 'Extension,Designer,CRM';
+            OptionMembers = "Extension","Designer","CRM";
         }
     }
 
