@@ -1,0 +1,3 @@
+*.app
+*.xlf
+!en-us.xlf
