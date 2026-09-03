@@ -17,7 +17,6 @@ enum 2000000011 "Agent User Int Request Type"
 {
     Extensible = false;
     Caption = 'Agent User Intervention Request Type';
-    Scope = OnPrem;
 
     /// <summary>
     /// The user is asked to review an input or output message.

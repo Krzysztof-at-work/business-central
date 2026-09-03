@@ -37,9 +37,9 @@ table 2000000293 "MCP Configuration Tool"
         /// </summary>
         field(2; "Object Type"; Option)
         {
-            Caption = 'Object Type';
-            OptionMembers = Page;
-            ToolTip = 'Specifies the type of the object.';
+            Caption = 'API Object Type';
+            OptionMembers = Page,Query;
+            ToolTip = 'Specifies the type of the API object.';
         }
 
         /// <summary>
@@ -94,6 +94,15 @@ table 2000000293 "MCP Configuration Tool"
         {
             Caption = 'Allow Bound Actions';
             ToolTip = 'Specifies whether bound actions are allowed for this tool.';
+        }
+
+        /// <summary>
+        /// Optional: Api Version of the API page.
+        /// </summary>
+        field(15; "API Version"; Text[30])
+        {
+            Caption = 'API Version';
+            ToolTip = 'Specifies the API version of the API page.';
         }
     }
 

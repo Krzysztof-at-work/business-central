@@ -1,5 +1,5 @@
 <Package xmlns="http://schemas.microsoft.com/navx/2015/manifest">
-  <App Id="8874ed3a-0643-4247-9ced-7a7002f7135d" Name="System" Publisher="Microsoft" Brief="" Description="" Version="27.0.46760.0" CompatibilityId="0.0.0.0" PrivacyStatement="" EULA="" Help="" HelpBaseUrl="" Url="" Logo="" Runtime="16.0" Target="OnPrem" ShowMyCode="False" />
+  <App Id="8874ed3a-0643-4247-9ced-7a7002f7135d" Name="System" Publisher="Microsoft" Brief="" Description="" Version="28.0.54016.0" CompatibilityId="0.0.0.0" PrivacyStatement="" EULA="" Help="" HelpBaseUrl="" Url="" Logo="" Runtime="17.0" Target="OnPrem" ShowMyCode="False" />
   <IdRanges>
     <IdRange MinObjectId="2000000000" MaxObjectId="2000001000" />
   </IdRanges>
@@ -8,6 +8,7 @@
     <Module Id="63ca2fa4-4f03-4f2b-a480-172fef340d3f" Name="System Application" Publisher="Microsoft" />
     <Module Id="c64d75f0-e9f1-4d0f-9949-cd453b9b1466" Name="Guided Experience" Publisher="Microsoft" />
     <Module Id="f7964d32-7685-400f-8297-4bc17d0aab0e" Name="Microsoft User Feedback" Publisher="Microsoft" />
+    <Module Id="5767db24-c02e-46e8-9132-44de8be7fc57" Name="MCP" Publisher="Microsoft" />
     <Module Id="a06f7530-7613-4575-b547-64b064784431" Name="Internal" Publisher="Microsoft" />
   </InternalsVisibleTo>
   <ScreenShots />
@@ -22,6 +23,6 @@
   <ResourceExposurePolicy AllowDebugging="true" AllowDownloadingSource="true" IncludeSourceInSymbolFile="true" ApplyToDevExtension="true" />
   <KeyVaultUrls />
   <Source />
-  <Build Timestamp="2026-02-25T19:48:44.9543034Z" CompilerVersion="16.4.33.4744" />
+  <Build Timestamp="2026-08-27T09:37:49.4802559Z" CompilerVersion="17.0.40.60691" />
   <AlternateIds />
 </Package>

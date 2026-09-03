@@ -29,6 +29,7 @@
     <Permission Type="0" ID="2000000072" Value="15" />
     <Permission Type="0" ID="2000000074" Value="15" />
     <Permission Type="0" ID="2000000186" Value="15" />
+    <Permission Type="0" ID="2000000294" Value="15" />
     <Permission Type="0" ID="2000000209" Value="15" />
     <Permission Type="0" ID="2000000207" Value="15" />
     <Permission Type="0" ID="2000000208" Value="15" />
@@ -143,7 +144,6 @@
     <Permission Type="0" ID="2000000243" Value="15" />
     <Permission Type="0" ID="2000000081" Value="15" />
     <Permission Type="0" ID="2000000135" Value="15" />
-    <Permission Type="0" ID="2000000287" Value="15" />
     <Permission Type="0" ID="2000000259" Value="15" />
     <Permission Type="0" ID="2000000258" Value="15" />
     <Permission Type="0" ID="2000000267" Value="15" />
@@ -155,14 +155,13 @@
     <Permission Type="0" ID="2000000271" Value="15" />
     <Permission Type="0" ID="2000000270" Value="15" />
     <Permission Type="0" ID="2000000298" Value="15" />
-    <Permission Type="0" ID="2000000283" Value="15" />
-    <Permission Type="0" ID="2000000285" Value="15" />
-    <Permission Type="0" ID="2000000290" Value="15" />
-    <Permission Type="0" ID="2000000279" Value="15" />
-    <Permission Type="0" ID="2000000286" Value="15" />
+    <Permission Type="0" ID="2000000287" Value="15" />
+    <Permission Type="0" ID="2000000297" Value="15" />
     <Permission Type="0" ID="2000000260" Value="15" />
     <Permission Type="0" ID="2000000261" Value="15" />
+    <Permission Type="0" ID="2000000299" Value="15" />
     <Permission Type="0" ID="2000000262" Value="15" />
+    <Permission Type="0" ID="2000000247" Value="15" />
     <Permission Type="0" ID="2000000274" Value="15" />
     <Permission Type="0" ID="2000000282" Value="15" />
     <Permission Type="0" ID="2000000264" Value="15" />
@@ -171,9 +170,15 @@
     <Permission Type="0" ID="2000000278" Value="15" />
     <Permission Type="0" ID="2000000276" Value="15" />
     <Permission Type="0" ID="2000000277" Value="15" />
+    <Permission Type="0" ID="2000000283" Value="15" />
+    <Permission Type="0" ID="2000000285" Value="15" />
+    <Permission Type="0" ID="2000000290" Value="15" />
+    <Permission Type="0" ID="2000000279" Value="15" />
+    <Permission Type="0" ID="2000000286" Value="15" />
     <Permission Type="0" ID="2000000164" Value="15" />
     <Permission Type="0" ID="2000000039" Value="15" />
     <Permission Type="0" ID="2000000229" Value="15" />
+    <Permission Type="0" ID="2000000300" Value="15" />
     <Permission Type="0" ID="2000000154" Value="15" />
     <Permission Type="0" ID="2000000236" Value="15" />
     <Permission Type="0" ID="2000000235" Value="15" />
@@ -181,6 +186,8 @@
     <Permission Type="0" ID="2000000045" Value="15" />
     <Permission Type="0" ID="2000000020" Value="15" />
     <Permission Type="0" ID="2000000022" Value="15" />
+    <Permission Type="0" ID="2000000292" Value="15" />
+    <Permission Type="0" ID="2000000293" Value="15" />
     <Permission Type="0" ID="2000000257" Value="15" />
     <Permission Type="0" ID="2000000256" Value="15" />
     <Permission Type="0" ID="2000000266" Value="15" />
@@ -188,6 +195,7 @@
     <Permission Type="0" ID="2000000159" Value="15" />
     <Permission Type="0" ID="2000000237" Value="15" />
     <Permission Type="0" ID="2000000238" Value="15" />
+    <Permission Type="0" ID="2000000296" Value="15" />
     <Permission Type="0" ID="2000000132" Value="15" />
     <Permission Type="0" ID="2000000213" Value="15" />
     <Permission Type="0" ID="2000000214" Value="15" />
@@ -216,8 +224,6 @@
     <Permission Type="0" ID="2000000102" Value="15" />
     <Permission Type="0" ID="2000000007" Value="15" />
     <Permission Type="0" ID="2000000026" Value="15" />
-    <Permission Type="0" ID="2000000292" Value="15" />
-    <Permission Type="0" ID="2000000293" Value="15" />
     <Permission Type="1" ID="2000000069" Value="16" />
     <Permission Type="1" ID="2000000001" Value="16" />
     <Permission Type="1" ID="2000000071" Value="16" />
@@ -246,6 +252,7 @@
     <Permission Type="1" ID="2000000072" Value="16" />
     <Permission Type="1" ID="2000000074" Value="16" />
     <Permission Type="1" ID="2000000186" Value="16" />
+    <Permission Type="1" ID="2000000294" Value="16" />
     <Permission Type="1" ID="2000000209" Value="16" />
     <Permission Type="1" ID="2000000207" Value="16" />
     <Permission Type="1" ID="2000000208" Value="16" />
@@ -360,7 +367,6 @@
     <Permission Type="1" ID="2000000243" Value="16" />
     <Permission Type="1" ID="2000000081" Value="16" />
     <Permission Type="1" ID="2000000135" Value="16" />
-    <Permission Type="1" ID="2000000287" Value="16" />
     <Permission Type="1" ID="2000000259" Value="16" />
     <Permission Type="1" ID="2000000258" Value="16" />
     <Permission Type="1" ID="2000000267" Value="16" />
@@ -372,14 +378,13 @@
     <Permission Type="1" ID="2000000271" Value="16" />
     <Permission Type="1" ID="2000000270" Value="16" />
     <Permission Type="1" ID="2000000298" Value="16" />
-    <Permission Type="1" ID="2000000283" Value="16" />
-    <Permission Type="1" ID="2000000285" Value="16" />
-    <Permission Type="1" ID="2000000290" Value="16" />
-    <Permission Type="1" ID="2000000279" Value="16" />
-    <Permission Type="1" ID="2000000286" Value="16" />
+    <Permission Type="1" ID="2000000287" Value="16" />
+    <Permission Type="1" ID="2000000297" Value="16" />
     <Permission Type="1" ID="2000000260" Value="16" />
     <Permission Type="1" ID="2000000261" Value="16" />
+    <Permission Type="1" ID="2000000299" Value="16" />
     <Permission Type="1" ID="2000000262" Value="16" />
+    <Permission Type="1" ID="2000000247" Value="16" />
     <Permission Type="1" ID="2000000274" Value="16" />
     <Permission Type="1" ID="2000000282" Value="16" />
     <Permission Type="1" ID="2000000264" Value="16" />
@@ -388,9 +393,15 @@
     <Permission Type="1" ID="2000000278" Value="16" />
     <Permission Type="1" ID="2000000276" Value="16" />
     <Permission Type="1" ID="2000000277" Value="16" />
+    <Permission Type="1" ID="2000000283" Value="16" />
+    <Permission Type="1" ID="2000000285" Value="16" />
+    <Permission Type="1" ID="2000000290" Value="16" />
+    <Permission Type="1" ID="2000000279" Value="16" />
+    <Permission Type="1" ID="2000000286" Value="16" />
     <Permission Type="1" ID="2000000164" Value="16" />
     <Permission Type="1" ID="2000000039" Value="16" />
     <Permission Type="1" ID="2000000229" Value="16" />
+    <Permission Type="1" ID="2000000300" Value="16" />
     <Permission Type="1" ID="2000000154" Value="16" />
     <Permission Type="1" ID="2000000236" Value="16" />
     <Permission Type="1" ID="2000000235" Value="16" />
@@ -398,6 +409,8 @@
     <Permission Type="1" ID="2000000045" Value="16" />
     <Permission Type="1" ID="2000000020" Value="16" />
     <Permission Type="1" ID="2000000022" Value="16" />
+    <Permission Type="1" ID="2000000292" Value="16" />
+    <Permission Type="1" ID="2000000293" Value="16" />
     <Permission Type="1" ID="2000000257" Value="16" />
     <Permission Type="1" ID="2000000256" Value="16" />
     <Permission Type="1" ID="2000000266" Value="16" />
@@ -405,6 +418,7 @@
     <Permission Type="1" ID="2000000159" Value="16" />
     <Permission Type="1" ID="2000000237" Value="16" />
     <Permission Type="1" ID="2000000238" Value="16" />
+    <Permission Type="1" ID="2000000296" Value="16" />
     <Permission Type="1" ID="2000000132" Value="16" />
     <Permission Type="1" ID="2000000213" Value="16" />
     <Permission Type="1" ID="2000000214" Value="16" />
@@ -433,9 +447,10 @@
     <Permission Type="1" ID="2000000102" Value="16" />
     <Permission Type="1" ID="2000000007" Value="16" />
     <Permission Type="1" ID="2000000026" Value="16" />
-    <Permission Type="1" ID="2000000292" Value="16" />
-    <Permission Type="1" ID="2000000293" Value="16" />
+    <Permission Type="5" ID="2000000017" Value="16" />
+    <Permission Type="5" ID="2000000030" Value="16" />
     <Permission Type="5" ID="2000000028" Value="16" />
+    <Permission Type="5" ID="2000000020" Value="16" />
     <Permission Type="5" ID="2000000003" Value="16" />
     <Permission Type="5" ID="2000000012" Value="16" />
     <Permission Type="5" ID="2000000010" Value="16" />
@@ -446,7 +461,6 @@
     <Permission Type="5" ID="2000000004" Value="16" />
     <Permission Type="5" ID="2000000014" Value="16" />
     <Permission Type="5" ID="2000000001" Value="16" />
-    <Permission Type="5" ID="2000000020" Value="16" />
     <Permission Type="5" ID="2000000008" Value="16" />
     <Permission Type="5" ID="2000000016" Value="16" />
     <Permission Type="5" ID="2000000027" Value="16" />
@@ -455,12 +469,22 @@
     <Permission Type="5" ID="2000000019" Value="16" />
     <Permission Type="5" ID="2000000022" Value="16" />
     <Permission Type="5" ID="2000000021" Value="16" />
+    <Permission Type="5" ID="2000000023" Value="16" />
+    <Permission Type="5" ID="2000000025" Value="16" />
     <Permission Type="5" ID="2000000007" Value="16" />
     <Permission Type="5" ID="2000000009" Value="16" />
     <Permission Type="5" ID="2000000011" Value="16" />
-    <Permission Type="5" ID="2000000023" Value="16" />
+    <Permission Type="5" ID="2000000029" Value="16" />
+    <Permission Type="5" ID="2000000024" Value="16" />
+    <Permission Type="8" ID="2000000000" Value="16" />
+    <Permission Type="8" ID="2000000004" Value="16" />
+    <Permission Type="8" ID="2000000001" Value="16" />
+    <Permission Type="8" ID="2000000003" Value="16" />
+    <Permission Type="8" ID="2000000002" Value="16" />
     <Permission Type="8" ID="2000000102" Value="16" />
+    <Permission Type="8" ID="2000000103" Value="16" />
     <Permission Type="8" ID="2000000100" Value="16" />
     <Permission Type="8" ID="2000000101" Value="16" />
+    <Permission Type="8" ID="2000000104" Value="16" />
   </ObjectEntitlements>
 </Entitlement>

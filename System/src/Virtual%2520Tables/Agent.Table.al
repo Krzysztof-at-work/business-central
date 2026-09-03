@@ -66,7 +66,7 @@ table 2000000260 "Agent"
         field(5; "State"; Option)
         {
             Caption = 'State';
-            OptionCaption = 'Enabled,Disabled';
+            OptionCaption = 'Active,Inactive';
             OptionMembers = Enabled,Disabled;
             Tooltip = 'Specifies the state of the user that is associated with the agent.';
             InitValue = Disabled;
@@ -195,6 +195,50 @@ table 2000000260 "Agent"
             Caption = 'Publisher Type';
             Tooltip = 'Specifies the Publisher Type of the agent.';
         }
+        /// <summary>
+        /// Unique identifier of the model version to be used by this agent instance.
+        /// </summary>
+        field(19; "Model ID"; Code[30])
+        {
+            Caption = 'Model ID';
+            Tooltip = 'Specifies the Model ID to be used by the agent.';
+        }
+        field(20; "Model Name"; Text[70])
+        {
+            Editable = false;
+            Caption = 'Model Name';
+            Tooltip = 'Specifies the friendly name of the model assigned to the agent.';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Agent Model"."Model Name" where("Model ID" = field("Model ID")));
+        }
+        /// <summary>
+        /// Indicates the availability status of the model assigned to this agent.
+        /// </summary>
+#pragma warning disable AS0005
+        field(21; "Model Availability"; Option)
+        {
+            Editable = false;
+            Caption = 'Model Availability';
+            Tooltip = 'Specifies the availability status of the model assigned to the agent (Preview, Available, Obsolete, or Retired).';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Agent Model".Availability where("Model ID" = field("Model ID")));
+            OptionCaption = 'Preview,Available,Obsolete,Retired';
+            OptionMembers = Preview,Available,Obsolete,Retired;
+        }
+#pragma warning restore AS0005
+        /// <summary>
+        /// The retirement date of the model assigned to this agent.
+        /// </summary>
+#pragma warning disable AS0005
+        field(22; "Model Retirement Date"; Date)
+        {
+            Editable = false;
+            Caption = 'Model Retirement Date';
+            Tooltip = 'Specifies the retirement date of the model assigned to the agent.';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Agent Model"."Retirement Date" where("Model ID" = field("Model ID")));
+        }
+#pragma warning restore AS0005
     }
 
     keys

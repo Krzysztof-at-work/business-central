@@ -12,7 +12,7 @@ page 2000000102 "Agent Task Details"
     PageType = ListPart;
     ApplicationArea = All;
     SourceTable = "Agent Task Timeline Step Det.";
-    Caption = 'Agent Task Timeline Step Details';
+    Caption = 'Agent Task Details';
     InsertAllowed = false;
     DeleteAllowed = false;
     Extensible = false;
@@ -21,7 +21,7 @@ page 2000000102 "Agent Task Details"
 
     layout
     {
-        area(content)
+        area(Content)
         {
             field(SelectedSuggestionId; SelectedSuggestionId)
             {
@@ -51,25 +51,21 @@ page 2000000102 "Agent Task Details"
     {
         area(Processing)
         {
-
-#pragma warning disable AW0005
             action(Confirm)
-#pragma warning restore AW0005
             {
+                ApplicationArea = All;
                 Caption = 'Continue';
                 ToolTip = 'Confirms the timeline step so that the agent continues with the task.';
-
                 trigger OnAction()
                 begin
                     AddUserIntervention();
                 end;
             }
-#pragma warning disable AW0005
             action(DiscardStep)
-#pragma warning restore AW0005
             {
+                ApplicationArea = All;
                 Caption = 'Discard step';
-                ToolTip = 'Discard the timeline step.';
+                ToolTip = 'Discards the timeline step.';
                 trigger OnAction()
                 begin
                     SkipStep();
@@ -100,6 +96,7 @@ page 2000000102 "Agent Task Details"
             if Rec."Client Context".HasValue() then begin
                 Rec."Client Context".CreateInStream(InStream, AgentTask.GetDefaultEncoding());
                 ClientContext.Read(InStream);
+                Clear(InStream);
             end;
     end;
 
@@ -113,7 +110,7 @@ page 2000000102 "Agent Task Details"
         TaskTimelineStep.SetRange("Last Log Entry Type", "Agent Task Log Entry Type"::"User Intervention Request");
         if TaskTimelineStep.FindLast() then
             if UserInterventionRequestEntry.Get(TaskTimelineStep."Task ID", TaskTimelineStep."Last Log Entry ID") then
-                AgentUserIntervention.CreateUserIntervention(UserInterventionRequestEntry, UserMessage, SelectedSuggestionId);
+                AgentUserIntervention.CreateUserInterventionFromSuggestionId(UserInterventionRequestEntry, UserMessage, SelectedSuggestionId);
     end;
 
     local procedure SkipStep()

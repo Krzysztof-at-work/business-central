@@ -19,14 +19,33 @@ codeunit 2000000019 "Agent User Intervention"
     /// Get the user intervention details for the specified log entry.
     /// </summary>
     /// <param name="UserInterventionRequestEntry">The agent task log entry.</param>
-    /// <param name="UserInterventionRequestDetails">The user interevention request details.</param>
-    /// <param name="AgentAnnotations">The annotations on the user intervention request.</param>
+    /// <param name="TempUserInterventionRequestDetails">The user interevention request details.</param>
+    /// <param name="TempUserInterventionAnnotations">The annotations on the user intervention request.</param>
+    [Scope('OnPrem')]
+    procedure GetUserInterventionRequestDetails(
+        UserInterventionRequestEntry: Record "Agent Task Log Entry";
+        var TempUserInterventionRequestDetails: Record "Agent User Int Request Details" temporary;
+        var TempUserInterventionAnnotations: Record "Agent Annotation" temporary)
+    var
+        TempUserInterventionSuggestions: Record "Agent Task User Int Suggestion" temporary;
+    begin
+        GetUserInterventionRequestDetails(UserInterventionRequestEntry, TempUserInterventionRequestDetails, TempUserInterventionAnnotations, TempUserInterventionSuggestions);
+    end;
+
+    /// <summary>
+    /// Get the user intervention details for the specified log entry.
+    /// </summary>
+    /// <param name="UserInterventionRequestEntry">The agent task log entry.</param>
+    /// <param name="TempUserInterventionRequestDetails">The user interevention request details.</param>
+    /// <param name="TempUserInterventionAnnotations">The annotations on the user intervention request.</param>
+    /// <param name="TempUserInterventionSuggestions">The suggestions available for the user intervention request.</param>
     [Scope('OnPrem')]
     [Native]
     procedure GetUserInterventionRequestDetails(
         UserInterventionRequestEntry: Record "Agent Task Log Entry";
-        var UserInterventionRequestDetails: Record "Agent User Int Request Details" temporary;
-        var AgentAnnotations: Record "Agent Annotation" temporary)
+        var TempUserInterventionRequestDetails: Record "Agent User Int Request Details" temporary;
+        var TempUserInterventionAnnotations: Record "Agent Annotation" temporary;
+        var TempUserInterventionSuggestions: Record "Agent Task User Int Suggestion" temporary)
     begin
     end;
 
@@ -37,7 +56,7 @@ codeunit 2000000019 "Agent User Intervention"
     [Scope('OnPrem')]
     procedure CreateUserIntervention(UserInterventionRequestEntry: Record "Agent Task Log Entry")
     begin
-        CreateUserIntervention(UserInterventionRequestEntry, '', -1);
+        CreateUserIntervention(UserInterventionRequestEntry, '');
     end;
 
     /// <summary>
@@ -47,19 +66,26 @@ codeunit 2000000019 "Agent User Intervention"
     /// <param name="UserInput">Additional text input provided by the user as part of the intervention response.</param>
     [Scope('OnPrem')]
     procedure CreateUserIntervention(UserInterventionRequestEntry: Record "Agent Task Log Entry"; UserInput: Text)
+    var
+        AgentTask: Record "Agent Task";
     begin
-        CreateUserIntervention(UserInterventionRequestEntry, UserInput, -1);
+        AgentTask.Get(UserInterventionRequestEntry."Task ID");
+        CreateUserInterventionFromUserInputInternal(AgentTask."Agent User Security ID", AgentTask.ID, UserInterventionRequestEntry.ID, UserInput);
     end;
 
     /// <summary>
-    /// Creates a user intervention response with a selected suggestion ID.
+    /// Creates a user intervention response with both user input and a suggestion ID provided as text.
     /// </summary>
     /// <param name="UserInterventionRequestEntry">The agent task log entry that requested user intervention.</param>
-    /// <param name="SelectedSuggestionId">The ID of the suggestion selected by the user from the available options.</param>
+    /// <param name="UserInput">Additional text input provided by the user as part of the intervention response.</param>
+    /// <param name="SelectedSuggestionCode">The suggestion ID as text that will be converted to integer. If invalid, logs an error and proceeds without suggestion selection.</param>
     [Scope('OnPrem')]
-    procedure CreateUserIntervention(UserInterventionRequestEntry: Record "Agent Task Log Entry"; SelectedSuggestionId: Integer)
+    procedure CreateUserInterventionFromSuggestionCode(UserInterventionRequestEntry: Record "Agent Task Log Entry"; SelectedSuggestionCode: Code[20])
+    var
+        AgentTask: Record "Agent Task";
     begin
-        CreateUserIntervention(UserInterventionRequestEntry, '', SelectedSuggestionId);
+        AgentTask.Get(UserInterventionRequestEntry."Task ID");
+        CreateUserInterventionFromSuggestionCodeInternal(AgentTask."Agent User Security ID", AgentTask.ID, UserInterventionRequestEntry.ID, '', SelectedSuggestionCode);
     end;
 
     /// <summary>
@@ -69,7 +95,7 @@ codeunit 2000000019 "Agent User Intervention"
     /// <param name="UserInput">Additional text input provided by the user as part of the intervention response.</param>
     /// <param name="SelectedSuggestionId">The suggestion ID as text that will be converted to integer. If invalid, logs an error and proceeds without suggestion selection.</param>
     [Scope('OnPrem')]
-    procedure CreateUserIntervention(UserInterventionRequestEntry: Record "Agent Task Log Entry"; UserInput: Text; SelectedSuggestionId: Text)
+    internal procedure CreateUserInterventionFromSuggestionId(UserInterventionRequestEntry: Record "Agent Task Log Entry"; UserInput: Text; SelectedSuggestionId: Text)
     var
         SelectedSuggestionIdInt: Integer;
     begin
@@ -87,6 +113,9 @@ codeunit 2000000019 "Agent User Intervention"
     /// <summary>
     /// Creates a user intervention response with both user input and a selected suggestion ID.
     /// </summary>
+    /// <remarks>
+    /// This method should not be used anymore, and will be marked as internal so that only the timeline uses it.
+    /// </remarks>
     /// <param name="UserInterventionRequestEntry">The agent task log entry that requested user intervention.</param>
     /// <param name="UserInput">Additional text input provided by the user as part of the intervention response.</param>
     /// <param name="SelectedSuggestionId">The integer ID of the suggestion selected by the user from the available options.</param>
@@ -96,11 +125,24 @@ codeunit 2000000019 "Agent User Intervention"
         AgentTask: Record "Agent Task";
     begin
         AgentTask.Get(UserInterventionRequestEntry."Task ID");
-        CreateUserInterventionInternal(AgentTask."Agent User Security ID", AgentTask.ID, UserInterventionRequestEntry.ID, UserInput, SelectedSuggestionId);
+        CreateUserInterventionFromSuggestionIdInternal(AgentTask."Agent User Security ID", AgentTask.ID, UserInterventionRequestEntry.ID, UserInput, SelectedSuggestionId);
     end;
 
     [Native]
-    local procedure CreateUserInterventionInternal(AgentUserSecurityId: Guid; AgentTaskId: BigInteger; UserInterventionRequestEntryId: Integer; UserInput: Text; SelectedSuggestionId: Integer)
+    [Scope('OnPrem')]
+    local procedure CreateUserInterventionFromUserInputInternal(AgentUserSecurityId: Guid; AgentTaskId: BigInteger; UserInterventionRequestEntryId: Integer; UserInput: Text)
+    begin
+    end;
+
+    [Native]
+    [Scope('OnPrem')]
+    local procedure CreateUserInterventionFromSuggestionIdInternal(AgentUserSecurityId: Guid; AgentTaskId: BigInteger; UserInterventionRequestEntryId: Integer; UserInput: Text; SelectedSuggestionId: Integer)
+    begin
+    end;
+
+    [Native]
+    [Scope('OnPrem')]
+    local procedure CreateUserInterventionFromSuggestionCodeInternal(AgentUserSecurityId: Guid; AgentTaskId: BigInteger; UserInterventionRequestEntryId: Integer; UserInput: Text; SelectedSuggestionCode: Code[20])
     begin
     end;
 

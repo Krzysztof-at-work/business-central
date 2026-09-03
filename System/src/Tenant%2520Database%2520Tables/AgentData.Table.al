@@ -101,6 +101,14 @@ table 2000000258 "Agent Data"
             Caption = 'Properties';
             ToolTip = 'Specifies custom properties that can be set on the agent.';
         }
+        /// <summary>
+        /// Unique identifier of the AI model version to be used by this agent instance.
+        /// </summary>
+        field(10; "Model ID"; Code[30])
+        {
+            Caption = 'Model ID';
+            Tooltip = 'Specifies the Model ID to be used by the agent.';
+        }
     }
 
     keys

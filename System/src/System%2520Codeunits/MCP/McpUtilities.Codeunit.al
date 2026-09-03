@@ -5,6 +5,7 @@
 
 namespace System.MCP;
 
+#pragma warning disable AS0018, AS0023, AS0026
 /// <summary>
 /// Provides functionality for managing MCP configurations.
 /// </summary>
@@ -13,22 +14,24 @@ codeunit 2000000023 "MCP Utilities"
     Access = Internal;
 
     /// <summary>
-    /// Get list of invalid MCP tools missing parent pages for the provided list of page tool object IDs.
+    /// Get a dictionary of potential parent MCP tools for the provided list of page IDs with their API versions.
+    /// Note: This assumes unique page IDs across all API versions in the MCP configuration tool.
+    /// Multiple pages with the same ID but different API versions are not supported.
     /// </summary>
-    /// <param name="PageObjectIds">List of page object IDs.</param>
-    /// <returns>List of invalid MCP tool page IDs.</returns>
+    /// <param name="PageIdVersions">Dictionary of page object ID and API version.</param>
+    /// <returns>Dictionary mapping each (page ID, version) tuple to its list of potential parent MCP tool page IDs.</returns>
     [Native]
-    procedure GetInvalidMCPToolsMissingParentPage(PageObjectIds: List of [Integer]): List of [Integer]
+    procedure GetParentMCPTools(PageIdVersions: Dictionary of [Integer, Text]): Dictionary of [Integer, List of [Integer]]
     begin
     end;
 
     /// <summary>
-    /// Get list of parent MCP tools for the provided list of page tool object IDs.
+    /// Get a dictionary of system tools available in dynamic mode.
     /// </summary>
-    /// <param name="PageObjectId">Page object ID.</param>
-    /// <returns>List of parent MCP tool page IDs.</returns>
+    /// <returns>Dictionary mapping each system tool name to their description</returns>
     [Native]
-    procedure GetParentMCPTools(PageObjectId: Integer): List of [Integer]
+    procedure GetSystemToolsInDynamicMode(): Dictionary of [Text, Text]
     begin
     end;
 }
+#pragma warning restore AS0018, AS0023, AS0026

@@ -118,6 +118,7 @@ table 2000000232 "Tenant Report Layout"
         {
             Caption = 'Description';
         }
+        
         /// <summary>
         /// Indicates whether this layout is marked as obsolete and should not be used.
         /// </summary>
@@ -125,12 +126,21 @@ table 2000000232 "Tenant Report Layout"
         {
             Caption = 'Is Obsolete';
         }
+        
         /// <summary>
         /// Configuration setting for Excel layouts controlling multiple data sheet behavior.
         /// </summary>
         field(13; ExcelLayoutMultipleDataSheets; enum "Excel Sheet Configuration")
         {
             Caption = 'Excel Layout Multiple Data Sheets';
+        }
+
+        /// <summary>
+        /// Layout status indicating if the layout is active, inactive, or under review.
+        /// </summary>
+        field(14; "Layout Status"; enum "Report Layout Status")
+        {
+            Caption = 'Layout Status';
         }
     }
 

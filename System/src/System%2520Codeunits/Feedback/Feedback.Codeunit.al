@@ -16,6 +16,29 @@ codeunit 2000000021 Feedback
     InherentPermissions = X;
 
     /// <summary>
+    /// Sets a custom question to be presented to the user when requesting feedback.
+    /// </summary>
+    /// <param name="Question">The custom question text to be displayed to the user.</param>
+    /// <param name="QuestionDisplay">The display text for the question. Translatable string.</param>
+    /// <param name="QuestionType">The type of question.</param>
+    /// <param name="RequiredBehavior">An dictionary of the enum values -> boolean-like value (true/false/1/0), indicating behavior for requiring answers.</param>
+    /// <param name="AnswerOptions">A dictionary of answer options where the key is the option value and the value is the display text.
+    /// Only applicable for Dropdown, MultiSelect, SingleSelect, and SingleSelectHorizontal question types.
+    /// </param>
+    [Native]
+    procedure SetCustomQuestion(Question: Text; QuestionDisplay: Text; QuestionType: Enum FeedbackQuestionType; RequiredBehavior: Dictionary of [Enum FeedbackRequiredBehavior, Text]; AnswerOptions: Dictionary of [Text, Text])
+    begin
+    end;
+
+    /// <summary>
+    /// Clears any previously set custom question.
+    /// </summary>
+    [Native]
+    procedure ClearCustomQuestion()
+    begin
+    end;
+
+    /// <summary>
     /// Requests general feedback for a feature, optionally specifying if it is a Copilot feature and its area.
     /// </summary>
     /// <param name="FeatureName">The name of the feature for which feedback is requested. This is the ID of the feature area on OCV.</param>

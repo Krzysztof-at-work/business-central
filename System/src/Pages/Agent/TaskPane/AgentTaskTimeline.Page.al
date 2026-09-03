@@ -6,7 +6,6 @@
 namespace System.Agents.TaskPane;
 
 using System.Agents;
-using System.Security.AccessControl;
 
 page 2000000101 "Agent Task Timeline"
 {
@@ -22,7 +21,7 @@ page 2000000101 "Agent Task Timeline"
 
     layout
     {
-        area(content)
+        area(Content)
         {
             field(SelectedSuggestionId; SelectedSuggestionId)
             {
@@ -48,6 +47,11 @@ page 2000000101 "Agent Task Timeline"
                 {
                     Caption = 'Summary';
                     ToolTip = 'Specifies the summary of the timeline step.';
+                }
+                field(PageType; GlobalPageType)
+                {
+                    Caption = 'Page Type';
+                    ToolTip = 'Specifies the page type from the summary of the timeline step.';
                 }
                 field(PrimaryPageQuery; GlobalPageQuery)
                 {
@@ -126,10 +130,9 @@ page 2000000101 "Agent Task Timeline"
     {
         area(Processing)
         {
-#pragma warning disable AW0005
             action(Send)
-#pragma warning restore AW0005
             {
+                ApplicationArea = All;
                 Caption = 'Continue';
                 ToolTip = 'Sends the instructions to the agent so that the agent continues with the task.';
                 Scope = Repeater;
@@ -139,14 +142,12 @@ page 2000000101 "Agent Task Timeline"
                 begin
                     if UserInterventionRequestEntry.Get(Rec."Task ID", Rec."Last Log Entry ID") then
                         if UserInterventionRequestEntry.Type = "Agent Task Log Entry Type"::"User Intervention Request" then
-                            AgentUserIntervention.CreateUserIntervention(UserInterventionRequestEntry, UserMessage, SelectedSuggestionId);
+                            AgentUserIntervention.CreateUserInterventionFromSuggestionId(UserInterventionRequestEntry, UserMessage, SelectedSuggestionId);
                 end;
             }
-
-#pragma warning disable AW0005
             action(Retry)
-#pragma warning restore AW0005
             {
+                ApplicationArea = All;
                 Caption = 'Retry';
                 ToolTip = 'Retries the task.';
                 Scope = Repeater;
@@ -178,18 +179,19 @@ page 2000000101 "Agent Task Timeline"
     local procedure SetTaskTimelineDetails()
     var
         AgentTaskMessage: Record "Agent Task Message";
+        SummaryJson: BigText;
         InStream: InStream;
         ConfirmationLogEntryType: Enum "Agent Task Log Entry Type";
         LogEntryId: Integer;
-        ConfirmedById: Guid;
         PrevConfirmedById: Guid;
         ShouldRefreshConfirmationDetails: Boolean;
     begin
         // Clear old values
-        GlobalNowAuthorizedBy := '';
-        GlobalConfirmedBy := '';
         GlobalConfirmedAt := 0DT;
+        Clear(GlobalNowAuthorizedBy);
+        Clear(GlobalConfirmedBy);
         Clear(GlobalPageSummary);
+        Clear(GlobalPageType);
         Clear(GlobalPageQuery);
         Clear(GlobalAnnotations);
         Clear(GlobalSuggestions);
@@ -200,7 +202,9 @@ page 2000000101 "Agent Task Timeline"
         if Rec.CalcFields("Primary Page Summary", "Primary Page Query", "Annotations", "Last User Intervention Details") then begin
             if Rec."Primary Page Summary".HasValue() then begin
                 Rec."Primary Page Summary".CreateInStream(InStream, AgentTask.GetDefaultEncoding());
-                GlobalPageSummary.Read(InStream);
+                SummaryJson.Read(InStream);
+                GlobalPageSummary := AgentTask.FormatTimelineStepSummary(Format(SummaryJson), Rec.Type);
+                GlobalPageType := AgentTask.GetTimelineStepSummaryPageType(Format(SummaryJson), Rec.Type);
                 Clear(InStream);
             end;
             if Rec."Primary Page Query".HasValue() then begin
@@ -250,11 +254,10 @@ page 2000000101 "Agent Task Timeline"
         if not ShouldRefreshConfirmationDetails then
             exit;
 
-        if not TryGetConfirmationDetails(LogEntryId, ConfirmedById, GlobalConfirmedAt, ConfirmationLogEntryType) then
+        if not TryGetConfirmationDetails(LogEntryId, GlobalConfirmedBy, GlobalConfirmedAt, ConfirmationLogEntryType) then
             exit;
 
-        GlobalConfirmedBy := ResolveUserDisplayName(ConfirmedById);
-        if (not IsNullGuid(ConfirmedById)) and (ConfirmedById <> PrevConfirmedById) then
+        if (not IsNullGuid(GlobalConfirmedBy)) and (GlobalConfirmedBy <> PrevConfirmedById) then
             GlobalNowAuthorizedBy := GlobalConfirmedBy;
 
         case
@@ -267,7 +270,7 @@ page 2000000101 "Agent Task Timeline"
                     if AgentTaskMessage.Get(Rec."Primary Page Record ID") then
                         if AgentTaskMessage.Status = AgentTaskMessage.Status::Discarded then begin
                             // Discards should not change authorized by.
-                            GlobalNowAuthorizedBy := '';
+                            Clear(GlobalNowAuthorizedBy);
                             ConfirmationStatusOption := ConfirmationStatusOption::Discarded;
                         end;
                 end else
@@ -332,33 +335,18 @@ page 2000000101 "Agent Task Timeline"
         exit(EmptyGuid);
     end;
 
-    local procedure ResolveUserDisplayName(UserSecurityId: Guid): Text[250]
-    var
-        User: Record User;
-    begin
-        if IsNullGuid(UserSecurityId) then
-            exit('');
-
-        if User.Get(UserSecurityId) then
-            if User."Full Name" <> '' then
-                exit(User."Full Name")
-            else
-                exit(User."User Name");
-
-        exit('');
-    end;
-
     var
         AgentUserIntervention: Codeunit "Agent User Intervention";
         AgentTask: Codeunit "Agent Task Internal";
-        GlobalPageSummary: BigText;
         GlobalPageQuery: BigText;
         GlobalAnnotations: BigText;
         GlobalSuggestions: BigText;
         GlobalUserInterventionDetails: BigText;
+        GlobalPageSummary: Text;
+        GlobalPageType: Text;
         GlobalDescription: Text[2048];
-        GlobalConfirmedBy: Text[250];
-        GlobalNowAuthorizedBy: Text[250];
+        GlobalConfirmedBy: Guid;
+        GlobalNowAuthorizedBy: Guid;
         GlobalConfirmedAt: DateTime;
         ConfirmationStatusOption: Option " ",ConfirmationNotRequired,ReviewConfirmationRequired,ReviewConfirmed,StopConfirmationRequired,StopConfirmed,Discarded;
         UserMessage: Text[250];

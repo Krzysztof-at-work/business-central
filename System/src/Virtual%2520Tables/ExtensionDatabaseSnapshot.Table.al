@@ -88,6 +88,14 @@ table 2000000244 "Extension Database Snapshot"
             OptionCaption = 'Unpublished, Global, PTE, Dev';
             OptionMembers = "Unpublished","Global","PTE","Dev";
         }
+
+        /// <summary>
+        /// Indicates whether a user has reviewed the orphaned extension data after uninstalling the extension.
+        /// </summary>
+        field(9; "Is Reviewed"; Boolean)
+        {
+            Caption = 'Is Reviewed';
+        }
     }
 
     keys

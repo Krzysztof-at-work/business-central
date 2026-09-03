@@ -15,9 +15,9 @@ using System.Globalization;
 using System.Integration;
 using System.IO;
 using System.MCP;
+using System.PerformanceProfile;
 using System.Privacy;
 using System.Reflection;
-using System.PerformanceProfile;
 using System.Security.Authentication;
 using System.Text;
 using System.Tooling;
@@ -132,6 +132,7 @@ permissionset 2000000020 BaseSystemPermissionSet
                   tabledata "Ext. Business Event Definition" = R,
                   tabledata "Agent" = RIMD,
                   tabledata "Agent Access Control" = RIMD,
+                  tabledata "Agent Creation Control" = RIMD,
                   tabledata "Agent Task" = RIMD,
                   tabledata "Agent Task Log Entry" = RIMD,
                   tabledata "Agent Task Memory Entry" = RIMD,

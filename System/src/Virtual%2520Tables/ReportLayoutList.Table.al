@@ -160,6 +160,15 @@ table 2000000234 "Report Layout List"
         {
             Caption = 'Excel Layout Multiple Data Sheets';
         }
+
+        /// <summary>
+        /// Layout status indicating if the layout is active, inactive, or under review.
+        /// </summary>
+        field(18; "Layout Status"; enum "Report Layout Status")
+        {
+            Caption = 'Layout Status';
+        }
+
     }
 
     keys

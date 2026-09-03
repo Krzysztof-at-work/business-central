@@ -103,6 +103,25 @@ table 2000000063 "Key"
         field(13; Unique; Boolean)
         {
         }
+        /// <summary>
+        /// The Key's name, duplicates may occur when multiple keys are defined on the same table but defined in seperate table extensions.
+        /// Table Id + Key Name + Source App ID is an unique combination.
+        /// </summary>
+        field(14; "Key name"; Text[128])
+        {
+            Caption = 'Key Name';
+            ToolTip = 'Name of the key either defined by metadata.';
+        }
+        /// <summary>
+        /// The application ID of the source of the key. Notice this is the table based placement location of the key,
+        /// not the application ID of the table where the key is defined.
+        /// An extension defined key on a base table will have the application ID of the base table, not the extension.
+        /// </summary>
+        field(15; "Source App ID"; Guid)
+        {
+            Caption = 'Source App ID';
+            ToolTip = 'The application ID of the source of the key definition.';
+        }
     }
 
     keys

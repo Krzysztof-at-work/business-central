@@ -151,8 +151,6 @@ table 2000000266 "Performance Profiles"
             Caption = 'Client Type';
             OptionCaption = ',,Web Service,,,Background,,Web Client,,,,';
             OptionMembers = ,,"Web Service",,,Background,,"Web Client",,,,;
-            FieldClass = FlowField;
-            CalcFormula = lookup("Performance Profile Scheduler"."Client Type" where("Schedule ID" = field("Schedule ID")));
         }
         /// <summary>
         /// The duration of the activity itself, as opposed to the entire profiling period.

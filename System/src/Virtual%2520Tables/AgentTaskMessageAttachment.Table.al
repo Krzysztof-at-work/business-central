@@ -69,6 +69,14 @@ table 2000000275 "Agent Task Message Attachment"
             Caption = 'Ignored';
             ToolTip = 'Specifies whether the message attachment is ignored.';
         }
+        /// <summary>
+        /// The reason why the attachment was ignored.
+        /// </summary>
+        field(6; "Ignored Reason"; Text[250])
+        {
+            Caption = 'Ignored Reason';
+            ToolTip = 'Specifies the reason why the message attachment was ignored.';
+        }
     }
 
     keys

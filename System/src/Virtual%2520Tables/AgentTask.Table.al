@@ -173,6 +173,46 @@ table 2000000262 "Agent Task"
             Caption = 'Needs Attention';
             ToolTip = 'Specifies whether the task needs attention.';
         }
+        /// <summary>
+        /// The execution context of the task at the time it was created.
+        /// </summary>
+        field(16; "Execution Context"; Option)
+        {
+            Caption = 'Execution Context';
+            ToolTip = 'Specifies the execution context of the task at the time it was created.';
+            OptionCaption = 'Default,Eval';
+            OptionMembers = Default,Eval;
+        }
+        /// <summary>
+        /// The billing classification for the task.
+        /// </summary>
+        field(17; "Billing Context"; Enum "Agent Task Billing Context")
+        {
+            Caption = 'Billing Context';
+            ToolTip = 'Specifies the billing context for the agent task. Non first party agents can only use "Default" billing context.';
+            Editable = false;
+        }
+        /// <summary>
+        /// The unique identifier of the AI model version used with this task. Set by the platform when the task is created
+        /// and cannot be modified afterwards.
+        /// </summary>
+        field(19; "Model ID"; Code[30])
+        {
+            Caption = 'Model ID';
+            ToolTip = 'Specifies the Model ID used by the agent for this task.';
+            Editable = false;
+        }
+        /// <summary>
+        /// The friendly name of the AI model version used with this task.
+        /// </summary>
+        field(20; "Model Name"; Text[70])
+        {
+            Editable = false;
+            Caption = 'Model Name';
+            Tooltip = 'Specifies the friendly name of the model assigned to the task.';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Agent Model"."Model Name" where("Model ID" = field("Model ID")));
+        }
     }
 
     keys

@@ -131,8 +131,8 @@ table 2000000295 "User AI Consumption Data"
         field(12; "Copilot Credits"; Decimal)
         {
             Caption = 'Copilot Credits';
-            AutoFormatType = 1;
-            DecimalPlaces = 2:2;
+            AutoFormatType = 0;
+            DecimalPlaces = 0 : 2;
             NotBlank = true;
             ToolTip = 'Specifies the amount of Copilot credits consumed.';
         }
@@ -201,6 +201,16 @@ table 2000000295 "User AI Consumption Data"
             NotBlank = true;
             ToolTip = 'Specifies the Copilot Studio feature display name for the charge, for example "Generative answer".';
         }
+        /// <summary>
+        /// A flag indicating whether or not the consumption entry is excluded from billing.
+        /// Note that the consumption is still reported to the billing pipeline.
+        /// </summary>
+        field(20; "Is Excluded From Billing"; Boolean)
+        {
+            Caption = 'Is Excluded From Billing';
+            NotBlank = true;
+            ToolTip = 'Specifies whether the consumption entry is excluded from billing.';
+        }
     }
 
     keys
@@ -249,3 +259,4 @@ table 2000000295 "User AI Consumption Data"
     {
     }
 }
+

@@ -73,6 +73,15 @@ table 2000000292 "MCP Configuration"
             Caption = 'Discover Additional Objects';
             ToolTip = 'Specifies whether to allow discovery of read-only objects not defined in the configuration. Only supported with dynamic tool mode.';
         }
+
+        /// <summary>
+        /// Indicates whether this is the default MCP configuration. When no ConfigurationName header is provided, the configuration marked as default is used.
+        /// </summary>
+        field(7; Default; Boolean)
+        {
+            Caption = 'Default';
+            ToolTip = 'Specifies whether this configuration is the default.';
+        }
     }
 
     keys

@@ -83,7 +83,7 @@ table 2000000267 "Agent Task Data"
         {
             Caption = 'Last Log Entry Timestamp';
             FieldClass = FlowField;
-            CalcFormula = lookup("Agent Task Log Entry Data".SystemCreatedAt where("Task ID" = field(ID), ID = field("Last Log Entry ID")));
+            CalcFormula = max("Agent Task Log Entry Data".SystemCreatedAt where("Task ID" = field(ID)));
         }
         /// <summary>
         /// External identifier for the task used for integration with external systems.
@@ -171,6 +171,44 @@ table 2000000267 "Agent Task Data"
             Caption = 'Secondary Timeline Step Count';
             FieldClass = FlowField;
             CalcFormula = count("Agent Task Timeline Step Data" where("Task ID" = field(ID), Importance = const(Secondary)));
+        }
+        /// <summary>
+        /// The unique identifier of the AI model version to be used with this task.
+        /// </summary>
+        field(19; "Model ID"; Code[30])
+        {
+            Caption = 'Model ID';
+            Tooltip = 'Specifies the Model ID to be used by the agent.';
+        }
+        /// <summary>
+        /// Indicates whether the task was created with the current agent model.
+        /// </summary>
+        field(20; "Created With Curr Model"; Boolean)
+        {
+            Caption = 'Created With Current Model';
+            ToolTip = 'Specifies whether the task was created with the same model as the current model for the agent.';
+            FieldClass = FlowField;
+            CalcFormula = exist("Agent Data" where("User Security ID" = field("Agent User Security ID"),
+                                                   "Model ID" = field("Model ID")));
+        }
+        /// <summary>
+        /// The execution context of the task at the time it was created.
+        /// </summary>
+        field(21; "Execution Context"; Option)
+        {
+            Caption = 'Execution Context';
+            ToolTip = 'Specifies the execution context of the task at the time it was created.';
+            OptionCaption = 'Default,Eval';
+            OptionMembers = Default,Eval;
+        }
+        /// <summary>
+        /// The billing classification for the task.
+        /// Set by the AL application at task creation time (e.g., during a trial period).
+        /// </summary>
+        field(22; "Billing Context"; Enum "Agent Task Billing Context")
+        {
+            Caption = 'Billing Context';
+            ToolTip = 'Specifies the billing context for the agent task.';
         }
     }
 

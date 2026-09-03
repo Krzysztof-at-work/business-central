@@ -4,7 +4,7 @@
         <id>8874ed3a-0643-4247-9ced-7a7002f7135d</id>
         <name>System</name>
         <publisher>Microsoft</publisher>
-        <version>27.0.46760.0</version>
+        <version>28.0.54016.0</version>
     </application>
     <members>
         <member name="NS:System#System">
@@ -251,6 +251,11 @@
             Core functionality: File operations, stream processing, data serialization, and I/O management.
             </remarks>
         </member>
+        <member name="NS:System#System#MCP">
+            <summary>
+            Provides functionality for managing MCP configurations.
+            </summary>
+        </member>
         <member name="NS:System#System#Migration">
             <summary>
             Provides data migration and upgrade infrastructure for Business Central version transitions and table transformations.
@@ -286,6 +291,12 @@
             privacy policy enforcement, and user consent management for external service integrations.
             Core functionality: Privacy notice management, consent tracking, and compliance enforcement.
             </remarks>
+        </member>
+        <member name="NS:System#System#Search">
+            <summary>
+            Provides APIs for semantic search functionality in Business Central, enabling intelligent data and metadata searches.
+            Includes semantic data search capabilities, metadata search operations, and structured result handling for ranked search results.
+            </summary>
         </member>
         <member name="NS:System#System#Text">
             <summary>
@@ -583,6 +594,11 @@
             Configuration setting for Excel layouts controlling whether data is distributed across multiple sheets.
             </summary>
         </member>
+        <member name="F:Table::System#Reflection#Report Layout Definition.Layout Status">
+            <summary>
+            Layout status indicating if the layout is active, inactive, or under review.
+            </summary>
+        </member>
         <member name="O:Enum::System#Reflection#Excel Sheet Configuration">
             <summary>
             Defines Excel sheet configuration options for report layout generation and data organization.
@@ -607,6 +623,33 @@
         <member name="E:Enum::System#Reflection#Excel Sheet Configuration.Multiple data sheets">
             <summary>
             Generates separate Excel worksheets for each report data item.
+            </summary>
+        </member>
+        <member name="O:Enum::System#Reflection#Report Layout Status">
+            <summary>
+            Defines Report layout status
+            </summary>
+            <remarks>
+            </remarks>
+        </member>
+        <member name="E:Enum::System#Reflection#Report Layout Status.Approved">
+            <summary>
+            Layout is approved and available to users.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Reflection#Report Layout Status.Draft">
+            <summary>
+            Layout is under development and not available to users.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Reflection#Report Layout Status.Pending Approval">
+            <summary>
+            Layout is awaiting approval
+            </summary>
+        </member>
+        <member name="E:Enum::System#Reflection#Report Layout Status.Retired">
+            <summary>
+            Layout is phased out and no longer available.
             </summary>
         </member>
         <member name="O:Table::System#Reflection#All Control Fields">
@@ -1156,6 +1199,19 @@
             Indicates whether this key enforces uniqueness constraints on the field combination.
             </summary>
         </member>
+        <member name="F:Table::System#Reflection#Key.Key name[128]">
+            <summary>
+            The Key's name, duplicates may occur when multiple keys are defined on the same table but defined in seperate table extensions.
+            Table Id + Key Name + Source App ID is an unique combination.
+            </summary>
+        </member>
+        <member name="F:Table::System#Reflection#Key.Source App ID">
+            <summary>
+            The application ID of the source of the key. Notice this is the table based placement location of the key,
+            not the application ID of the table where the key is defined.
+            An extension defined key on a base table will have the application ID of the base table, not the extension.
+            </summary>
+        </member>
         <member name="O:Table::System#Reflection#Page Action">
             <summary>
             Virtual table that provides metadata about actions defined on pages.
@@ -1580,6 +1636,11 @@
             The inherent entitlements required to access this query.
             </summary>
         </member>
+        <member name="F:Table::System#Reflection#Query Metadata.AL Namespace[500]">
+            <summary>
+            The AL namespace of the object.
+            </summary>
+        </member>
         <member name="O:Table::System#Reflection#Report Data Items">
             <summary>
             Virtual table that provides metadata about data items defined in reports.
@@ -1725,6 +1786,11 @@
         <member name="F:Table::System#Reflection#Report Layout List.ExcelLayoutMultipleDataSheets">
             <summary>
             Configuration setting for Excel layouts regarding multiple data sheets handling.
+            </summary>
+        </member>
+        <member name="F:Table::System#Reflection#Report Layout List.Layout Status">
+            <summary>
+            Layout status indicating if the layout is active, inactive, or under review.
             </summary>
         </member>
         <member name="O:Table::System#Reflection#Report Metadata">
@@ -2280,6 +2346,11 @@
         <member name="F:Table::System#Reflection#XmlPort Metadata.InherentEntitlements[5]">
             <summary>
             The inherent entitlements required to access this XMLport.
+            </summary>
+        </member>
+        <member name="F:Table::System#Reflection#XmlPort Metadata.AL Namespace[500]">
+            <summary>
+            The AL namespace of the object.
             </summary>
         </member>
         <member name="O:Table::System#Apps#Application Dependency">
@@ -3145,6 +3216,11 @@
             The "Published As" option. Indicates how the application was published.
             </summary>
         </member>
+        <member name="F:Table::System#Apps#Extension Database Snapshot.Is Reviewed">
+            <summary>
+            Indicates whether a user has reviewed the orphaned extension data after uninstalling the extension.
+            </summary>
+        </member>
         <member name="O:Table::System#Apps#NAV App Extra">
             <summary>
             Virtual table that provides additional metadata information about extensions.
@@ -3195,6 +3271,17 @@
         <member name="O:Table::System#Apps#NAV App Tenant App">
             <summary>
             This table contains installed applications for tenants.
+            </summary>
+        </member>
+        <member name="O:Codeunit::System#Apps#Extension Database Management">
+            <summary>
+            Provides operations for managing extension database schema tracking state.
+            </summary>
+        </member>
+        <member name="M:Codeunit::System#Apps#Extension Database Management.MarkAllOrphanedExtensionDataAsReviewed">
+            <summary>
+            Marks all synced extension data where the extension is not currently installed as reviewed.
+            This indicates the orphaned data has been acknowledged and intentionally kept.
             </summary>
         </member>
         <member name="O:Table::System#Environment#Configuration#Configuration Package File">
@@ -3938,6 +4025,11 @@
             Configuration setting for Excel layouts controlling multiple data sheet behavior.
             </summary>
         </member>
+        <member name="F:Table::System#Environment#Configuration#Tenant Report Layout.Layout Status">
+            <summary>
+            Layout status indicating if the layout is active, inactive, or under review.
+            </summary>
+        </member>
         <member name="O:Table::System#Environment#Configuration#Tenant Report Layout Selection">
             <summary>
             Stores user and company-specific report layout selections at the tenant level, enabling personalized report formatting preferences.
@@ -4440,6 +4532,12 @@
             The Copilot Studio Feature Display Name for the charge. Derived from the 'Copilot Studio Feature' column.
             </summary>
         </member>
+        <member name="F:Table::System#Environment#Consumption#User AI Consumption Data.Is Excluded From Billing">
+            <summary>
+            A flag indicating whether or not the consumption entry is excluded from billing.
+            Note that the consumption is still reported to the billing pipeline.
+            </summary>
+        </member>
         <member name="O:Table::System#Environment#Consumption#User Consumption Log Entry">
             <summary>
             Records user consumption events for features and services, enabling usage tracking, billing, and analytics at the tenant level.
@@ -4669,6 +4767,730 @@
             <summary>
             Version number of the last tenant configuration applied to this server instance for configuration synchronization.
             </summary>
+        </member>
+        <member name="O:Enum::System#Environment#Scheduled Task Auth Delegation Type">
+            <summary>
+            Defines authentication delegation types for scheduled task execution context.
+            Controls how authentication credentials are handled when tasks are scheduled from different session types.
+            </summary>
+            <remarks>
+            Used for managing security context and authentication delegation in scheduled task scenarios.
+            Essential for maintaining proper security boundaries when tasks are created from agent or user sessions.
+            Supports differentiation between standard and agent-initiated scheduled tasks.
+            </remarks>
+        </member>
+        <member name="E:Enum::System#Environment#Scheduled Task Auth Delegation Type.None">
+            <summary>
+            No delegation.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Environment#Scheduled Task Auth Delegation Type.Agent">
+            <summary>
+            Task scheduled from an agent session.
+            </summary>
+        </member>
+        <member name="O:Table::System#Environment#Active Session">
+            <summary>
+            Stores information about currently active user sessions in the Business Central tenant.
+            Tracks user connections, client types, and session activity for monitoring and management purposes.
+            </summary>
+            <remarks>
+            This table provides real-time visibility into user sessions across all server instances and client types.
+            Integrates with session management systems, monitoring tools, and user activity tracking for
+            administrative oversight and performance analysis. Used for session administration and security monitoring.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Environment#Active Session.User SID">
+            <summary>
+            Security identifier of the user who owns this active session.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Active Session.Server Instance ID">
+            <summary>
+            Identifier of the server instance hosting this session.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Active Session.Session ID">
+            <summary>
+            Unique numeric identifier of the session within the server instance.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Active Session.Server Instance Name[250]">
+            <summary>
+            Name of the server instance hosting this session.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Active Session.Server Computer Name[250]">
+            <summary>
+            Name of the computer or server hosting the Business Central service.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Active Session.User ID[132]">
+            <summary>
+            Login identifier of the user for this session.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Active Session.Client Type">
+            <summary>
+            Type of client application being used for this session.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Active Session.Client Computer Name[250]">
+            <summary>
+            Name of the computer or device from which the client is connecting.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Active Session.Login Datetime">
+            <summary>
+            Date and time when this session was established.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Active Session.Database Name[250]">
+            <summary>
+            Name of the database that this session is connected to.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Active Session.Session Unique ID">
+            <summary>
+            Global unique identifier for this session across all server instances.
+            </summary>
+        </member>
+        <member name="O:Table::System#Environment#Company">
+            <summary>
+            Stores company definitions and settings for Business Central tenants.
+            Manages company creation, configuration, and identification across the platform.
+            </summary>
+            <remarks>
+            This table serves as the central registry for all companies within a tenant, supporting
+            multi-company operations, company-specific data isolation, and business profile management.
+            Integrates with tenant provisioning, user access control, and company-specific configuration systems.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Environment#Company.Name[30]">
+            <summary>
+            Unique identifier name of the company used for database partitioning and access control.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Company.Evaluation Company">
+            <summary>
+            Indicates whether this is an evaluation company with limited functionality and data restrictions.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Company.Display Name[250]">
+            <summary>
+            User-friendly display name of the company shown in interfaces and reports.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Company.Id">
+            <summary>
+            Global unique identifier for the company used in integration and external references.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Company.Business Profile Id[250]">
+            <summary>
+            Business profile identifier linking the company to external business classification systems.
+            </summary>
+        </member>
+        <member name="O:Table::System#Environment#Scheduled Task">
+            <summary>
+            Manages scheduled task execution in Business Central, storing task metadata, execution context, and failure handling information.
+            </summary>
+            <remarks>
+            This table stores scheduled tasks that can be executed at specific times or intervals within Business Central.
+            Each task includes execution context (user, company, language), timing constraints, and references to
+            codeunits for both successful execution and failure handling. Supports timeout management, authentication
+            delegation, and maintains execution state and error information. Used by the task scheduler framework
+            to manage background task execution and provide reliable task processing capabilities.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.ID">
+            <summary>
+            Unique identifier for the scheduled task.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.User ID">
+            <summary>
+            Security ID of the user under whose context the task will execute.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.User Name[50]">
+            <summary>
+            Name of the user under whose context the task will execute.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.User Language ID">
+            <summary>
+            Language ID for the user context in which the task will execute.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.User Format ID">
+            <summary>
+            Format ID for the user context in which the task will execute.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.User Time Zone[32]">
+            <summary>
+            Time zone setting for the user context in which the task will execute.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.User App ID[20]">
+            <summary>
+            Application ID associated with the user context for the task execution.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.Company[30]">
+            <summary>
+            Company context in which the scheduled task will execute.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.Is Ready">
+            <summary>
+            Indicates whether the task is ready for execution.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.Not Before">
+            <summary>
+            Earliest date and time when the task should be executed.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.Run Codeunit">
+            <summary>
+            ID of the codeunit that will be executed when the task runs.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.Failure Codeunit">
+            <summary>
+            ID of the codeunit that will be executed if the task fails.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.Record">
+            <summary>
+            Record reference that the task will operate on, if applicable.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.Timeout">
+            <summary>
+            Maximum duration allowed for task execution before timeout.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.Tenant ID[128]">
+            <summary>
+            Identifier of the tenant where this task should execute.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.Last Error">
+            <summary>
+            Error information from the last failed execution attempt.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.Auth Delegation Related Record">
+            <summary>
+            Record reference for authentication delegation, if used.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Scheduled Task.Auth Delegation Type">
+            <summary>
+            Type of authentication delegation to use for the task execution.
+            </summary>
+        </member>
+        <member name="O:Table::System#Environment#Session Event">
+            <summary>
+            Records session events and activities for users within Business Central, providing audit trail and session management capabilities.
+            </summary>
+            <remarks>
+            This table captures user session events including logon, logoff, start, stop, and close activities across different
+            client types and server instances. Provides session tracking with client information, timestamps,
+            and session identifiers for security auditing and system monitoring. Supports various client types from web clients
+            to mobile devices and services. Used by the session management framework for monitoring user activity, security
+            auditing, and troubleshooting session-related issues.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Environment#Session Event.User SID">
+            <summary>
+            Security ID of the user associated with this session event.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session Event.Server Instance ID">
+            <summary>
+            Identifier of the server instance where the session event occurred.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session Event.Session ID">
+            <summary>
+            Unique identifier for the session within the server instance.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session Event.Event Type">
+            <summary>
+            Type of session event that occurred (Logon, Logoff, Start, Stop, Close).
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session Event.Event Datetime">
+            <summary>
+            Date and time when the session event occurred.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session Event.Client Type">
+            <summary>
+            Type of client application that initiated the session.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session Event.Database Name[250]">
+            <summary>
+            Name of the database where the session was established.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session Event.Client Computer Name[250]">
+            <summary>
+            Name of the client computer from which the session was initiated.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session Event.User ID[132]">
+            <summary>
+            User identifier for the session, typically the login name.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session Event.Comment[132]">
+            <summary>
+            Additional comment or information about the session event.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session Event.Session Unique ID">
+            <summary>
+            Globally unique identifier for the session across all server instances.
+            </summary>
+        </member>
+        <member name="O:Table::System#Environment#Tenant Media">
+            <summary>
+            Stores media files and binary content for tenant-wide use across Business Central applications.
+            Manages images, documents, and other media content with metadata and access control.
+            </summary>
+            <remarks>
+            This table provides centralized media storage for tenant applications, supporting file upload,
+            image management, and content delivery. Integrates with media controls, attachment systems,
+            and content management features for enhanced user interface and document handling capabilities.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media.ID">
+            <summary>
+            Unique global identifier for the media file or content item.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media.Description[250]">
+            <summary>
+            Descriptive text explaining the purpose or content of the media file.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media.Content">
+            <summary>
+            Binary storage containing the actual media content data.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media.Mime Type[100]">
+            <summary>
+            MIME type specification defining the format and content type of the media file.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media.Height">
+            <summary>
+            Height dimension in pixels for image media content.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media.Width">
+            <summary>
+            Width dimension in pixels for image media content.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media.Company Name[30]">
+            <summary>
+            Company context for company-specific media content restrictions.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media.Expiration Date">
+            <summary>
+            Date and time when the media content expires and should be removed.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media.Prohibit Cache">
+            <summary>
+            Indicates whether this media content should be excluded from caching mechanisms.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media.File Name[250]">
+            <summary>
+            Original file name of the uploaded media content.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media.Security Token[100]">
+            <summary>
+            Security token for controlling access to the media content.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media.Creating User[50]">
+            <summary>
+            User identifier of the person who uploaded or created this media content.
+            </summary>
+        </member>
+        <member name="O:Table::System#Environment#Tenant Media Set">
+            <summary>
+            Manages collections of media items for tenant-specific media storage and organization.
+            </summary>
+            <remarks>
+            This table provides a grouping mechanism for media files within the tenant, allowing multiple media items
+            to be organized into logical sets. Each media set has a unique identifier and can contain multiple media
+            references with indexed ordering. Supports company-specific media organization and provides efficient
+            lookup capabilities through media indexing. Used by the media management framework to organize and
+            reference collections of media files such as image galleries or document sets.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media Set.ID">
+            <summary>
+            Unique identifier for the media set.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media Set.Media ID">
+            <summary>
+            Reference to a media item within this media set.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media Set.Company Name[30]">
+            <summary>
+            Name of the company this media set belongs to, if company-specific.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media Set.Media Index">
+            <summary>
+            Index number for ordering media items within the set.
+            </summary>
+        </member>
+        <member name="O:Table::System#Environment#Tenant Media Thumbnails">
+            <summary>
+            Stores thumbnail images for media files at the tenant level, providing optimized image previews for improved user experience.
+            This table manages thumbnail generation, storage, and retrieval for media content across the platform.
+            </summary>
+            <remarks>
+            This table contains thumbnail representations of media files, enabling fast preview displays without loading full-size images.
+            Each thumbnail includes dimension information and MIME type for proper rendering and optimization.
+            Data is not company-specific but tracks company association for proper media scope management.
+            Extensibility points include custom thumbnail generation logic and image processing events.
+            Related tables: Tenant Media for the full media files, Media and MediaSet for media management.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media Thumbnails.ID">
+            <summary>
+            Unique identifier for the thumbnail record, providing primary key functionality for thumbnail management.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Media ID">
+            <summary>
+            Reference to the original media file for which this thumbnail was generated, establishing the media relationship.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Content">
+            <summary>
+            Binary data containing the thumbnail image content, optimized for quick display and reduced storage requirements.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Mime Type[100]">
+            <summary>
+            MIME type of the thumbnail image, indicating the image format and encoding for proper browser rendering.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Height">
+            <summary>
+            Height dimension of the thumbnail image in pixels, used for layout calculations and display optimization.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Width">
+            <summary>
+            Width dimension of the thumbnail image in pixels, used for layout calculations and display optimization.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Company Name[30]">
+            <summary>
+            Name of the company context associated with this thumbnail, enabling company-specific media management and access control.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Embedded">
+            <summary>
+            Indicates whether the thumbnail data is embedded directly in the record or stored externally, affecting retrieval performance.
+            </summary>
+        </member>
+        <member name="O:Table::System#Environment#Database">
+            <summary>
+            Virtual table that provides information about databases accessible to the Business Central server.
+            This table enables discovery and management of database connections in multi-database environments.
+            </summary>
+            <remarks>
+            The Database table provides visibility into available databases and their characteristics
+            in environments where multiple databases may be accessible. It includes information about
+            database creators, creation dates, and replication settings for databases that support
+            data synchronization scenarios. This table is only available in on-premises deployments
+            where administrators may have access to multiple database instances. The information
+            is useful for database administration, replication management, and multi-tenant scenarios.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Environment#Database.Database Name[128]">
+            <summary>
+            The name of the database.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Database.Creator[64]">
+            <summary>
+            The name of the user or process that created the database.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Database.Created">
+            <summary>
+            The date when the database was created.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Database.Replication Type">
+            <summary>
+            The replication type configured for the database when participating in data synchronization.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Database.My Database">
+            <summary>
+            Indicates whether this database record represents the current database being accessed.
+            </summary>
+        </member>
+        <member name="O:Table::System#Environment#Event Subscription">
+            <summary>
+            Virtual table that provides information about active event subscriptions in the system.
+            This table enables monitoring and management of event publisher-subscriber relationships across all applications.
+            </summary>
+            <remarks>
+            The Event Subscription table is crucial for understanding the event-driven architecture within Business Central.
+            It provides visibility into which events are being subscribed to, how often they're called, and their current status.
+            This information is essential for debugging event-related issues, monitoring system performance, and understanding
+            extensibility patterns. The table tracks events from all types including Business Events, Integration Events,
+            and Internal Events, showing both base application and extension-based subscriptions. Each subscription can be
+            individually activated or deactivated, and the table maintains statistics about event usage patterns.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Environment#Event Subscription.Subscriber Codeunit ID">
+            <summary>
+            The codeunit ID that contains the event subscriber function.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Event Subscription.Subscriber Function[250]">
+            <summary>
+            The name of the function that subscribes to the event.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Event Subscription.Event Type">
+            <summary>
+            The type of event being subscribed to (Trigger, Business, Integration, or Internal).
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Event Subscription.Publisher Object Type">
+            <summary>
+            The type of object that publishes the event (Table, Report, Codeunit, etc.).
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Event Subscription.Publisher Object ID">
+            <summary>
+            The ID of the object that publishes the event.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Event Subscription.Published Function[250]">
+            <summary>
+            The name of the function that publishes the event.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Event Subscription.Active">
+            <summary>
+            Indicates whether the event subscription is currently active and will be triggered.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Event Subscription.Number of Calls">
+            <summary>
+            The total number of times this event subscription has been called since system startup.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Event Subscription.Error Information[250]">
+            <summary>
+            Error information if the event subscription has encountered issues during execution.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Event Subscription.Originating Package ID">
+            <summary>
+            The package identifier of the application that contains the subscriber function.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Event Subscription.Originating App Name[250]">
+            <summary>
+            The name of the application that contains the subscriber function.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Event Subscription.Subscriber Instance[250]">
+            <summary>
+            Instance information for the subscriber when multiple instances are supported.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Event Subscription.Active Manual Instances">
+            <summary>
+            The number of active manual instances for this event subscription.
+            </summary>
+        </member>
+        <member name="O:Table::System#Environment#Session">
+            <summary>
+            Virtual table that provides information about active user sessions connected to the Business Central server.
+            This table enables monitoring of current database connections, user activity, and session management.
+            </summary>
+            <remarks>
+            The Session table is essential for session monitoring, user management, and system administration.
+            It provides real-time information about who is connected to the system, when they logged in,
+            and various session attributes. This information is commonly used for user activity reports,
+            connection monitoring, and security auditing. The table only shows active sessions and
+            automatically reflects changes as users connect and disconnect.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Environment#Session.Connection ID">
+            <summary>
+            Unique identifier for the database connection session.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session.User ID[64]">
+            <summary>
+            The user ID of the user associated with this session.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session.My Session">
+            <summary>
+            Indicates whether this session record represents the current user's own session.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session.Login Time">
+            <summary>
+            The time when the user logged into this session.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session.Login Date">
+            <summary>
+            The date when the user logged into this session.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session.Database Name[128]">
+            <summary>
+            The name of the database that the session is connected to.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session.Application Name[64]">
+            <summary>
+            The name of the application or client used to connect to the session.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session.Login Type">
+            <summary>
+            The authentication method used to establish the session.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Session.Host Name[64]">
+            <summary>
+            The name of the computer or host from which the session was initiated.
+            </summary>
+        </member>
+        <member name="O:Table::System#Environment#Table Information">
+            <summary>
+            Virtual table that provides statistical information about table sizes, record counts, and storage metrics.
+            This table enables monitoring of database storage usage and performance characteristics for each table.
+            </summary>
+            <remarks>
+            The Table Information table provides essential database administration information including
+            record counts, storage sizes, and compression settings for all tables in the system.
+            This information is crucial for database performance monitoring, storage planning, and optimization.
+            The data is particularly useful for identifying large tables, monitoring growth trends,
+            and making decisions about data archival or cleanup. This table is only available in on-premises
+            deployments where administrators have direct access to the underlying database statistics.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Environment#Table Information.Company Name[30]">
+            <summary>
+            The name of the company to which the table data belongs.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Table Information.Table No#">
+            <summary>
+            The unique identifier number of the table.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Table Information.Table Name[30]">
+            <summary>
+            The name of the table as defined in the AL source code.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Table Information.No# of Records">
+            <summary>
+            The current number of records stored in the table.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Table Information.Record Size">
+            <summary>
+            The average size of a record in the table, measured in bytes.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Table Information.Size (KB)">
+            <summary>
+            The total size of the table including data and indexes, measured in kilobytes.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Table Information.Compression">
+            <summary>
+            The compression method applied to the table in the database.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Table Information.Data Size (KB)">
+            <summary>
+            The size of the actual data stored in the table, measured in kilobytes.
+            </summary>
+        </member>
+        <member name="F:Table::System#Environment#Table Information.Index Size (KB)">
+            <summary>
+            The size of all indexes associated with the table, measured in kilobytes.
+            </summary>
+        </member>
+        <member name="O:Codeunit::System#Environment#Feature Access Management">
+            <summary>
+            Provides functionality related to access to features.
+            </summary>
+        </member>
+        <member name="M:Codeunit::System#Environment#Feature Access Management.AgentTaskManagementPreviewEnabled(Boolean):Boolean">
+            <summary>
+            Checks if the agent task management preview feature is enabled.
+            </summary>
+            <param name="ThrowError">If an error should be thrown if unavailable.</param>
+            <returns>True if enabled, false otherwise.</returns>
+        </member>
+        <member name="M:Codeunit::System#Environment#Feature Access Management.AgentManagementAllowed(Boolean):Boolean">
+            <summary>
+            Checks if agent management is allowed in the current environment.
+            </summary>
+            <param name="ThrowError">If an error should be thrown if unavailable.</param>
+            <returns>True if allowed, false otherwise.</returns>
+        </member>
+        <member name="M:Codeunit::System#Environment#Feature Access Management.IsSandboxEnvironmentOrFirstPartyCode(Boolean):Boolean">
+            <summary>
+            Checks if the environment is an evaluation environment or if the code is first-party code.
+            </summary>
+        </member>
+        <member name="M:Codeunit::System#Environment#Feature Access Management.IsEnvironmentPositiveListed:Boolean">
+            <summary>
+            Checks if the current environment is positive listed.
+            </summary>
+            <returns>True if yes, false otherwise.</returns>
+        </member>
+        <member name="M:Codeunit::System#Environment#Feature Access Management.IsSandboxEnvironment:Boolean">
+            <summary>
+            Checks if the environment is a sandbox environment.
+            </summary>
+        </member>
+        <member name="M:Codeunit::System#Environment#Feature Access Management.IsTestSession:Boolean">
+            <summary>
+            Checks if the current session is running in the context of a test.
+            </summary>
+            <returns>True if a test is executing, false otherwise.</returns>
         </member>
         <member name="O:Codeunit::System#Environment#Company Triggers">
             <summary>
@@ -5524,6 +6346,16 @@
             Use this to provide alternative page routing for Agent Task Message display in scenarios where the primary interface is not available.
             </remarks>
         </member>
+        <member name="M:Codeunit::System#Environment#System Action Triggers.OnFeedbackEvent(Integer,Dictionary of [Text,Text],Boolean@)">
+            <summary>
+            Event triggered when feedback is requested on a page.
+            </summary>
+        </member>
+        <member name="M:Codeunit::System#Environment#System Action Triggers.GetAgentTaskEvalExecutionContext(Guid,BigInteger,JsonObject@)">
+            <summary>
+            Gets the execution context for agent tasks evaluations, which includes information about the current state and limits for AI evaluations.
+            </summary>
+        </member>
         <member name="O:Codeunit::System#Environment#UI Helper Triggers">
             <summary>
             Provides business events for extending UI helper functionality including auto-formatting, caption translation, system indicators, and application language management.
@@ -5644,717 +6476,6 @@
             <remarks>
             Use this event to implement custom build reporting, integrate with continuous integration systems, or provide enhanced build information that includes commit identifiers, build timestamps, or deployment pipeline details.
             </remarks>
-        </member>
-        <member name="O:Enum::System#Environment#Scheduled Task Auth Delegation Type">
-            <summary>
-            Defines authentication delegation types for scheduled task execution context.
-            Controls how authentication credentials are handled when tasks are scheduled from different session types.
-            </summary>
-            <remarks>
-            Used for managing security context and authentication delegation in scheduled task scenarios.
-            Essential for maintaining proper security boundaries when tasks are created from agent or user sessions.
-            Supports differentiation between standard and agent-initiated scheduled tasks.
-            </remarks>
-        </member>
-        <member name="E:Enum::System#Environment#Scheduled Task Auth Delegation Type.None">
-            <summary>
-            No delegation.
-            </summary>
-        </member>
-        <member name="E:Enum::System#Environment#Scheduled Task Auth Delegation Type.Agent">
-            <summary>
-            Task scheduled from an agent session.
-            </summary>
-        </member>
-        <member name="O:Table::System#Environment#Active Session">
-            <summary>
-            Stores information about currently active user sessions in the Business Central tenant.
-            Tracks user connections, client types, and session activity for monitoring and management purposes.
-            </summary>
-            <remarks>
-            This table provides real-time visibility into user sessions across all server instances and client types.
-            Integrates with session management systems, monitoring tools, and user activity tracking for
-            administrative oversight and performance analysis. Used for session administration and security monitoring.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Environment#Active Session.User SID">
-            <summary>
-            Security identifier of the user who owns this active session.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Active Session.Server Instance ID">
-            <summary>
-            Identifier of the server instance hosting this session.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Active Session.Session ID">
-            <summary>
-            Unique numeric identifier of the session within the server instance.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Active Session.Server Instance Name[250]">
-            <summary>
-            Name of the server instance hosting this session.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Active Session.Server Computer Name[250]">
-            <summary>
-            Name of the computer or server hosting the Business Central service.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Active Session.User ID[132]">
-            <summary>
-            Login identifier of the user for this session.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Active Session.Client Type">
-            <summary>
-            Type of client application being used for this session.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Active Session.Client Computer Name[250]">
-            <summary>
-            Name of the computer or device from which the client is connecting.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Active Session.Login Datetime">
-            <summary>
-            Date and time when this session was established.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Active Session.Database Name[250]">
-            <summary>
-            Name of the database that this session is connected to.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Active Session.Session Unique ID">
-            <summary>
-            Global unique identifier for this session across all server instances.
-            </summary>
-        </member>
-        <member name="O:Table::System#Environment#Company">
-            <summary>
-            Stores company definitions and settings for Business Central tenants.
-            Manages company creation, configuration, and identification across the platform.
-            </summary>
-            <remarks>
-            This table serves as the central registry for all companies within a tenant, supporting
-            multi-company operations, company-specific data isolation, and business profile management.
-            Integrates with tenant provisioning, user access control, and company-specific configuration systems.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Environment#Company.Name[30]">
-            <summary>
-            Unique identifier name of the company used for database partitioning and access control.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Company.Evaluation Company">
-            <summary>
-            Indicates whether this is an evaluation company with limited functionality and data restrictions.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Company.Display Name[250]">
-            <summary>
-            User-friendly display name of the company shown in interfaces and reports.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Company.Id">
-            <summary>
-            Global unique identifier for the company used in integration and external references.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Company.Business Profile Id[250]">
-            <summary>
-            Business profile identifier linking the company to external business classification systems.
-            </summary>
-        </member>
-        <member name="O:Table::System#Environment#Scheduled Task">
-            <summary>
-            Manages scheduled task execution in Business Central, storing task metadata, execution context, and failure handling information.
-            </summary>
-            <remarks>
-            This table stores scheduled tasks that can be executed at specific times or intervals within Business Central.
-            Each task includes execution context (user, company, language), timing constraints, and references to
-            codeunits for both successful execution and failure handling. Supports timeout management, authentication
-            delegation, and maintains execution state and error information. Used by the task scheduler framework
-            to manage background task execution and provide reliable task processing capabilities.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.ID">
-            <summary>
-            Unique identifier for the scheduled task.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.User ID">
-            <summary>
-            Security ID of the user under whose context the task will execute.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.User Name[50]">
-            <summary>
-            Name of the user under whose context the task will execute.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.User Language ID">
-            <summary>
-            Language ID for the user context in which the task will execute.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.User Format ID">
-            <summary>
-            Format ID for the user context in which the task will execute.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.User Time Zone[32]">
-            <summary>
-            Time zone setting for the user context in which the task will execute.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.User App ID[20]">
-            <summary>
-            Application ID associated with the user context for the task execution.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.Company[30]">
-            <summary>
-            Company context in which the scheduled task will execute.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.Is Ready">
-            <summary>
-            Indicates whether the task is ready for execution.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.Not Before">
-            <summary>
-            Earliest date and time when the task should be executed.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.Run Codeunit">
-            <summary>
-            ID of the codeunit that will be executed when the task runs.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.Failure Codeunit">
-            <summary>
-            ID of the codeunit that will be executed if the task fails.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.Record">
-            <summary>
-            Record reference that the task will operate on, if applicable.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.Timeout">
-            <summary>
-            Maximum duration allowed for task execution before timeout.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.Tenant ID[128]">
-            <summary>
-            Identifier of the tenant where this task should execute.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.Last Error">
-            <summary>
-            Error information from the last failed execution attempt.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.Auth Delegation Related Record">
-            <summary>
-            Record reference for authentication delegation, if used.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Scheduled Task.Auth Delegation Type">
-            <summary>
-            Type of authentication delegation to use for the task execution.
-            </summary>
-        </member>
-        <member name="O:Table::System#Environment#Session Event">
-            <summary>
-            Records session events and activities for users within Business Central, providing audit trail and session management capabilities.
-            </summary>
-            <remarks>
-            This table captures user session events including logon, logoff, start, stop, and close activities across different
-            client types and server instances. Provides session tracking with client information, timestamps,
-            and session identifiers for security auditing and system monitoring. Supports various client types from web clients
-            to mobile devices and services. Used by the session management framework for monitoring user activity, security
-            auditing, and troubleshooting session-related issues.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Environment#Session Event.User SID">
-            <summary>
-            Security ID of the user associated with this session event.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session Event.Server Instance ID">
-            <summary>
-            Identifier of the server instance where the session event occurred.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session Event.Session ID">
-            <summary>
-            Unique identifier for the session within the server instance.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session Event.Event Type">
-            <summary>
-            Type of session event that occurred (Logon, Logoff, Start, Stop, Close).
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session Event.Event Datetime">
-            <summary>
-            Date and time when the session event occurred.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session Event.Client Type">
-            <summary>
-            Type of client application that initiated the session.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session Event.Database Name[250]">
-            <summary>
-            Name of the database where the session was established.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session Event.Client Computer Name[250]">
-            <summary>
-            Name of the client computer from which the session was initiated.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session Event.User ID[132]">
-            <summary>
-            User identifier for the session, typically the login name.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session Event.Comment[132]">
-            <summary>
-            Additional comment or information about the session event.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session Event.Session Unique ID">
-            <summary>
-            Globally unique identifier for the session across all server instances.
-            </summary>
-        </member>
-        <member name="O:Table::System#Environment#Tenant Media">
-            <summary>
-            Stores media files and binary content for tenant-wide use across Business Central applications.
-            Manages images, documents, and other media content with metadata and access control.
-            </summary>
-            <remarks>
-            This table provides centralized media storage for tenant applications, supporting file upload,
-            image management, and content delivery. Integrates with media controls, attachment systems,
-            and content management features for enhanced user interface and document handling capabilities.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media.ID">
-            <summary>
-            Unique global identifier for the media file or content item.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media.Description[250]">
-            <summary>
-            Descriptive text explaining the purpose or content of the media file.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media.Content">
-            <summary>
-            Binary storage containing the actual media content data.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media.Mime Type[100]">
-            <summary>
-            MIME type specification defining the format and content type of the media file.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media.Height">
-            <summary>
-            Height dimension in pixels for image media content.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media.Width">
-            <summary>
-            Width dimension in pixels for image media content.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media.Company Name[30]">
-            <summary>
-            Company context for company-specific media content restrictions.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media.Expiration Date">
-            <summary>
-            Date and time when the media content expires and should be removed.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media.Prohibit Cache">
-            <summary>
-            Indicates whether this media content should be excluded from caching mechanisms.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media.File Name[250]">
-            <summary>
-            Original file name of the uploaded media content.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media.Security Token[100]">
-            <summary>
-            Security token for controlling access to the media content.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media.Creating User[50]">
-            <summary>
-            User identifier of the person who uploaded or created this media content.
-            </summary>
-        </member>
-        <member name="O:Table::System#Environment#Tenant Media Set">
-            <summary>
-            Manages collections of media items for tenant-specific media storage and organization.
-            </summary>
-            <remarks>
-            This table provides a grouping mechanism for media files within the tenant, allowing multiple media items
-            to be organized into logical sets. Each media set has a unique identifier and can contain multiple media
-            references with indexed ordering. Supports company-specific media organization and provides efficient
-            lookup capabilities through media indexing. Used by the media management framework to organize and
-            reference collections of media files such as image galleries or document sets.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media Set.ID">
-            <summary>
-            Unique identifier for the media set.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media Set.Media ID">
-            <summary>
-            Reference to a media item within this media set.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media Set.Company Name[30]">
-            <summary>
-            Name of the company this media set belongs to, if company-specific.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media Set.Media Index">
-            <summary>
-            Index number for ordering media items within the set.
-            </summary>
-        </member>
-        <member name="O:Table::System#Environment#Tenant Media Thumbnails">
-            <summary>
-            Stores thumbnail images for media files at the tenant level, providing optimized image previews for improved user experience.
-            This table manages thumbnail generation, storage, and retrieval for media content across the platform.
-            </summary>
-            <remarks>
-            This table contains thumbnail representations of media files, enabling fast preview displays without loading full-size images.
-            Each thumbnail includes dimension information and MIME type for proper rendering and optimization.
-            Data is not company-specific but tracks company association for proper media scope management.
-            Extensibility points include custom thumbnail generation logic and image processing events.
-            Related tables: Tenant Media for the full media files, Media and MediaSet for media management.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media Thumbnails.ID">
-            <summary>
-            Unique identifier for the thumbnail record, providing primary key functionality for thumbnail management.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Media ID">
-            <summary>
-            Reference to the original media file for which this thumbnail was generated, establishing the media relationship.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Content">
-            <summary>
-            Binary data containing the thumbnail image content, optimized for quick display and reduced storage requirements.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Mime Type[100]">
-            <summary>
-            MIME type of the thumbnail image, indicating the image format and encoding for proper browser rendering.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Height">
-            <summary>
-            Height dimension of the thumbnail image in pixels, used for layout calculations and display optimization.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Width">
-            <summary>
-            Width dimension of the thumbnail image in pixels, used for layout calculations and display optimization.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Company Name[30]">
-            <summary>
-            Name of the company context associated with this thumbnail, enabling company-specific media management and access control.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Tenant Media Thumbnails.Embedded">
-            <summary>
-            Indicates whether the thumbnail data is embedded directly in the record or stored externally, affecting retrieval performance.
-            </summary>
-        </member>
-        <member name="O:Table::System#Environment#Database">
-            <summary>
-            Virtual table that provides information about databases accessible to the Business Central server.
-            This table enables discovery and management of database connections in multi-database environments.
-            </summary>
-            <remarks>
-            The Database table provides visibility into available databases and their characteristics
-            in environments where multiple databases may be accessible. It includes information about
-            database creators, creation dates, and replication settings for databases that support
-            data synchronization scenarios. This table is only available in on-premises deployments
-            where administrators may have access to multiple database instances. The information
-            is useful for database administration, replication management, and multi-tenant scenarios.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Environment#Database.Database Name[128]">
-            <summary>
-            The name of the database.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Database.Creator[64]">
-            <summary>
-            The name of the user or process that created the database.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Database.Created">
-            <summary>
-            The date when the database was created.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Database.Replication Type">
-            <summary>
-            The replication type configured for the database when participating in data synchronization.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Database.My Database">
-            <summary>
-            Indicates whether this database record represents the current database being accessed.
-            </summary>
-        </member>
-        <member name="O:Table::System#Environment#Event Subscription">
-            <summary>
-            Virtual table that provides information about active event subscriptions in the system.
-            This table enables monitoring and management of event publisher-subscriber relationships across all applications.
-            </summary>
-            <remarks>
-            The Event Subscription table is crucial for understanding the event-driven architecture within Business Central.
-            It provides visibility into which events are being subscribed to, how often they're called, and their current status.
-            This information is essential for debugging event-related issues, monitoring system performance, and understanding
-            extensibility patterns. The table tracks events from all types including Business Events, Integration Events,
-            and Internal Events, showing both base application and extension-based subscriptions. Each subscription can be
-            individually activated or deactivated, and the table maintains statistics about event usage patterns.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Environment#Event Subscription.Subscriber Codeunit ID">
-            <summary>
-            The codeunit ID that contains the event subscriber function.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Event Subscription.Subscriber Function[250]">
-            <summary>
-            The name of the function that subscribes to the event.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Event Subscription.Event Type">
-            <summary>
-            The type of event being subscribed to (Trigger, Business, Integration, or Internal).
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Event Subscription.Publisher Object Type">
-            <summary>
-            The type of object that publishes the event (Table, Report, Codeunit, etc.).
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Event Subscription.Publisher Object ID">
-            <summary>
-            The ID of the object that publishes the event.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Event Subscription.Published Function[250]">
-            <summary>
-            The name of the function that publishes the event.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Event Subscription.Active">
-            <summary>
-            Indicates whether the event subscription is currently active and will be triggered.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Event Subscription.Number of Calls">
-            <summary>
-            The total number of times this event subscription has been called since system startup.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Event Subscription.Error Information[250]">
-            <summary>
-            Error information if the event subscription has encountered issues during execution.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Event Subscription.Originating Package ID">
-            <summary>
-            The package identifier of the application that contains the subscriber function.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Event Subscription.Originating App Name[250]">
-            <summary>
-            The name of the application that contains the subscriber function.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Event Subscription.Subscriber Instance[250]">
-            <summary>
-            Instance information for the subscriber when multiple instances are supported.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Event Subscription.Active Manual Instances">
-            <summary>
-            The number of active manual instances for this event subscription.
-            </summary>
-        </member>
-        <member name="O:Table::System#Environment#Session">
-            <summary>
-            Virtual table that provides information about active user sessions connected to the Business Central server.
-            This table enables monitoring of current database connections, user activity, and session management.
-            </summary>
-            <remarks>
-            The Session table is essential for session monitoring, user management, and system administration.
-            It provides real-time information about who is connected to the system, when they logged in,
-            and various session attributes. This information is commonly used for user activity reports,
-            connection monitoring, and security auditing. The table only shows active sessions and
-            automatically reflects changes as users connect and disconnect.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Environment#Session.Connection ID">
-            <summary>
-            Unique identifier for the database connection session.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session.User ID[64]">
-            <summary>
-            The user ID of the user associated with this session.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session.My Session">
-            <summary>
-            Indicates whether this session record represents the current user's own session.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session.Login Time">
-            <summary>
-            The time when the user logged into this session.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session.Login Date">
-            <summary>
-            The date when the user logged into this session.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session.Database Name[128]">
-            <summary>
-            The name of the database that the session is connected to.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session.Application Name[64]">
-            <summary>
-            The name of the application or client used to connect to the session.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session.Login Type">
-            <summary>
-            The authentication method used to establish the session.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Session.Host Name[64]">
-            <summary>
-            The name of the computer or host from which the session was initiated.
-            </summary>
-        </member>
-        <member name="O:Table::System#Environment#Table Information">
-            <summary>
-            Virtual table that provides statistical information about table sizes, record counts, and storage metrics.
-            This table enables monitoring of database storage usage and performance characteristics for each table.
-            </summary>
-            <remarks>
-            The Table Information table provides essential database administration information including
-            record counts, storage sizes, and compression settings for all tables in the system.
-            This information is crucial for database performance monitoring, storage planning, and optimization.
-            The data is particularly useful for identifying large tables, monitoring growth trends,
-            and making decisions about data archival or cleanup. This table is only available in on-premises
-            deployments where administrators have direct access to the underlying database statistics.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Environment#Table Information.Company Name[30]">
-            <summary>
-            The name of the company to which the table data belongs.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Table Information.Table No#">
-            <summary>
-            The unique identifier number of the table.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Table Information.Table Name[30]">
-            <summary>
-            The name of the table as defined in the AL source code.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Table Information.No# of Records">
-            <summary>
-            The current number of records stored in the table.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Table Information.Record Size">
-            <summary>
-            The average size of a record in the table, measured in bytes.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Table Information.Size (KB)">
-            <summary>
-            The total size of the table including data and indexes, measured in kilobytes.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Table Information.Compression">
-            <summary>
-            The compression method applied to the table in the database.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Table Information.Data Size (KB)">
-            <summary>
-            The size of the actual data stored in the table, measured in kilobytes.
-            </summary>
-        </member>
-        <member name="F:Table::System#Environment#Table Information.Index Size (KB)">
-            <summary>
-            The size of all indexes associated with the table, measured in kilobytes.
-            </summary>
-        </member>
-        <member name="O:Codeunit::System#Environment#Feature Access Management">
-            <summary>
-            Provides functionality related to access to features.
-            </summary>
-        </member>
-        <member name="M:Codeunit::System#Environment#Feature Access Management.AgentTaskManagementPreviewEnabled(Boolean):Boolean">
-            <summary>
-            Checks if the agent task management preview feature is enabled.
-            </summary>
-            <param name="ThrowError">If an error should be thrown if unavailable.</param>
-            <returns>True if enabled, false otherwise.</returns>
-        </member>
-        <member name="M:Codeunit::System#Environment#Feature Access Management.IsSandboxEnvironmentOrFirstPartyCode(Boolean):Boolean">
-            <summary>
-            Checks if the environment is an evaluation environment or if the code is first-party code.
-            </summary>
-        </member>
-        <member name="M:Codeunit::System#Environment#Feature Access Management.IsEnvironmentPositiveListed:Boolean">
-            <summary>
-            Checks if the current environment is positive listed.
-            </summary>
-            <returns>True if yes, false otherwise.</returns>
-        </member>
-        <member name="M:Codeunit::System#Environment#Feature Access Management.IsSandboxEnvironment:Boolean">
-            <summary>
-            Checks if the environment is a sandbox environment.
-            </summary>
         </member>
         <member name="O:Table::System#Security#AccessControl#Entitlement">
             <summary>
@@ -8545,6 +8666,31 @@
             Descriptive text explaining the purpose and content of the upgrade blob storage item.
             </summary>
         </member>
+        <member name="O:Table::System#Upgrade#Table Synch# Setup">
+            <summary>
+            Virtual table that provides configuration settings for table synchronization during upgrade processes.
+            </summary>
+            <remarks>
+            This table defines how tables should be synchronized during upgrade operations, including mode and target table mappings.
+            Used by the upgrade framework to control data migration and synchronization behavior.
+            The table is scoped to OnPrem and not per-company, making it a system-wide configuration.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Upgrade#Table Synch# Setup.Table ID">
+            <summary>
+            The ID of the source table to be synchronized during upgrade.
+            </summary>
+        </member>
+        <member name="F:Table::System#Upgrade#Table Synch# Setup.Upgrade Table ID">
+            <summary>
+            The ID of the target table for upgrade synchronization operations.
+            </summary>
+        </member>
+        <member name="F:Table::System#Upgrade#Table Synch# Setup.Mode">
+            <summary>
+            The synchronization mode that determines how the table data should be handled during upgrade.
+            </summary>
+        </member>
         <member name="O:Codeunit::System#Upgrade#Upgrade Triggers">
             <summary>
             Provides business events for extending application upgrade functionality including precondition checks, upgrade operations, validation, and post-upgrade commit operations.
@@ -8617,50 +8763,6 @@
             Use this event to implement post-upgrade operations that should execute after all company-level upgrade changes have been successfully committed. Perform company-specific cleanup, trigger business process workflows, or execute final configuration steps that depend on completed company upgrade operations.
             </remarks>
         </member>
-        <member name="O:Table::System#Upgrade#Table Synch# Setup">
-            <summary>
-            Virtual table that provides configuration settings for table synchronization during upgrade processes.
-            </summary>
-            <remarks>
-            This table defines how tables should be synchronized during upgrade operations, including mode and target table mappings.
-            Used by the upgrade framework to control data migration and synchronization behavior.
-            The table is scoped to OnPrem and not per-company, making it a system-wide configuration.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Upgrade#Table Synch# Setup.Table ID">
-            <summary>
-            The ID of the source table to be synchronized during upgrade.
-            </summary>
-        </member>
-        <member name="F:Table::System#Upgrade#Table Synch# Setup.Upgrade Table ID">
-            <summary>
-            The ID of the target table for upgrade synchronization operations.
-            </summary>
-        </member>
-        <member name="F:Table::System#Upgrade#Table Synch# Setup.Mode">
-            <summary>
-            The synchronization mode that determines how the table data should be handled during upgrade.
-            </summary>
-        </member>
-        <member name="O:Codeunit::System#Agents#Internal#Agent Default Experimental">
-            <summary>
-            Provides default implementation for experimental agent functionality within the agent framework.
-            Implements IAgentExperimental interface to support extensible experimental agent features.
-            </summary>
-            <remarks>
-            Default implementation returns no page scripts for agent automation.
-            Part of experimental agent framework subject to change or removal.
-            Supports extensibility through interface implementation pattern for custom experimental features.
-            </remarks>
-        </member>
-        <member name="M:Codeunit::System#Agents#Internal#Agent Default Experimental.GetPageScripts(Guid,Agent Task Page Script@)">
-            <summary>
-            Returns page scripts for agent automation and page interaction capabilities.
-            Default implementation returns no scripts.
-            </summary>
-            <param name="AgentUserId">Unique identifier for the agent user requesting scripts</param>
-            <param name="AgentTaskPageScript">Record to populate with available page scripts</param>
-        </member>
         <member name="O:Interface::System#Agents#Internal#IAgentExperimental">
             <summary>
             Defines experimental capabilities related to agents.
@@ -8681,27 +8783,6 @@
             Scripts provide agents with page interaction capabilities during task processing.
             Experimental feature subject to change - may be promoted to stable interfaces or removed.
             </remarks>
-        </member>
-        <member name="O:Table::System#Agents#Internal#Agent Task Page Script">
-            <summary>
-            Stores experimental page script data for agent automation and page interaction capabilities.
-            Provides script content storage for enabling agent automation features during task execution.
-            </summary>
-            <remarks>
-            Temporary table used in experimental agent features for page automation scripting.
-            Part of the experimental agent framework subject to change or removal.
-            Scripts enable agents to interact with pages during automated task processing.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Agents#Internal#Agent Task Page Script.ID[10]">
-            <summary>
-            Unique identifier for the page script entry.
-            </summary>
-        </member>
-        <member name="F:Table::System#Agents#Internal#Agent Task Page Script.Content">
-            <summary>
-            Script content stored in binary format for agent page automation.
-            </summary>
         </member>
         <member name="O:Table::System#Agents#Internal#Agent Access Control Data">
             <summary>
@@ -8788,6 +8869,11 @@
         <member name="F:Table::System#Agents#Internal#Agent Data.Properties">
             <summary>
             Custom properties and configuration data specific to this agent instance.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Internal#Agent Data.Model ID[30]">
+            <summary>
+            Unique identifier of the AI model version to be used by this agent instance.
             </summary>
         </member>
         <member name="O:Table::System#Agents#Internal#Agent Task Data">
@@ -8885,6 +8971,27 @@
         <member name="F:Table::System#Agents#Internal#Agent Task Data.Secondary Timeline Step Count">
             <summary>
             The count of secondary timeline steps associated with this task.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Internal#Agent Task Data.Model ID[30]">
+            <summary>
+            The unique identifier of the AI model version to be used with this task.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Internal#Agent Task Data.Created With Curr Model">
+            <summary>
+            Indicates whether the task was created with the current agent model.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Internal#Agent Task Data.Execution Context">
+            <summary>
+            The execution context of the task at the time it was created.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Internal#Agent Task Data.Billing Context">
+            <summary>
+            The billing classification for the task.
+            Set by the AL application at task creation time (e.g., during a trial period).
             </summary>
         </member>
         <member name="O:Table::System#Agents#Internal#Agent Task File Data">
@@ -9235,6 +9342,11 @@
             The type of message the attachment belongs to.
             </summary>
         </member>
+        <member name="F:Table::System#Agents#Internal#Agent Task Msg Attach Data.Ignored Reason[250]">
+            <summary>
+            The reason why the attachment was ignored.
+            </summary>
+        </member>
         <member name="O:Table::System#Agents#Internal#Agent Task Timeline Step Data">
             <summary>
             Stores timeline step data for agent task execution, tracking the progression and status of individual steps within an agent task.
@@ -9405,6 +9517,46 @@
             5. Agent settings
             </summary>
         </member>
+        <member name="O:Codeunit::System#Agents#Internal#Agent Default Experimental">
+            <summary>
+            Provides default implementation for experimental agent functionality within the agent framework.
+            Implements IAgentExperimental interface to support extensible experimental agent features.
+            </summary>
+            <remarks>
+            Default implementation returns no page scripts for agent automation.
+            Part of experimental agent framework subject to change or removal.
+            Supports extensibility through interface implementation pattern for custom experimental features.
+            </remarks>
+        </member>
+        <member name="M:Codeunit::System#Agents#Internal#Agent Default Experimental.GetPageScripts(Guid,Agent Task Page Script@)">
+            <summary>
+            Returns page scripts for agent automation and page interaction capabilities.
+            Default implementation returns no scripts.
+            </summary>
+            <param name="AgentUserId">Unique identifier for the agent user requesting scripts</param>
+            <param name="AgentTaskPageScript">Record to populate with available page scripts</param>
+        </member>
+        <member name="O:Table::System#Agents#Internal#Agent Task Page Script">
+            <summary>
+            Stores experimental page script data for agent automation and page interaction capabilities.
+            Provides script content storage for enabling agent automation features during task execution.
+            </summary>
+            <remarks>
+            Temporary table used in experimental agent features for page automation scripting.
+            Part of the experimental agent framework subject to change or removal.
+            Scripts enable agents to interact with pages during automated task processing.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Internal#Agent Task Page Script.ID[10]">
+            <summary>
+            Unique identifier for the page script entry.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Internal#Agent Task Page Script.Content">
+            <summary>
+            Script content stored in binary format for agent page automation.
+            </summary>
+        </member>
         <member name="M:Codeunit::System#Agents#TaskPane#Task Pane.ShowAgent(Agent)">
             <summary>
             Show the specified agent in the task pane.
@@ -9435,10 +9587,17 @@
             </summary>
             <param name="TaskID">The agent task ID.</param>
         </member>
-        <member name="O:Codeunit::System#Agents#Agent Default Task Execution">
+        <member name="M:Codeunit::System#Agents#TaskPane#Task Pane.ReviewTask(Agent Task)">
             <summary>
-            The default implementation for the Agent Task Execution.
+            Review the specified agent task in the task pane.
             </summary>
+            <param name="AgentTask">The agent task record.</param>
+        </member>
+        <member name="M:Codeunit::System#Agents#TaskPane#Task Pane.ReviewTask(BigInteger)">
+            <summary>
+            Review the specified agent task in the task pane.
+            </summary>
+            <param name="TaskID">The agent task ID.</param>
         </member>
         <member name="O:Enum::System#Agents#Agent Metadata Provider">
             <summary>
@@ -9464,6 +9623,23 @@
         <member name="E:Enum::System#Agents#Agent Publisher Type.User">
             <summary>
             An agent that was created without involvement of an AL extension publisher.
+            </summary>
+        </member>
+        <member name="O:Enum::System#Agents#Agent Task Billing Context">
+            <summary>
+            Defines the billing classification for agent tasks.
+            Controls whether consumption for a task is included in or excluded from billing.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Agents#Agent Task Billing Context.Default">
+            <summary>
+            Default billing behavior. The task's consumption is billed normally.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Agents#Agent Task Billing Context.Excluded">
+            <summary>
+            The task's consumption is excluded from billing (e.g., during a trial period).
+            Note that consumption is still reported to the billing pipeline.
             </summary>
         </member>
         <member name="O:Enum::System#Agents#Agent Task Log Entry Type">
@@ -9831,176 +10007,45 @@
             <param name="AgentTaskPageContextRequest">The agent task page context request.</param>
             <returns>The agent task page context.</returns>
         </member>
-        <member name="O:Table::System#Agents#Agent Annotation">
+        <member name="O:Table::System#Agents#Agent Creation Control">
             <summary>
-            Stores annotation data for agent validation and user feedback in agent operations.
-            Provides structured feedback mechanism for agent tasks and operations with severity-based classification.
+            Manages access creation permissions for AI agents, defining which non-admin users can create specific agents.
             </summary>
             <remarks>
-            Temporary table used for passing annotation data between agent validation interfaces and the agent framework.
-            Supports Info, Warning, and Error severity levels for different validation scenarios.
-            Essential for agent operation integrity and user oversight through the validation system.
+            This table establishes the security model for agent creation by linking users with specific agents
+            and their configuration permissions per company. Used by the agent framework to enforce security
+            policies and ensure only authorized users can create agents.
             </remarks>
         </member>
-        <member name="F:Table::System#Agents#Agent Annotation.Code[20]">
+        <member name="F:Table::System#Agents#Agent Creation Control.ID">
             <summary>
-            The unique identifier for the annotation. This ID is logged into telemetry.
+            Auto-incremented unique identifier of the agent creation permission rule.
             </summary>
         </member>
-        <member name="F:Table::System#Agents#Agent Annotation.Message[2048]">
+        <member name="F:Table::System#Agents#Agent Creation Control.User Security ID">
             <summary>
-            The message of the annotation appearing in the timeline.
-            This should be localized in the agent's language (see "User Personalization"."Language ID").
+            User to whom the permission applies; empty Guid means all users.
             </summary>
         </member>
-        <member name="F:Table::System#Agents#Agent Annotation.Details[2048]">
+        <member name="F:Table::System#Agents#Agent Creation Control.User Name[50]">
             <summary>
-            The details of the annotation appearing in the timeline.
-            This should be localized in the agent's language (see "User Personalization"."Language ID").
+            Name of the selected user, calculated from the User table.
             </summary>
         </member>
-        <member name="F:Table::System#Agents#Agent Annotation.Severity">
+        <member name="F:Table::System#Agents#Agent Creation Control.Agent Metadata Provider">
             <summary>
-            The severity of the annotation.
+            Agent metadata provider allowed by the rule; -1 means all providers.
             </summary>
         </member>
-        <member name="O:Table::System#Agents#Agent Task Page Context">
+        <member name="F:Table::System#Agents#Agent Creation Control.Company Name[30]">
             <summary>
-            Stores context information for agent task page operations including currency, language, and formatting preferences.
-            Provides localization and formatting context for agent communication and page interaction.
-            </summary>
-            <remarks>
-            Temporary table used for passing page context data between agent metadata interfaces and the agent framework.
-            Contains currency, language, and format settings for proper agent communication formatting.
-            Essential for maintaining consistent user experience across different locales and formats.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Agents#Agent Task Page Context.Currency Code[10]">
-            <summary>
-            The currency code. Ex: USD.
+            Company where the permission applies; empty value means all companies.
             </summary>
         </member>
-        <member name="F:Table::System#Agents#Agent Task Page Context.Currency Symbol[10]">
+        <member name="F:Table::System#Agents#Agent Creation Control.Description[250]">
             <summary>
-            The symbol for the currency. Ex: $.
+            Optional description of the agent creation permission rule.
             </summary>
-        </member>
-        <member name="F:Table::System#Agents#Agent Task Page Context.Communication Language LCID">
-            <summary>
-            The LCID of the language to be used for outgoing communications.
-            </summary>
-        </member>
-        <member name="F:Table::System#Agents#Agent Task Page Context.Communication Format LCID">
-            <summary>
-            The LCID of the format to be used for outgoing communications (numbers, dates, times, etc.).
-            </summary>
-        </member>
-        <member name="F:Table::System#Agents#Agent Task Page Context.Comm# Use Short Date Format">
-            <summary>
-            Specifies whether dates in outgoing communications should be in a short date format. Ex: 01/01/2025.
-            </summary>
-        </member>
-        <member name="O:Table::System#Agents#Agent Task User Int Suggestion">
-            <summary>
-            Stores user intervention suggestions for agent tasks to enable human guidance and oversight.
-            Provides structured suggestions that can be offered to agents during task execution for improved outcomes.
-            </summary>
-            <remarks>
-            Temporary table used for passing user intervention suggestions between agent metadata interfaces and the agent framework.
-            Supports both always-included suggestions and context-evaluated suggestions based on relevance.
-            Essential for human-agent collaboration and task execution improvement.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Agents#Agent Task User Int Suggestion.Summary[100]">
-            <summary>
-            Brief summary of the suggestion displayed to users in the interface.
-            </summary>
-            <remarks>
-            It is recommended:
-            - to translate this field in the agent's language (for instance, using labels),
-            - to not end this field's value with a period.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Agents#Agent Task User Int Suggestion.Instructions[1024]">
-            <summary>
-            Detailed instructions provided to the agent when this suggestion is selected.
-            </summary>
-            <remarks>
-            It is recommended to use English to provide instructions.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Agents#Agent Task User Int Suggestion.Description[1024]">
-            <summary>
-            Description used by the system to evaluate suggestion relevance and applicability.
-            </summary>
-            <remarks>
-            It is recommended to use English to provide the description.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Agents#Agent Task User Int Suggestion.Always Included">
-            <summary>
-            Specifies whether this suggestion must always be included regardless of context evaluation.
-            </summary>
-        </member>
-        <member name="O:Table::System#Agents#Agent User Int Request Details">
-            <summary>
-            Stores detailed information for agent user intervention requests including task context and target specifications.
-            Provides structured data for requesting human intervention during agent task execution.
-            </summary>
-            <remarks>
-            Temporary table used for passing user intervention request details between agent metadata interfaces and the agent framework.
-            Contains task identification, page context, and record targeting information for precise intervention requests.
-            Essential for enabling targeted human oversight and guidance during agent operations.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Agents#Agent User Int Request Details.Agent User ID">
-            <summary>
-            Unique identifier for the agent user requesting intervention.
-            </summary>
-        </member>
-        <member name="F:Table::System#Agents#Agent User Int Request Details.Task ID">
-            <summary>
-            Identifier for the specific agent task requiring user intervention.
-            </summary>
-        </member>
-        <member name="F:Table::System#Agents#Agent User Int Request Details.Type">
-            <summary>
-            Type of user intervention request being made by the agent.
-            </summary>
-        </member>
-        <member name="F:Table::System#Agents#Agent User Int Request Details.Page ID">
-            <summary>
-            Page identifier where the user intervention is requested.
-            </summary>
-        </member>
-        <member name="F:Table::System#Agents#Agent User Int Request Details.Record ID">
-            <summary>
-            Record identifier for the specific record requiring user intervention.
-            </summary>
-        </member>
-        <member name="F:Table::System#Agents#Agent User Int Request Details.Title[2048]">
-            <summary>
-            The user intervention request title.
-            </summary>
-            <remarks>
-            This information is currently not available in <see cref="IAgentTaskExecution.GetAgentTaskUserInterventionSuggestions"/>.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Agents#Agent User Int Request Details.Message[2048]">
-            <summary>
-            The user intervention request message.
-            </summary>
-            <remarks>
-            This information is currently not available in <see cref="IAgentTaskExecution.GetAgentTaskUserInterventionSuggestions"/>.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Agents#Agent User Int Request Details.Message ID">
-            <summary>
-            The Message ID for which the user intervention request is sent. This applies to Review Message requests only.
-            </summary>
-            <remarks>
-            This information is currently not available in <see cref="IAgentTaskExecution.GetAgentTaskUserInterventionSuggestions"/>.
-            </remarks>
         </member>
         <member name="O:Table::System#Agents#Agent">
             <summary>
@@ -10107,6 +10152,21 @@
             Specifies the Publisher Type of the agent.
             </summary>
         </member>
+        <member name="F:Table::System#Agents#Agent.Model ID[30]">
+            <summary>
+            Unique identifier of the model version to be used by this agent instance.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent.Model Availability">
+            <summary>
+            Indicates the availability status of the model assigned to this agent.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent.Model Retirement Date">
+            <summary>
+            The retirement date of the model assigned to this agent.
+            </summary>
+        </member>
         <member name="O:Table::System#Agents#Agent Access Control">
             <summary>
             Virtual table that manages access control permissions for agent operations.
@@ -10137,6 +10197,40 @@
         <member name="F:Table::System#Agents#Agent Access Control.Company Name[30]">
             <summary>
             Name of the company where the permission set assignment applies.
+            </summary>
+        </member>
+        <member name="O:Table::System#Agents#Agent Model">
+            <summary>
+            Virtual table that stores data associated with agent models.
+            Exposed to cloud, but read-only for any apps.
+            </summary>
+            <remarks>
+            This table provides access to available agent models that can be used for agent tasks execution.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent Model.Model ID[30]">
+            <summary>
+            The unique identifier of the agent model.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Model.Model Name[70]">
+            <summary>
+            The model name.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Model.Is Default">
+            <summary>
+            The indication if model is Default.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Model.Availability">
+            <summary>
+            The availability status of the model.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Model.Retirement Date">
+            <summary>
+            The retirement date of the model.
             </summary>
         </member>
         <member name="O:Table::System#Agents#Agent Task">
@@ -10227,6 +10321,129 @@
         <member name="F:Table::System#Agents#Agent Task.Needs Attention">
             <summary>
             Indicates whether this task requires human attention or intervention to proceed.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task.Execution Context">
+            <summary>
+            The execution context of the task at the time it was created.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task.Billing Context">
+            <summary>
+            The billing classification for the task.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task.Model ID[30]">
+            <summary>
+            The unique identifier of the AI model version used with this task. Set by the platform when the task is created
+            and cannot be modified afterwards.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task.Model Name[70]">
+            <summary>
+            The friendly name of the AI model version used with this task.
+            </summary>
+        </member>
+        <member name="O:Table::System#Agents#Agent Task Consumption">
+            <summary>
+            Virtual table that provides read-only consumption data for agent task execution, tracking credit usage and billing events.
+            It provides a view of <see cref="User AI Consumption Data"/> focused on agent tasks with agent access control policies applied. 
+            </summary>
+            <remarks>
+            This table logs consumption events generated during agent task execution, capturing credit charges,
+            feature attribution, and action descriptions for auditing and cost tracking purposes.
+            Each entry links to an agent task and records the Copilot credits consumed, the feature responsible,
+            and the user context. Essential for billing transparency, consumption monitoring, and governance
+            of AI-powered agent operations. The table is scoped to OnPrem and not replicated for security considerations.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Task Id">
+            <summary>
+            The unique identifier of the agent task associated with this consumption entry.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Id">
+            <summary>
+            The unique auto-incrementing identifier for this consumption entry.
+            </summary>
+            <remarks>
+            This ID is sourced directly from <see cref="User AI Consumption Data"/>. As the current user/session might not have access
+            to see all consumption entries from the source table, this field value is likely not sequential.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Agent User Security Id">
+            <summary>
+            The security identifier of the agent user who consumed the credits.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Company Name[30]">
+            <summary>
+            The name of the company context in which the consumption occurred.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Consumption Timestamp">
+            <summary>
+            The date and time when the consumption event occurred, in UTC.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Feature Name[256]">
+            <summary>
+            The name of the feature that consumed the credits, such as "Sales Order Agent".
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Actions[1024]">
+            <summary>
+            A textual representation of the operations the charge corresponds to, such as "Created Sales Order".
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Copilot Credits">
+            <summary>
+            The amount of Copilot credits consumed by this event.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Description">
+            <summary>
+            Additional details about the consumption event stored as binary data.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Copilot Studio Feature Display Name[1024]">
+            <summary>
+            The display name of the Copilot Studio feature associated with this charge, such as "Generative answer".
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Agent App ID">
+            <summary>
+            The App ID of the extension that defined the agent that consumed the credits.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Agent App Name[250]">
+            <summary>
+            The App Name of the extension that defined the agent that consumed the credits.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Agent App Publisher[250]">
+            <summary>
+            The App Publisher of the extension that defined the agent that consumed the credits.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Agent Metadata Provider">
+            <summary>
+            Specifies the metadata provider of the agent.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Agent User Display Name[80]">
+            <summary>
+            Specifies the display name of the agent.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Task Title[150]">
+            <summary>
+            Specifies the title of the agent task.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Consumption.Is Excluded From Billing">
+            <summary>
+            A flag indicating whether or not the consumption entry is excluded from billing.
             </summary>
         </member>
         <member name="O:Table::System#Agents#Agent Task File">
@@ -10507,6 +10724,11 @@
             Whether the attachment is ignored.
             </summary>
         </member>
+        <member name="F:Table::System#Agents#Agent Task Message Attachment.Ignored Reason[250]">
+            <summary>
+            The reason why the attachment was ignored.
+            </summary>
+        </member>
         <member name="O:Table::System#Agents#Agent Task Timeline">
             <summary>
             Virtual table that provides timeline view of agent task execution and status progression.
@@ -10744,6 +10966,11 @@
             The client context information at the time this detail entry was created.
             </summary>
         </member>
+        <member name="O:Codeunit::System#Agents#Agent Default Task Execution">
+            <summary>
+            The default implementation for the Agent Task Execution.
+            </summary>
+        </member>
         <member name="O:Codeunit::System#Agents#Agent Task Internal">
             <summary>
             Provides core functionality for managing agent tasks within Business Central.
@@ -10772,6 +10999,48 @@
             <param name="AgentTaskStatus">The target status to set for the agent tasks when stopping them.</param>
             <param name="UserConfirm">Specifies whether to show a confirmation dialog to the user before stopping all tasks.</param>
         </member>
+        <member name="M:Codeunit::System#Agents#Agent Task Internal.CanShowTask(BigInteger):Boolean">
+            <summary>
+            Determines whether a task can be shown in the agent task pane.
+            </summary>
+            <param name="TaskId">The unique identifier of the task.</param>
+            <returns>True if the task can be shown; otherwise, false.</returns>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent Task Internal.CanReviewTask(BigInteger,Enum::System#Agents#Agent Task Status,Boolean,BigText):Boolean">
+            <summary>
+            Determines whether a task can be reviewed in the agent task pane.
+            </summary>
+            <param name="TaskId">The unique identifier of the task.</param>
+            <param name="Indicator">The status indicator of the task.</param>
+            <param name="CurrentPageExists">Indicates whether the current page exists.</param>
+            <param name="CurrentPageQuery">The query string of the current page.</param>
+            <returns>True if the task can be reviewed; otherwise, false.</returns>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent Task Internal.CanStopTask(BigInteger,Enum::System#Agents#Agent Task Status,Boolean):Boolean">
+            <summary>
+            Determines whether a task can be stopped in the agent task pane.
+            </summary>
+            <param name="TaskId">The unique identifier of the task.</param>
+            <param name="Indicator">The status indicator of the task.</param>
+            <param name="NeedsAttention">Indicates whether the task needs attention.</param>
+            <returns>True if the task can be stopped; otherwise, false.</returns>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent Task Internal.FormatTimelineStepSummary(Text,Enum::System#Agents#Agent Task Timeline Step Type):Text">
+            <summary>
+            Formats the summary of an agent task timeline step based on its type.
+            </summary>
+            <param name="SummaryJson">The JSON string containing the summary data.</param>
+            <param name="StepType">The type of the timeline step.</param>
+            <returns>The formatted summary text.</returns>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent Task Internal.GetTimelineStepSummaryPageType(Text,Enum::System#Agents#Agent Task Timeline Step Type):Text">
+            <summary>
+            Retrieves the page type from the summary of an agent task timeline step.
+            </summary>
+            <param name="SummaryJson">The JSON string containing the summary data.</param>
+            <param name="StepType">The type of the timeline step.</param>
+            <returns>The page type as a text string.</returns>
+        </member>
         <member name="O:Codeunit::System#Agents#Agent User Intervention">
             <summary>
             Provides functionality for creating and managing user interventions in agent tasks.
@@ -10784,8 +11053,17 @@
             Get the user intervention details for the specified log entry.
             </summary>
             <param name="UserInterventionRequestEntry">The agent task log entry.</param>
-            <param name="UserInterventionRequestDetails">The user interevention request details.</param>
-            <param name="AgentAnnotations">The annotations on the user intervention request.</param>
+            <param name="TempUserInterventionRequestDetails">The user interevention request details.</param>
+            <param name="TempUserInterventionAnnotations">The annotations on the user intervention request.</param>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent User Intervention.GetUserInterventionRequestDetails(Agent Task Log Entry,Agent User Int Request Details@,Agent Annotation@,Agent Task User Int Suggestion@)">
+            <summary>
+            Get the user intervention details for the specified log entry.
+            </summary>
+            <param name="UserInterventionRequestEntry">The agent task log entry.</param>
+            <param name="TempUserInterventionRequestDetails">The user interevention request details.</param>
+            <param name="TempUserInterventionAnnotations">The annotations on the user intervention request.</param>
+            <param name="TempUserInterventionSuggestions">The suggestions available for the user intervention request.</param>
         </member>
         <member name="M:Codeunit::System#Agents#Agent User Intervention.CreateUserIntervention(Agent Task Log Entry)">
             <summary>
@@ -10800,14 +11078,15 @@
             <param name="UserInterventionRequestEntry">The agent task log entry that requested user intervention.</param>
             <param name="UserInput">Additional text input provided by the user as part of the intervention response.</param>
         </member>
-        <member name="M:Codeunit::System#Agents#Agent User Intervention.CreateUserIntervention(Agent Task Log Entry,Integer)">
+        <member name="M:Codeunit::System#Agents#Agent User Intervention.CreateUserInterventionFromSuggestionCode(Agent Task Log Entry,Code[20])">
             <summary>
-            Creates a user intervention response with a selected suggestion ID.
+            Creates a user intervention response with both user input and a suggestion ID provided as text.
             </summary>
             <param name="UserInterventionRequestEntry">The agent task log entry that requested user intervention.</param>
-            <param name="SelectedSuggestionId">The ID of the suggestion selected by the user from the available options.</param>
+            <param name="UserInput">Additional text input provided by the user as part of the intervention response.</param>
+            <param name="SelectedSuggestionCode">The suggestion ID as text that will be converted to integer. If invalid, logs an error and proceeds without suggestion selection.</param>
         </member>
-        <member name="M:Codeunit::System#Agents#Agent User Intervention.CreateUserIntervention(Agent Task Log Entry,Text,Text)">
+        <member name="M:Codeunit::System#Agents#Agent User Intervention.CreateUserInterventionFromSuggestionId(Agent Task Log Entry,Text,Text)">
             <summary>
             Creates a user intervention response with both user input and a suggestion ID provided as text.
             </summary>
@@ -10819,6 +11098,9 @@
             <summary>
             Creates a user intervention response with both user input and a selected suggestion ID.
             </summary>
+            <remarks>
+            This method should not be used anymore, and will be marked as internal so that only the timeline uses it.
+            </remarks>
             <param name="UserInterventionRequestEntry">The agent task log entry that requested user intervention.</param>
             <param name="UserInput">Additional text input provided by the user as part of the intervention response.</param>
             <param name="SelectedSuggestionId">The integer ID of the suggestion selected by the user from the available options.</param>
@@ -10895,6 +11177,218 @@
             <param name="AgentPublisherName">The agent publisher name.</param>
             <param name="AgentPublisherType">The agent publisher type.</param>
             <returns>True if the publisher info could be found, false otherwise.</returns>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent Utilities.TryGetAgentAppInfo(Enum::System#Agents#Agent Metadata Provider,Text[250]@,Text[250]@,Guid@):Boolean">
+            <summary>
+            Gets the agent app info for the specified agent metadata provider.
+            </summary>
+            <param name="AgentMetadataProvider">The agent metadata provider.</param>
+            <param name="AppPublisher">The app publisher name.</param>
+            <param name="AppName">The app name.</param>
+            <param name="AppId">The app ID.</param>
+            <returns>True if the app info could be found, false otherwise.</returns>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent Utilities.CurrentUserHasConfigureAllAgentsPermissionInAllCompanies:Boolean">
+            <summary>
+            Gets whether the current user can configure all agents (i.e. is an agent admin) in all companies.
+            </summary>
+            <returns>True if the current user can configure all agents in all companies, false otherwise.</returns>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent Utilities.IsAgentsFeatureEnabled:Boolean">
+            <summary>
+            Gets whether the Agents feature is enabled for the current environment.
+            </summary>
+            <returns>True if the Agents feature is enabled, false otherwise.</returns>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent Utilities.CanCurrentUserCreateAgent(Enum::System#Agents#Agent Metadata Provider):Boolean">
+            <summary>
+            Gets whether the current user can create agents based on the specified agent metadata provider.
+            </summary>
+            <param name="AgentMetadataProvider">The agent metadata provider.</param>
+            <returns>True if the current user can create agents based on the specified agent metadata provider, false otherwise.</returns>
+        </member>
+        <member name="M:Codeunit::System#Agents#Agent Utilities.GetConsumedCopilotCredits(BigInteger):Decimal">
+            <summary>
+            Gets the total Copilot credits consumed by the agent task.
+            </summary>
+            <param name="TaskId">The ID of the agent task to get consumed credits for.</param>
+            <returns>The total Copilot credits consumed by the agent task.</returns>
+        </member>
+        <member name="O:Table::System#Agents#Agent Annotation">
+            <summary>
+            Stores annotation data for agent validation and user feedback in agent operations.
+            Provides structured feedback mechanism for agent tasks and operations with severity-based classification.
+            </summary>
+            <remarks>
+            Temporary table used for passing annotation data between agent validation interfaces and the agent framework.
+            Supports Info, Warning, and Error severity levels for different validation scenarios.
+            Essential for agent operation integrity and user oversight through the validation system.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent Annotation.Code[20]">
+            <summary>
+            Unique code identifier for the agent annotation used for referencing and management. This code is logged into telemetry.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Annotation.Message[2048]">
+            <summary>
+            The message of the annotation appearing in the timeline.
+            This should be localized in the agent's language (see "User Personalization"."Language ID").
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Annotation.Details[2048]">
+            <summary>
+            The details of the annotation appearing in the timeline.
+            This should be localized in the agent's language (see "User Personalization"."Language ID").
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Annotation.Severity">
+            <summary>
+            The severity of the annotation.
+            </summary>
+        </member>
+        <member name="O:Table::System#Agents#Agent Task Page Context">
+            <summary>
+            Stores context information for agent task page operations including currency, language, and formatting preferences.
+            Provides localization and formatting context for agent communication and page interaction.
+            </summary>
+            <remarks>
+            Temporary table used for passing page context data between agent metadata interfaces and the agent framework.
+            Contains currency, language, and format settings for proper agent communication formatting.
+            Essential for maintaining consistent user experience across different locales and formats.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Page Context.Currency Code[10]">
+            <summary>
+            The currency code. Ex: USD.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Page Context.Currency Symbol[10]">
+            <summary>
+            The symbol for the currency. Ex: $.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Page Context.Communication Language LCID">
+            <summary>
+            The LCID of the language to be used for outgoing communications.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Page Context.Communication Format LCID">
+            <summary>
+            The LCID of the format to be used for outgoing communications (numbers, dates, times, etc.).
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task Page Context.Comm# Use Short Date Format">
+            <summary>
+            Specifies whether dates in outgoing communications should be in a short date format. Ex: 01/01/2025.
+            </summary>
+        </member>
+        <member name="O:Table::System#Agents#Agent Task User Int Suggestion">
+            <summary>
+            Stores user intervention suggestions for agent tasks to enable human guidance and oversight.
+            Provides structured suggestions that can be offered to agents during task execution for improved outcomes.
+            </summary>
+            <remarks>
+            Temporary table used for passing user intervention suggestions between agent metadata interfaces and the agent framework.
+            Supports both always-included suggestions and context-evaluated suggestions based on relevance.
+            Essential for human-agent collaboration and task execution improvement.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task User Int Suggestion.Summary[100]">
+            <summary>
+            Brief summary of the suggestion displayed to users in the interface.
+            </summary>
+            <remarks>
+            It is recommended:
+            - to translate this field in the agent's language (for instance, using labels),
+            - to not end this field's value with a period.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task User Int Suggestion.Instructions[1024]">
+            <summary>
+            Detailed instructions provided to the agent when this suggestion is selected.
+            </summary>
+            <remarks>
+            It is recommended to use English to provide instructions.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task User Int Suggestion.Description[1024]">
+            <summary>
+            Description used by the system to evaluate suggestion relevance and applicability.
+            </summary>
+            <remarks>
+            It is recommended to use English to provide the description.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task User Int Suggestion.Always Included">
+            <summary>
+            Specifies whether this suggestion must always be included regardless of context evaluation.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent Task User Int Suggestion.Code[20]">
+            <summary>
+            Unique code identifier for the user intervention suggestion used for referencing and management. This code is logged into telemetry.
+            </summary>
+        </member>
+        <member name="O:Table::System#Agents#Agent User Int Request Details">
+            <summary>
+            Stores detailed information for agent user intervention requests including task context and target specifications.
+            Provides structured data for requesting human intervention during agent task execution.
+            </summary>
+            <remarks>
+            Temporary table used for passing user intervention request details between agent metadata interfaces and the agent framework.
+            Contains task identification, page context, and record targeting information for precise intervention requests.
+            Essential for enabling targeted human oversight and guidance during agent operations.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent User Int Request Details.Agent User ID">
+            <summary>
+            Unique identifier for the agent user requesting intervention.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent User Int Request Details.Task ID">
+            <summary>
+            Identifier for the specific agent task requiring user intervention.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent User Int Request Details.Type">
+            <summary>
+            Type of user intervention request being made by the agent.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent User Int Request Details.Page ID">
+            <summary>
+            Page identifier where the user intervention is requested.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent User Int Request Details.Record ID">
+            <summary>
+            Record identifier for the specific record requiring user intervention.
+            </summary>
+        </member>
+        <member name="F:Table::System#Agents#Agent User Int Request Details.Title[2048]">
+            <summary>
+            The user intervention request title.
+            </summary>
+            <remarks>
+            This information is currently not available in <see cref="IAgentTaskExecution.GetAgentTaskUserInterventionSuggestions"/>.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent User Int Request Details.Message[2048]">
+            <summary>
+            The user intervention request message.
+            </summary>
+            <remarks>
+            This information is currently not available in <see cref="IAgentTaskExecution.GetAgentTaskUserInterventionSuggestions"/>.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Agents#Agent User Int Request Details.Message ID">
+            <summary>
+            The Message ID for which the user intervention request is sent. This applies to Review Message requests only.
+            </summary>
+            <remarks>
+            This information is currently not available in <see cref="IAgentTaskExecution.GetAgentTaskUserInterventionSuggestions"/>.
+            </remarks>
         </member>
         <member name="O:Enum::System#AI#Copilot Capability">
             <summary>
@@ -11041,6 +11535,16 @@
             <summary>
             A detailed description of the printer and its capabilities.
             </summary>
+        </member>
+        <member name="O:Table::System#Diagnostics#Database Index">
+            <summary>
+            Virtual table that presents detailed per-index data from the database.
+            </summary>
+            <remarks>
+            This table sources its data directly from the database instead of "just" metadata like the Key table,
+            as a consequence its data output should not be considered stable and may change due to database tuning or platform changes.
+            All output rows from this table should be considered implementation details and may change if the platform changes its physical database implementation.
+            </remarks>
         </member>
         <member name="O:Table::System#Diagnostics#Database Locks">
             <summary>
@@ -11236,10 +11740,72 @@
             The timestamp when the database was started, providing context for the statistics collection period.
             </summary>
         </member>
+        <member name="E:Enum::System#Feedback#FeedbackQuestionType.Dropdown">
+            <summary>
+            Dropdown question type.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Feedback#FeedbackQuestionType.Text">
+            <summary>
+            Text question type.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Feedback#FeedbackQuestionType.Rating">
+            <summary>
+            Rating question type.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Feedback#FeedbackQuestionType.MultiSelect">
+            <summary>
+            MultiSelect question type.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Feedback#FeedbackQuestionType.SingleSelect">
+            <summary>
+            SingleSelect question type.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Feedback#FeedbackQuestionType.SingleSelectHorizontal">
+            <summary>
+            SingleSelectHorizontal question type.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Feedback#FeedbackRequiredBehavior.QuestionNotRequired">
+            <summary>
+            Main question is not required.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Feedback#FeedbackRequiredBehavior.CommentNotRequired">
+            <summary>
+            Comment below question is not required.
+            </summary>
+        </member>
+        <member name="E:Enum::System#Feedback#FeedbackRequiredBehavior.CommentRequiredLastOption">
+            <summary>
+            Comment below question is required if the last option is selected.
+            </summary>
+        </member>
         <member name="O:Codeunit::System#Feedback#Feedback">
             <summary>
             Provides an API for requesting user feedback to be collected in the client
             through the OCV platform.
+            </summary>
+        </member>
+        <member name="M:Codeunit::System#Feedback#Feedback.SetCustomQuestion(Text,Text,Enum::System#Feedback#FeedbackQuestionType,Dictionary of [FeedbackRequiredBehavior,Text],Dictionary of [Text,Text])">
+            <summary>
+            Sets a custom question to be presented to the user when requesting feedback.
+            </summary>
+            <param name="Question">The custom question text to be displayed to the user.</param>
+            <param name="QuestionDisplay">The display text for the question. Translatable string.</param>
+            <param name="QuestionType">The type of question.</param>
+            <param name="RequiredBehavior">An dictionary of the enum values -> boolean-like value (true/false/1/0), indicating behavior for requiring answers.</param>
+            <param name="AnswerOptions">A dictionary of answer options where the key is the option value and the value is the display text.
+            Only applicable for Dropdown, MultiSelect, SingleSelect, and SingleSelectHorizontal question types.
+            </param>
+        </member>
+        <member name="M:Codeunit::System#Feedback#Feedback.ClearCustomQuestion">
+            <summary>
+            Clears any previously set custom question.
             </summary>
         </member>
         <member name="M:Codeunit::System#Feedback#Feedback.RequestFeedback(Text,Text,Text,Dictionary of [Text,Text],Dictionary of [Text,Text])">
@@ -11511,6 +12077,123 @@
             <summary>
             The binary content of the file, available for files but not directories.
             </summary>
+        </member>
+        <member name="O:Table::System#MCP#MCP Configuration">
+            <summary>
+            Root configuration record for controlling allowed operations against Business Central objects.
+            </summary>
+            <remarks>
+            This table contains the different MCP server configurations, each identified by a unique 'Configuration ID'.
+            </remarks>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration.Name[100]">
+            <summary>
+            Configuration name.
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration.Description[250]">
+            <summary>
+            Configuration description.
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration.EnableDynamicToolMode">
+            <summary>
+            Use Tool Search Mode.
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration.Active">
+            <summary>
+            Is configuration active.
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration.AllowProdChanges">
+            <summary>
+            Allow create, update, and delete tools.
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration.DiscoverReadOnlyObjects">
+            <summary>
+            Allow discovery of accessible read-only objects by the MCP client.
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration.Default">
+            <summary>
+            Indicates whether this is the default MCP configuration. When no ConfigurationName header is provided, the configuration marked as default is used.
+            </summary>
+        </member>
+        <member name="O:Table::System#MCP#MCP Configuration Tool">
+            <summary>
+            Child records that define allowed operations for specific Business Central objects
+            under a given MCP Configuration.
+            </summary>
+            <remarks>
+            This table contains the different MCP configuration tools, each linked to a parent MCP Configuration record via 'ID'.
+            </remarks>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration Tool.ID">
+            <summary>
+            MCP Configuration system ID.
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration Tool.Object Type">
+            <summary>
+            Type of the Business Central object (Page, Query).
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration Tool.Object ID">
+            <summary>
+            The object ID in Business Central (e.g., Page ID, Query ID).
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration Tool.Allow Read">
+            <summary>
+            Allow read access to the object.
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration Tool.Allow Create">
+            <summary>
+            Allow create access to the object.
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration Tool.Allow Modify">
+            <summary>
+            Allow modify access to the object.
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration Tool.Allow Delete">
+            <summary>
+            Allow delete access to the object.
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration Tool.Allow Bound Actions">
+            <summary>
+            Optional: Allow bound actions for API pages.
+            </summary>
+        </member>
+        <member name="F:Table::System#MCP#MCP Configuration Tool.API Version[30]">
+            <summary>
+            Optional: Api Version of the API page.
+            </summary>
+        </member>
+        <member name="O:Codeunit::System#MCP#MCP Utilities">
+            <summary>
+            Provides functionality for managing MCP configurations.
+            </summary>
+        </member>
+        <member name="M:Codeunit::System#MCP#MCP Utilities.GetParentMCPTools(Dictionary of [Integer,Text]):Dictionary of [Integer,List]">
+            <summary>
+            Get a dictionary of potential parent MCP tools for the provided list of page IDs with their API versions.
+            Note: This assumes unique page IDs across all API versions in the MCP configuration tool.
+            Multiple pages with the same ID but different API versions are not supported.
+            </summary>
+            <param name="PageIdVersions">Dictionary of page object ID and API version.</param>
+            <returns>Dictionary mapping each (page ID, version) tuple to its list of potential parent MCP tool page IDs.</returns>
+        </member>
+        <member name="M:Codeunit::System#MCP#MCP Utilities.GetSystemToolsInDynamicMode:Dictionary of [Text,Text]">
+            <summary>
+            Get a dictionary of system tools available in dynamic mode.
+            </summary>
+            <returns>Dictionary mapping each system tool name to their description</returns>
         </member>
         <member name="O:Table::System#Migration#Table Field Mappings">
             <summary>
@@ -12054,6 +12737,108 @@
             Boolean flag indicating whether the privacy notice was approved (true) or rejected (false) by the user.
             </summary>
         </member>
+        <member name="O:Table::System#Search#Similarity Result">
+            <summary>
+            Temporary table that holds search results from semantic searches across Business Central.
+            Used to present search findings with similarity scoring and record identification.
+            </summary>
+        </member>
+        <member name="F:Table::System#Search#Similarity Result.No#">
+            <summary>
+            Sequential number for ordering and identifying search result entries.
+            </summary>
+        </member>
+        <member name="F:Table::System#Search#Similarity Result.System ID">
+            <summary>
+            Unique system identifier for the search result entry.
+            </summary>
+        </member>
+        <member name="F:Table::System#Search#Similarity Result.Similarity">
+            <summary>
+            Similarity score indicating how closely the found result matches the search criteria.
+            Higher values indicate better matches.
+            </summary>
+        </member>
+        <member name="O:Codeunit::System#Search#Semantic Search">
+            <summary>
+            Provides functionality to perform semantic searches on both metadata objects and data records,
+            retrieving ranked results based on similarity scoring.
+            </summary>
+        </member>
+        <member name="M:Codeunit::System#Search#Semantic Search.SetMaxResults(Integer)">
+            <summary>
+            Sets the maximum number of results to return from a search.
+            </summary>
+            <param name="MaxResults">The maximum number of results to return.</param>
+        </member>
+        <member name="M:Codeunit::System#Search#Semantic Search.SetSearchTarget(RecordRef)">
+            <summary>
+            Sets the target to search. Any filters set on the record will be applied to the search.
+            </summary>
+            <param name="Record">The RecordRef to search</param>
+        </member>
+        <member name="M:Codeunit::System#Search#Semantic Search.FindSimilarByField(Text,List of [Integer],Similarity Result@):Boolean">
+            <summary>
+            Performs a semantic (similarity) search for the specified text on a specified list of fields and populates the provided result table with the search results.
+            </summary>
+            <param name="SearchText">The text to search for.</param>
+            <param name="FieldIds">The list of field IDs to search within.</param>
+            <param name="ResultTable">The table to populate with the search results.</param>
+            <returns>True if the search was successful; otherwise, false.</returns>
+        </member>
+        <member name="O:Enum::System#Text#Entity Text Scenario">
+            <summary>
+            Defines text processing scenarios for entity-related operations and transformations.
+            Provides extensible framework for entity text handling and processing scenarios.
+            </summary>
+            <remarks>
+            Extensible enum designed for custom entity text processing implementations.
+            Used for categorizing different text processing contexts and scenarios within the system.
+            Foundation for entity-related text operations and transformations.
+            </remarks>
+        </member>
+        <member name="O:Table::System#Text#Entity Text">
+            <summary>
+            Stores extracted and processed text content from business entities for search, analysis, and AI processing scenarios.
+            </summary>
+            <remarks>
+            This table maintains text representations of business data extracted from various source tables and records.
+            Each entry contains both preview text for quick access and full text content stored as BLOB for comprehensive
+            analysis. Supports different scenarios for text processing such as search indexing, AI analysis, or content
+            extraction. Used by text processing frameworks to provide searchable content and enable advanced text-based
+            functionality across Business Central entities.
+            </remarks>
+        </member>
+        <member name="F:Table::System#Text#Entity Text.Company[30]">
+            <summary>
+            Name of the company where the source entity belongs.
+            </summary>
+        </member>
+        <member name="F:Table::System#Text#Entity Text.Source Table Id">
+            <summary>
+            Table ID of the source entity from which the text was extracted.
+            </summary>
+        </member>
+        <member name="F:Table::System#Text#Entity Text.Source System Id">
+            <summary>
+            System ID of the specific record from which the text was extracted.
+            </summary>
+        </member>
+        <member name="F:Table::System#Text#Entity Text.Scenario">
+            <summary>
+            Scenario or purpose for which the text extraction was performed.
+            </summary>
+        </member>
+        <member name="F:Table::System#Text#Entity Text.Preview Text[1024]">
+            <summary>
+            Abbreviated text content for quick preview and summary purposes.
+            </summary>
+        </member>
+        <member name="F:Table::System#Text#Entity Text.Text">
+            <summary>
+            Complete text content extracted from the source entity stored as BLOB.
+            </summary>
+        </member>
         <member name="O:Codeunit::System#Text#Filter Helper Triggers">
             <summary>
             Provides business events for custom filter text processing and manipulation.
@@ -12123,134 +12908,6 @@
             <param name="TimeFilterText">Time filter text to be customized</param>
             <remarks>
             Raised when time filter text requires formatting or customization.
-            </remarks>
-        </member>
-        <member name="O:Enum::System#Text#Entity Text Scenario">
-            <summary>
-            Defines text processing scenarios for entity-related operations and transformations.
-            Provides extensible framework for entity text handling and processing scenarios.
-            </summary>
-            <remarks>
-            Extensible enum designed for custom entity text processing implementations.
-            Used for categorizing different text processing contexts and scenarios within the system.
-            Foundation for entity-related text operations and transformations.
-            </remarks>
-        </member>
-        <member name="O:Table::System#Text#Entity Text">
-            <summary>
-            Stores extracted and processed text content from business entities for search, analysis, and AI processing scenarios.
-            </summary>
-            <remarks>
-            This table maintains text representations of business data extracted from various source tables and records.
-            Each entry contains both preview text for quick access and full text content stored as BLOB for comprehensive
-            analysis. Supports different scenarios for text processing such as search indexing, AI analysis, or content
-            extraction. Used by text processing frameworks to provide searchable content and enable advanced text-based
-            functionality across Business Central entities.
-            </remarks>
-        </member>
-        <member name="F:Table::System#Text#Entity Text.Company[30]">
-            <summary>
-            Name of the company where the source entity belongs.
-            </summary>
-        </member>
-        <member name="F:Table::System#Text#Entity Text.Source Table Id">
-            <summary>
-            Table ID of the source entity from which the text was extracted.
-            </summary>
-        </member>
-        <member name="F:Table::System#Text#Entity Text.Source System Id">
-            <summary>
-            System ID of the specific record from which the text was extracted.
-            </summary>
-        </member>
-        <member name="F:Table::System#Text#Entity Text.Scenario">
-            <summary>
-            Scenario or purpose for which the text extraction was performed.
-            </summary>
-        </member>
-        <member name="F:Table::System#Text#Entity Text.Preview Text[1024]">
-            <summary>
-            Abbreviated text content for quick preview and summary purposes.
-            </summary>
-        </member>
-        <member name="F:Table::System#Text#Entity Text.Text">
-            <summary>
-            Complete text content extracted from the source entity stored as BLOB.
-            </summary>
-        </member>
-        <member name="O:Codeunit::System#Tooling#Debugger Triggers">
-            <summary>
-            Provides business events for debugger-related functionality and breakpoint management.
-            Contains legacy debugger events for backward compatibility with obsolete debugger engine.
-            </summary>
-            <remarks>
-            Contains obsolete events related to classic debugger engine support.
-            Maintained for backward compatibility but classic debugger functionality has been removed.
-            Modern debugging should use current VS Code debugging capabilities.
-            </remarks>
-        </member>
-        <member name="M:Codeunit::System#Tooling#Debugger Triggers.OnDebuggerBreak(Text)">
-            <summary>
-            Obsolete business event previously raised when debugger breakpoint was hit.
-            Classic debugger engine support has been removed from the platform.
-            </summary>
-            <param name="ErrorMessage">Error message text from debugger break context</param>
-            <remarks>
-            Raised when classic debugger breakpoint was encountered during code execution.
-            </remarks>
-        </member>
-        <member name="O:Codeunit::System#Tooling#SmartList Designer Triggers">
-            <summary>
-            Provides business events for extending SmartList Designer functionality and managing query-based list creation workflows.
-            </summary>
-            <remarks>
-            This codeunit serves as an extensibility layer for the SmartList Designer tool, enabling partners and developers to customize list creation behavior, handle query operations, and integrate with external data visualization tools. All events are business events that can be subscribed to by external extensions.
-            </remarks>
-        </member>
-        <member name="M:Codeunit::System#Tooling#SmartList Designer Triggers.GetEnabled(Boolean@)">
-            <summary>
-            Business event that allows subscribers to control whether SmartList Designer functionality is enabled.
-            </summary>
-            <param name="Enabled">Indicates whether SmartList Designer should be enabled. Subscribers can modify this value to control feature availability.</param>
-            <remarks>
-            Use this event to implement conditional enabling of SmartList Designer based on licensing, user permissions, or environment configuration.
-            </remarks>
-        </member>
-        <member name="M:Codeunit::System#Tooling#SmartList Designer Triggers.OnCreateForTable(Integer)">
-            <summary>
-            Obsolete business event for creating SmartLists based on a table. Use OnCreateNewForTableAndView instead.
-            </summary>
-            <param name="TableId">The ID of the table for which to create a SmartList.</param>
-            <remarks>
-            This event is obsolete. Use OnCreateNewForTableAndView instead which provides enhanced functionality with view support.
-            </remarks>
-        </member>
-        <member name="M:Codeunit::System#Tooling#SmartList Designer Triggers.OnCreateNewForTableAndView(Integer,Text)">
-            <summary>
-            Business event that is triggered when creating a new SmartList for a specific table and view combination.
-            </summary>
-            <param name="TableId">The ID of the table for which to create a SmartList.</param>
-            <param name="ViewId">The identifier of the view to be used for the SmartList creation.</param>
-            <remarks>
-            Use this event to customize SmartList creation behavior, apply default settings, or integrate with external list management systems when creating lists for specific table and view combinations.
-            </remarks>
-        </member>
-        <member name="M:Codeunit::System#Tooling#SmartList Designer Triggers.OnEditQuery(Text)">
-            <summary>
-            Business event that is triggered when editing a query in SmartList Designer.
-            </summary>
-            <param name="QueryId">The identifier of the query being edited.</param>
-            <remarks>
-            Use this event to implement custom query editing behavior, apply validation rules, or integrate with external query design tools.
-            </remarks>
-        </member>
-        <member name="M:Codeunit::System#Tooling#SmartList Designer Triggers.OnInvalidQueryNavigation(BigInteger)">
-            <summary>
-            Business event that is triggered when an invalid query navigation is attempted.
-            </summary>
-            <param name="Id">The identifier of the invalid query or navigation target.</param>
-            <remarks>
-            Use this event to handle error scenarios when query navigation fails, provide alternative navigation paths, or log invalid navigation attempts for debugging purposes.
             </remarks>
         </member>
         <member name="O:Table::System#Tooling#Designed Query">
@@ -13124,6 +13781,81 @@
             The table field ID for table or table-bound fields (0 for page fields bound to expressions).
             </summary>
         </member>
+        <member name="O:Codeunit::System#Tooling#Debugger Triggers">
+            <summary>
+            Provides business events for debugger-related functionality and breakpoint management.
+            Contains legacy debugger events for backward compatibility with obsolete debugger engine.
+            </summary>
+            <remarks>
+            Contains obsolete events related to classic debugger engine support.
+            Maintained for backward compatibility but classic debugger functionality has been removed.
+            Modern debugging should use current VS Code debugging capabilities.
+            </remarks>
+        </member>
+        <member name="M:Codeunit::System#Tooling#Debugger Triggers.OnDebuggerBreak(Text)">
+            <summary>
+            Obsolete business event previously raised when debugger breakpoint was hit.
+            Classic debugger engine support has been removed from the platform.
+            </summary>
+            <param name="ErrorMessage">Error message text from debugger break context</param>
+            <remarks>
+            Raised when classic debugger breakpoint was encountered during code execution.
+            </remarks>
+        </member>
+        <member name="O:Codeunit::System#Tooling#SmartList Designer Triggers">
+            <summary>
+            Provides business events for extending SmartList Designer functionality and managing query-based list creation workflows.
+            </summary>
+            <remarks>
+            This codeunit serves as an extensibility layer for the SmartList Designer tool, enabling partners and developers to customize list creation behavior, handle query operations, and integrate with external data visualization tools. All events are business events that can be subscribed to by external extensions.
+            </remarks>
+        </member>
+        <member name="M:Codeunit::System#Tooling#SmartList Designer Triggers.GetEnabled(Boolean@)">
+            <summary>
+            Business event that allows subscribers to control whether SmartList Designer functionality is enabled.
+            </summary>
+            <param name="Enabled">Indicates whether SmartList Designer should be enabled. Subscribers can modify this value to control feature availability.</param>
+            <remarks>
+            Use this event to implement conditional enabling of SmartList Designer based on licensing, user permissions, or environment configuration.
+            </remarks>
+        </member>
+        <member name="M:Codeunit::System#Tooling#SmartList Designer Triggers.OnCreateForTable(Integer)">
+            <summary>
+            Obsolete business event for creating SmartLists based on a table. Use OnCreateNewForTableAndView instead.
+            </summary>
+            <param name="TableId">The ID of the table for which to create a SmartList.</param>
+            <remarks>
+            This event is obsolete. Use OnCreateNewForTableAndView instead which provides enhanced functionality with view support.
+            </remarks>
+        </member>
+        <member name="M:Codeunit::System#Tooling#SmartList Designer Triggers.OnCreateNewForTableAndView(Integer,Text)">
+            <summary>
+            Business event that is triggered when creating a new SmartList for a specific table and view combination.
+            </summary>
+            <param name="TableId">The ID of the table for which to create a SmartList.</param>
+            <param name="ViewId">The identifier of the view to be used for the SmartList creation.</param>
+            <remarks>
+            Use this event to customize SmartList creation behavior, apply default settings, or integrate with external list management systems when creating lists for specific table and view combinations.
+            </remarks>
+        </member>
+        <member name="M:Codeunit::System#Tooling#SmartList Designer Triggers.OnEditQuery(Text)">
+            <summary>
+            Business event that is triggered when editing a query in SmartList Designer.
+            </summary>
+            <param name="QueryId">The identifier of the query being edited.</param>
+            <remarks>
+            Use this event to implement custom query editing behavior, apply validation rules, or integrate with external query design tools.
+            </remarks>
+        </member>
+        <member name="M:Codeunit::System#Tooling#SmartList Designer Triggers.OnInvalidQueryNavigation(BigInteger)">
+            <summary>
+            Business event that is triggered when an invalid query navigation is attempted.
+            </summary>
+            <param name="Id">The identifier of the invalid query or navigation target.</param>
+            <remarks>
+            Use this event to handle error scenarios when query navigation fails, provide alternative navigation paths, or log invalid navigation attempts for debugging purposes.
+            </remarks>
+        </member>
         <member name="O:Table::System#Utilities#Date">
             <summary>
             Virtual table that provides period-based date calculations and date range generation for various time periods.
@@ -13186,111 +13918,117 @@
             The integer value in the sequence, starting from negative values and continuing through positive values.
             </summary>
         </member>
-        <member name="O:Table::System#MCP#MCP Configuration">
+        <member name="O:Codeunit::System#Database#Index Management">
             <summary>
-            Root configuration record for controlling allowed operations against Business Central objects.
-            </summary>
-            <remarks>
-            This table contains the different MCP server configurations, each identified by a unique 'Configuration ID'.
-            </remarks>
-        </member>
-        <member name="F:Table::System#MCP#MCP Configuration.Name[100]">
-            <summary>
-            Configuration name.
+            Provides an API for various index management operations.
             </summary>
         </member>
-        <member name="F:Table::System#MCP#MCP Configuration.Description[250]">
+        <member name="M:Codeunit::System#Database#Index Management.GetSupportedOptimizedTextSearchLanguages:Dictionary of [Integer,Text]">
             <summary>
-            Configuration description.
+            Gets the list of supported LCIDs for optimized text search.
+            </summary>
+            <returns>A list of LCIDs supported for optimized text search.</returns>
+        </member>
+        <member name="M:Codeunit::System#Database#Index Management.GetCurrentOptimizedTextSearchLanguage:Integer">
+            <summary>
+            Gets the current optimized text search language.
+            </summary>
+            <returns>The LCID of the current optimized text search language.</returns>
+        </member>
+        <member name="M:Codeunit::System#Database#Index Management.SetCurrentOptimizedTextSearchLanguage(Integer)">
+            <summary>
+            Sets the current optimized text search language.
+            </summary>
+            <param name="Lcid">The LCID to set as the current optimized text search language.</param>
+        </member>
+        <member name="M:Codeunit::System#Database#Index Management.DisableIndex(Database Index)">
+            <summary>
+            Disables the index of the current Database Index record.
+            Indexes that are primary key, unique (including SystemId), or SIFT cannot be disabled.
+            </summary>
+            <param name="DatabaseIndexRecord">The DatabaseIndex record identifying the index to disable.</param>
+        </member>
+        <member name="M:Codeunit::System#Database#Index Management.EnableKey(Key,Text[30])">
+            <summary>
+            Enables the corresponding index of the current Key record.
+            </summary>
+            <param name="KeyRecord">The Key table record identifying the key to enable.</param>
+            <param name="CompanyName"> The name of the company for which to enable a key in SQL. Use empty if a not a per company table</param>
+        </member>
+        <member name="O:Codeunit::System#Runtime#Base64Convert">
+            <summary>
+            Provides an API for handling Base64 conversion from buffers and streams.
             </summary>
         </member>
-        <member name="F:Table::System#MCP#MCP Configuration.EnableDynamicToolMode">
+        <member name="M:Codeunit::System#Runtime#Base64Convert.ToBase64(Text,Boolean,TextEncoding,Integer):Text">
             <summary>
-            Use Tool Search Mode.
+            Build the Base64 representation of a text string.
             </summary>
+            <param name="String">The input text string to convert.</param>
+            <param name="InsertLineBreaks">Whether to insert line breaks in the output.</param>
+            <param name="TextEncoding">The encoding of the input text.</param>
+            <param name="Codepage">The codepage to use for the conversion.</param>
         </member>
-        <member name="F:Table::System#MCP#MCP Configuration.Active">
+        <member name="M:Codeunit::System#Runtime#Base64Convert.ToBase64(Text,Boolean,TextEncoding,Integer,OutStream)">
             <summary>
-            Is configuration active.
+            Build the Base64 representation of a text string.
             </summary>
+            <param name="String">The input text string to convert.</param>
+            <param name="InsertLineBreaks">Whether to insert line breaks in the output.</param>
+            <param name="TextEncoding">The encoding of the input text.</param>
+            <param name="Codepage">The codepage to use for the conversion.</param>
+            <param name="OutStream">The output stream to write the Base64 data to.</param>
         </member>
-        <member name="F:Table::System#MCP#MCP Configuration.AllowProdChanges">
+        <member name="M:Codeunit::System#Runtime#Base64Convert.ToBase64(InStream,Boolean):Text">
             <summary>
-            Allow create, update, and delete tools.
+            Build the Base64 representation of the stream content.
             </summary>
+            <param name="InStream">The input stream to convert.</param>
+            <param name="InsertLineBreaks">Whether to insert line breaks in the output.</param>
         </member>
-        <member name="F:Table::System#MCP#MCP Configuration.DiscoverReadOnlyObjects">
+        <member name="M:Codeunit::System#Runtime#Base64Convert.ToBase64(InStream,Boolean,OutStream)">
             <summary>
-            Allow discovery of accessible read-only objects by the MCP client.
+            Build the Base64 representation of the stream content.
             </summary>
+            <param name="InStream">The input stream to convert.</param>
+            <param name="InsertLineBreaks">Whether to insert line breaks in the output.</param>
+            <param name="OutStream">The output stream to write the Base64 data to.</param>
         </member>
-        <member name="O:Table::System#MCP#MCP Configuration Tool">
+        <member name="M:Codeunit::System#Runtime#Base64Convert.FromBase64(Text,TextEncoding,Integer):Text">
             <summary>
-            Child records that define allowed operations for specific Business Central objects
-            under a given MCP Configuration.
+            Decode the base64 string to a text string.
             </summary>
-            <remarks>
-            This table contains the different MCP configuration tools, each linked to a parent MCP Configuration record via 'ID'.
-            </remarks>
+            <param name="Base64String">The base64 string to decode.</param>
+            <param name="TextEncoding">The encoding to use for the output text.</param>
+            <param name="CodePage">The codepage to use for the output text.</param>
         </member>
-        <member name="F:Table::System#MCP#MCP Configuration Tool.ID">
+        <member name="M:Codeunit::System#Runtime#Base64Convert.FromBase64(Text,TextEncoding,Integer,OutStream)">
             <summary>
-            MCP Configuration system ID.
+            Decode the base64 string to a stream.
             </summary>
+            <param name="Base64String">The base64 string to decode.</param>
+            <param name="TextEncoding">The encoding to use for the output text.</param>
+            <param name="CodePage">The codepage to use for the output text.</param>
         </member>
-        <member name="F:Table::System#MCP#MCP Configuration Tool.Object Type">
+        <member name="M:Codeunit::System#Runtime#Base64Convert.FromBase64(Text,OutStream)">
             <summary>
-            Type of the Business Central object (Page, Query).
+            Decode the base64 string to a stream.
             </summary>
+            <param name="Base64String">The base64 string to decode.</param>
+            <param name="OutStream">The output stream to write the decoded data to.</param>
         </member>
-        <member name="F:Table::System#MCP#MCP Configuration Tool.Object ID">
+        <member name="M:Codeunit::System#Runtime#Base64Convert.FromBase64(InStream):Text">
             <summary>
-            The object ID in Business Central (e.g., Page ID, Query ID).
+            Decode the base64 stream to a string.
             </summary>
+            <param name="InStream">The base64 stream data to decode.</param>
         </member>
-        <member name="F:Table::System#MCP#MCP Configuration Tool.Allow Read">
+        <member name="M:Codeunit::System#Runtime#Base64Convert.FromBase64(InStream,OutStream)">
             <summary>
-            Allow read access to the object.
+            Decode the base64 data in the InStream to an OutSttream.
             </summary>
-        </member>
-        <member name="F:Table::System#MCP#MCP Configuration Tool.Allow Create">
-            <summary>
-            Allow create access to the object.
-            </summary>
-        </member>
-        <member name="F:Table::System#MCP#MCP Configuration Tool.Allow Modify">
-            <summary>
-            Allow modify access to the object.
-            </summary>
-        </member>
-        <member name="F:Table::System#MCP#MCP Configuration Tool.Allow Delete">
-            <summary>
-            Allow delete access to the object.
-            </summary>
-        </member>
-        <member name="F:Table::System#MCP#MCP Configuration Tool.Allow Bound Actions">
-            <summary>
-            Optional: Allow bound actions for API pages.
-            </summary>
-        </member>
-        <member name="O:Codeunit::System#MCP#MCP Utilities">
-            <summary>
-            Provides functionality for managing MCP configurations.
-            </summary>
-        </member>
-        <member name="M:Codeunit::System#MCP#MCP Utilities.GetInvalidMCPToolsMissingParentPage(List of [Integer]):List of [Integer]">
-            <summary>
-            Get list of invalid MCP tools missing parent pages for the provided list of page tool object IDs.
-            </summary>
-            <param name="PageObjectIds">List of page object IDs.</param>
-            <returns>List of invalid MCP tool page IDs.</returns>
-        </member>
-        <member name="M:Codeunit::System#MCP#MCP Utilities.GetParentMCPTools(Integer):List of [Integer]">
-            <summary>
-            Get list of parent MCP tools for the provided list of page tool object IDs.
-            </summary>
-            <param name="PageObjectId">Page object ID.</param>
-            <returns>List of parent MCP tool page IDs.</returns>
+            <param name="InStream">The base64 stream to decode.</param>
+            <param name="OutStream">The output stream to write the decoded data to.</param>
         </member>
         <member name="O:Interface::System#IUnknown">
             <summary>

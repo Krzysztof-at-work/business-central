@@ -22,7 +22,18 @@ codeunit 2000000020 "Feature Access Management"
     [Scope('OnPrem')]
     procedure AgentTaskManagementPreviewEnabled(ThrowError: Boolean): Boolean
     begin
-        exit(AgentTaskManagementPreviewEnabledInternal(ThrowError));
+        exit(AgentManagementAllowedInternal(ThrowError));
+    end;
+
+    /// <summary>
+    /// Checks if agent management is allowed in the current environment.
+    /// </summary>
+    /// <param name="ThrowError">If an error should be thrown if unavailable.</param>
+    /// <returns>True if allowed, false otherwise.</returns>
+    [Scope('OnPrem')]
+    procedure AgentManagementAllowed(ThrowError: Boolean): Boolean
+    begin
+        exit(AgentManagementAllowedInternal(ThrowError));
     end;
 
     /// <summary>
@@ -52,8 +63,18 @@ codeunit 2000000020 "Feature Access Management"
         exit(IsSandboxEnvironmentInternal());
     end;
 
+    /// <summary>
+    /// Checks if the current session is running in the context of a test.
+    /// </summary>
+    /// <returns>True if a test is executing, false otherwise.</returns>
+    [Scope('OnPrem')]
+    procedure IsTestSession(): Boolean
+    begin
+        exit(IsTestSessionInternal());
+    end;
+
     [Native]
-    local procedure AgentTaskManagementPreviewEnabledInternal(ThrowError: Boolean): Boolean
+    local procedure AgentManagementAllowedInternal(ThrowError: Boolean): Boolean
     begin
     end;
 
@@ -69,6 +90,11 @@ codeunit 2000000020 "Feature Access Management"
 
     [Native]
     local procedure IsEnvironmentPositiveListedInternal(): Boolean
+    begin
+    end;
+
+    [Native]
+    local procedure IsTestSessionInternal(): Boolean
     begin
     end;
 }

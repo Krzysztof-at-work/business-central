@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NavigationDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:schemas-microsoft-com:dynamics:NAV:MetaObjects">
+  <ActionContainers ActionContainerType="Departments">
+    <Actions xsi:type="ActionGroupDefinition" Caption="System" ControlGUID="{9c8e2991-8f34-479b-b18b-0965726b8a2c}">
+      <Actions xsi:type="ActionDefinition" PushAction="RunObject" RunObjectType="Page" TargetID="2000000001" DepartmentCategory="Lists" RunObjectSrcTable="2000000138" ControlGUID="{90f8a0ad-fe72-4afd-b925-e6ebbd1c97d2}" Name="List and Card page picker" CaptionML="ENU=Choose a source page" ApplicationArea="#All" AdditionalSearchTermsML="ENU=List and Card page picker" CaptionTranslationKey="Page 2238546172 - Property 2879900210" AdditionalSearchTermsTranslationKey="Page 2238546172 - Property 3863440606" />
+    </Actions>
+  </ActionContainers>
+</NavigationDefinition>

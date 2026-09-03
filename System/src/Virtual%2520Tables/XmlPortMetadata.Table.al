@@ -101,6 +101,12 @@ table 2000000280 "XmlPort Metadata"
         field(12; InherentEntitlements; Text[5])
         {
         }
+        /// <summary>
+        /// The AL namespace of the object.
+        /// </summary>
+        field(13; "AL Namespace"; text[500])
+        {
+        }
     }
 
     fieldgroups

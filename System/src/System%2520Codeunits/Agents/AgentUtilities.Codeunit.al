@@ -138,4 +138,60 @@ codeunit 2000000022 "Agent Utilities"
     procedure TryGetAgentPublisherInfo(AgentMetadataProvider: Enum "Agent Metadata Provider"; var AgentPublisherName: Text[250]; var AgentPublisherType: Enum "Agent Publisher Type"): Boolean
     begin
     end;
+
+    /// <summary>
+    /// Gets the agent app info for the specified agent metadata provider.
+    /// </summary>
+    /// <param name="AgentMetadataProvider">The agent metadata provider.</param>
+    /// <param name="AppPublisher">The app publisher name.</param>
+    /// <param name="AppName">The app name.</param>
+    /// <param name="AppId">The app ID.</param>
+    /// <returns>True if the app info could be found, false otherwise.</returns>
+    [Native]
+    [Scope('OnPrem')]
+    procedure TryGetAgentAppInfo(AgentMetadataProvider: Enum "Agent Metadata Provider"; var AppPublisher: Text[250]; var AppName: Text[250]; var AppId: Guid): Boolean
+    begin
+    end;
+
+    /// <summary>
+    /// Gets whether the current user can configure all agents (i.e. is an agent admin) in all companies.
+    /// </summary>
+    /// <returns>True if the current user can configure all agents in all companies, false otherwise.</returns>
+    [Native]
+    [Scope('OnPrem')]
+    procedure CurrentUserHasConfigureAllAgentsPermissionInAllCompanies(): Boolean
+    begin
+    end;
+
+    /// <summary>
+    /// Gets whether the Agents feature is enabled for the current environment.
+    /// </summary>
+    /// <returns>True if the Agents feature is enabled, false otherwise.</returns>
+    [Native]
+    [Scope('OnPrem')]
+    procedure IsAgentsFeatureEnabled(): Boolean
+    begin
+    end;
+
+    /// <summary>
+    /// Gets whether the current user can create agents based on the specified agent metadata provider.
+    /// </summary>
+    /// <param name="AgentMetadataProvider">The agent metadata provider.</param>
+    /// <returns>True if the current user can create agents based on the specified agent metadata provider, false otherwise.</returns>
+    [Native]
+    [Scope('OnPrem')]
+    procedure CanCurrentUserCreateAgent(AgentMetadataProvider: Enum "Agent Metadata Provider"): Boolean
+    begin
+    end;
+
+    /// <summary>
+    /// Gets the total Copilot credits consumed by the agent task.
+    /// </summary>
+    /// <param name="TaskId">The ID of the agent task to get consumed credits for.</param>
+    /// <returns>The total Copilot credits consumed by the agent task.</returns>
+    [Native]
+    [Scope('OnPrem')]
+    procedure GetConsumedCopilotCredits(TaskId: BigInteger): Decimal
+    begin
+    end;
 }

@@ -110,6 +110,14 @@ table 2000000273 "Agent Task Msg Attach Data"
             CalcFormula = Lookup("Agent Task Message Data".Type Where("Task ID" = Field("Task ID"), "ID" = Field("Message ID")));
             FieldClass = FlowField;
         }
+        /// <summary>
+        /// The reason why the attachment was ignored.
+        /// </summary>
+        field(12; "Ignored Reason"; Text[250])
+        {
+            Caption = 'Ignored Reason';
+            ToolTip = 'Specifies the reason why the message attachment was ignored.';
+        }
     }
 
     keys

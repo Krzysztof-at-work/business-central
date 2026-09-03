@@ -46,7 +46,7 @@ codeunit 2000000027 "Task Pane"
     [Scope('OnPrem')]
     procedure ShowTask(AgentTask: Record "Agent Task")
     begin
-        ShowTaskByID(AgentTask.ID);
+        ShowTaskByID(AgentTask."Agent User Security ID", AgentTask.ID);
     end;
 
     /// <summary>
@@ -55,8 +55,40 @@ codeunit 2000000027 "Task Pane"
     /// <param name="TaskID">The agent task ID.</param>
     [Scope('OnPrem')]
     procedure ShowTask(TaskID: BigInteger)
+    var
+        AgentTask: Record "Agent Task";
+        AgentUserSecurityID: Guid;
     begin
-        ShowTaskByID(TaskID);
+        if AgentTask.Get(TaskID) then
+            AgentUserSecurityID := AgentTask."Agent User Security ID";
+
+        ShowTaskByID(AgentUserSecurityID, TaskID)
+    end;
+
+    /// <summary>
+    /// Review the specified agent task in the task pane.
+    /// </summary>
+    /// <param name="AgentTask">The agent task record.</param>
+    [Scope('OnPrem')]
+    procedure ReviewTask(AgentTask: Record "Agent Task")
+    begin
+        ReviewTaskByID(AgentTask."Agent User Security ID", AgentTask.ID);
+    end;
+
+    /// <summary>
+    /// Review the specified agent task in the task pane.
+    /// </summary>
+    /// <param name="TaskID">The agent task ID.</param>
+    [Scope('OnPrem')]
+    procedure ReviewTask(TaskID: BigInteger)
+    var
+        AgentTask: Record "Agent Task";
+        AgentUserSecurityID: Guid;
+    begin
+        if AgentTask.Get(TaskID) then
+            AgentUserSecurityID := AgentTask."Agent User Security ID";
+
+        ReviewTaskByID(AgentUserSecurityID, TaskID)
     end;
 
     [Native]
@@ -70,7 +102,12 @@ codeunit 2000000027 "Task Pane"
     end;
 
     [Native]
-    local procedure ShowTaskByID(TaskID: BigInteger)
+    local procedure ShowTaskByID(AgentUserSecurityID: Guid; TaskID: BigInteger)
+    begin
+    end;
+
+    [Native]
+    local procedure ReviewTaskByID(AgentUserSecurityID: Guid; TaskID: BigInteger)
     begin
     end;
 }
