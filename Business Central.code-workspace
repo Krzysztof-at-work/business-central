@@ -51,7 +51,11 @@
 		{
 			"name":"External File Storage - SharePoint Connector",
 			"path":"External File Storage - SharePoint Connector.Source"
-		}	
+		},
+		{
+			"name":"External File Storage - SFTP Connector",
+			"path":"External File Storage - SFTP Connector.Source"
+		}
 	],
 	"settings": {
 		"al.codeAnalyzers": [
