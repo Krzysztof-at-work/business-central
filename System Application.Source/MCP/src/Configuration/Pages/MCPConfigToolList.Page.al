@@ -5,7 +5,6 @@
 
 namespace System.MCP;
 
-using System.Environment;
 using System.Reflection;
 
 page 8352 "MCP Config Tool List"
@@ -27,22 +26,49 @@ page 8352 "MCP Config Tool List"
             repeater(Control1)
             {
                 ShowCaption = false;
-                field("Object Type"; Rec."Object Type") { }
+                field("Object Type"; Rec."Object Type")
+                {
+                    ToolTip = 'Specifies the type of the object.';
+                }
                 field("Object Id"; Rec."Object Id")
                 {
+                    ToolTip = 'Specifies the ID of the object.';
+
                     trigger OnLookup(var Text: Text): Boolean
                     var
                         PageMetadata: Record "Page Metadata";
+                        QueryMetadata: Record "Query Metadata";
                     begin
-                        if not MCPConfigImplementation.LookupAPITools(PageMetadata) then
-                            exit;
+                        case Rec."Object Type" of
+                            Rec."Object Type"::Page:
+                                begin
+                                    if not MCPConfigImplementation.LookupAPIPageTools(PageMetadata) then
+                                        exit;
 
-                        if not PageMetadata.FindSet() then
-                            exit;
+                                    if not PageMetadata.FindSet() then
+                                        exit;
 
-                        repeat
-                            MCPConfig.CreateAPITool(Rec.ID, PageMetadata.ID);
-                        until PageMetadata.Next() = 0;
+                                    repeat
+                                        if MCPConfigImplementation.CheckAPIToolExists(Rec.ID, PageMetadata.ID, Rec."Object Type") then
+                                            continue;
+                                        MCPConfig.CreateAPITool(Rec.ID, PageMetadata.ID);
+                                    until PageMetadata.Next() = 0;
+                                end;
+                            Rec."Object Type"::Query:
+                                begin
+                                    if not MCPConfigImplementation.LookupAPIQueryTools(QueryMetadata) then
+                                        exit;
+
+                                    if not QueryMetadata.FindSet() then
+                                        exit;
+
+                                    repeat
+                                        if MCPConfigImplementation.CheckAPIToolExists(Rec.ID, QueryMetadata.ID, Rec."Object Type") then
+                                            continue;
+                                        MCPConfig.CreateQueryAPITool(Rec.ID, QueryMetadata.ID);
+                                    until QueryMetadata.Next() = 0;
+                                end;
+                        end;
 
                         if not IsNullGuid(Rec.SystemId) then
                             Rec.Delete();
@@ -50,8 +76,22 @@ page 8352 "MCP Config Tool List"
                     end;
 
                     trigger OnValidate()
+                    var
+                        PageMetadata: Record "Page Metadata";
+                        QueryMetadata: Record "Query Metadata";
                     begin
-                        MCPConfigImplementation.ValidateAPITool(Rec."Object Id", true);
+                        case Rec."Object Type" of
+                            Rec."Object Type"::Page:
+                                begin
+                                    PageMetadata := MCPConfigImplementation.ValidateAPIPageTool(Rec."Object Id", true);
+                                    Rec."API Version" := MCPConfigImplementation.GetHighestAPIPageVersion(PageMetadata);
+                                end;
+                            Rec."Object Type"::Query:
+                                begin
+                                    QueryMetadata := MCPConfigImplementation.ValidateAPIQueryTool(Rec."Object Id");
+                                    Rec."API Version" := MCPConfigImplementation.GetHighestAPIQueryVersion(QueryMetadata);
+                                end;
+                        end;
                         SetPermissions();
                     end;
                 }
@@ -61,22 +101,61 @@ page 8352 "MCP Config Tool List"
                     Editable = false;
                     ToolTip = 'Specifies the name of the object.';
                 }
-                field("Allow Read"; Rec."Allow Read") { }
+                field("API Version"; Rec."API Version")
+                {
+                    Caption = 'API Version';
+                    ToolTip = 'Specifies the API version of the tool.';
+
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        APIVersion: Text[30];
+                    begin
+                        if Rec."Object ID" = 0 then
+                            exit;
+
+                        case Rec."Object Type" of
+                            Rec."Object Type"::Page:
+                                MCPConfigImplementation.LookupAPIPageVersions(Rec."Object Id", APIVersion);
+                            Rec."Object Type"::Query:
+                                MCPConfigImplementation.LookupAPIQueryVersions(Rec."Object Id", APIVersion);
+                        end;
+                        if APIVersion <> '' then
+                            Rec."API Version" := APIVersion;
+                    end;
+
+                    trigger OnValidate()
+                    begin
+                        case Rec."Object Type" of
+                            Rec."Object Type"::Page:
+                                MCPConfigImplementation.ValidateAPIPageVersion(Rec."Object Id", Rec."API Version");
+                            Rec."Object Type"::Query:
+                                MCPConfigImplementation.ValidateAPIQueryVersion(Rec."Object Id", Rec."API Version");
+                        end;
+                    end;
+                }
+                field("Allow Read"; Rec."Allow Read")
+                {
+                    ToolTip = 'Specifies whether read operations are allowed for this tool.';
+                }
                 field("Allow Create"; Rec."Allow Create")
                 {
-                    Editable = AllowCreateEditable and (IsSandbox or AllowCreateUpdateDeleteTools);
+                    ToolTip = 'Specifies whether create operations are allowed for this tool.';
+                    Editable = AllowCreateEditable and AllowCreateUpdateDeleteTools and (Rec."Object Type" = Rec."Object Type"::Page);
                 }
                 field("Allow Modify"; Rec."Allow Modify")
                 {
-                    Editable = AllowModifyEditable and (IsSandbox or AllowCreateUpdateDeleteTools);
+                    ToolTip = 'Specifies whether modify operations are allowed for this tool.';
+                    Editable = AllowModifyEditable and AllowCreateUpdateDeleteTools and (Rec."Object Type" = Rec."Object Type"::Page);
                 }
                 field("Allow Delete"; Rec."Allow Delete")
                 {
-                    Editable = AllowDeleteEditable and (IsSandbox or AllowCreateUpdateDeleteTools);
+                    ToolTip = 'Specifies whether delete operations are allowed for this tool.';
+                    Editable = AllowDeleteEditable and AllowCreateUpdateDeleteTools and (Rec."Object Type" = Rec."Object Type"::Page);
                 }
                 field("Allow Bound Actions"; Rec."Allow Bound Actions")
                 {
-                    Editable = IsSandbox or AllowCreateUpdateDeleteTools;
+                    ToolTip = 'Specifies whether bound actions are allowed for this tool.';
+                    Editable = AllowCreateUpdateDeleteTools and (Rec."Object Type" = Rec."Object Type"::Page);
                 }
             }
         }
@@ -86,11 +165,60 @@ page 8352 "MCP Config Tool List"
     {
         area(Processing)
         {
+            action(SelectTools)
+            {
+                Caption = 'Select Tools';
+                Ellipsis = true;
+                Image = Resource;
+                ToolTip = 'Opens a lookup to select API tools to add to this configuration.';
+
+                trigger OnAction()
+                var
+                    PageMetadata: Record "Page Metadata";
+                    QueryMetadata: Record "Query Metadata";
+                begin
+                    case Rec."Object Type" of
+                        Rec."Object Type"::Page:
+                            begin
+                                if not MCPConfigImplementation.LookupAPIPageTools(PageMetadata) then
+                                    exit;
+
+                                if not PageMetadata.FindSet() then
+                                    exit;
+
+                                repeat
+                                    if MCPConfigImplementation.CheckAPIToolExists(Rec.ID, PageMetadata.ID, Rec."Object Type") then
+                                        continue;
+                                    MCPConfig.CreateAPITool(Rec.ID, PageMetadata.ID);
+                                until PageMetadata.Next() = 0;
+                            end;
+                        Rec."Object Type"::Query:
+                            begin
+                                if not MCPConfigImplementation.LookupAPIQueryTools(QueryMetadata) then
+                                    exit;
+
+                                if not QueryMetadata.FindSet() then
+                                    exit;
+
+                                repeat
+                                    if MCPConfigImplementation.CheckAPIToolExists(Rec.ID, QueryMetadata.ID, Rec."Object Type") then
+                                        continue;
+                                    MCPConfig.CreateQueryAPITool(Rec.ID, QueryMetadata.ID);
+                                until QueryMetadata.Next() = 0;
+                            end;
+                    end;
+
+                    if not IsNullGuid(Rec.SystemId) then
+                        Rec.Delete();
+                    CurrPage.Update();
+                end;
+            }
             action(AddToolsByAPIGroup)
             {
                 Caption = 'Add Tools by API Group';
                 Image = NewResourceGroup;
                 ToolTip = 'Adds tools to the configuration by API publisher and group.';
+                Enabled = not IsConfigActive;
 
                 trigger OnAction()
                 begin
@@ -102,7 +230,8 @@ page 8352 "MCP Config Tool List"
             {
                 Caption = 'Add All Standard APIs as Tools';
                 Image = ResourceGroup;
-                ToolTip = 'Adds tools for all standard API v2.0 to the configuration.';
+                ToolTip = 'Adds tools for all standard API pages and queries to the configuration.';
+                Enabled = not IsConfigActive;
 
                 trigger OnAction()
                 begin
@@ -126,11 +255,9 @@ page 8352 "MCP Config Tool List"
     end;
 
     trigger OnOpenPage()
-    var
-        EnvironmentInformation: Codeunit "Environment Information";
     begin
-        IsSandbox := EnvironmentInformation.IsSandbox();
         GetAllowCreateUpdateDeleteTools();
+        IsConfigActive := MCPConfigImplementation.IsConfigurationActive(Rec.ID);
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean)
@@ -141,11 +268,11 @@ page 8352 "MCP Config Tool List"
     var
         MCPConfig: Codeunit "MCP Config";
         MCPConfigImplementation: Codeunit "MCP Config Implementation";
-        IsSandbox: Boolean;
         AllowCreateEditable: Boolean;
         AllowModifyEditable: Boolean;
         AllowDeleteEditable: Boolean;
         AllowCreateUpdateDeleteTools: Boolean;
+        IsConfigActive: Boolean;
 
     local procedure SetPermissions()
     var

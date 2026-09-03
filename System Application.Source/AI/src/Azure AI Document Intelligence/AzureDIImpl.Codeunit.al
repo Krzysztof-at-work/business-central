@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
 namespace System.AI.DocumentIntelligence;
+
 using System;
 using System.AI;
 using System.Telemetry;
@@ -114,6 +115,7 @@ codeunit 7779 "Azure DI Impl." implements "AI Service Name"
         Result := ALCopilotResponse.Result();
     end;
 
+    [NonDebuggable]
     local procedure GenerateJsonForSingleInput(Base64: Text): Text
     var
         JsonObject: JsonObject;

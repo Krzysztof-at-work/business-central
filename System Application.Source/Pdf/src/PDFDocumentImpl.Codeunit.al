@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
 namespace System.IO;
+
 using System;
 using System.Utilities;
 
@@ -355,6 +356,7 @@ codeunit 3109 "PDF Document Impl."
         Clear(this.SaveFormat);
     end;
 
+    [NonDebuggable]
     procedure ToJson(RenderingPayload: JsonObject): JsonObject
     var
         JsonElement: JsonObject;

@@ -50,7 +50,6 @@ codeunit 4316 "Agent Task Message Builder"
     /// </summary>
     /// <param name="RequiresReview">Specifies if the user needs to review and approve message before agent starts processing the task. The default value is true.</param>
     /// <returns>This instance of the Agent Task Message Builder.</returns>
-    [Scope('OnPrem')]
     procedure SetRequiresReview(RequiresReview: Boolean): codeunit "Agent Task Message Builder"
     begin
         AgentTaskMsgBuilderImpl.SetRequiresReview(RequiresReview);
@@ -205,15 +204,38 @@ codeunit 4316 "Agent Task Message Builder"
     /// The file will be attached when the message is created.
     /// It is possible to attach multiple files to the message.
     /// </summary>
+    /// <param name="FileName">The name of the file to attach.</param>
+    /// <param name="FileMIMEType">The MIME type of the file to attach.</param>
+    /// <param name="InStream">The stream of the file to attach.</param>
+    /// <param name="Ignored">Specifies if the attachment should be marked as ignored, so that it is not processed by agent.</param>
+    /// <param name="IgnoredReason">Specifies why the attachment was ignored.</param>
+    /// <returns>This instance of the Agent Task Message Builder.</returns>
+    procedure AddAttachment(FileName: Text[250]; FileMIMEType: Text[100]; InStream: InStream; Ignored: Boolean; IgnoredReason: Text[250]): codeunit "Agent Task Message Builder"
+    begin
+        FeatureAccessManagement.AgentTaskManagementPreviewEnabled(true);
+        AgentTaskMsgBuilderImpl.AddAttachment(FileName, FileMIMEType, InStream, Ignored, IgnoredReason);
+        exit(this);
+    end;
+
+    /// <summary>
+    /// Attach a file to the task message.
+    /// The file will be attached when the message is created.
+    /// It is possible to attach multiple files to the message.
+    /// </summary>
     /// <param name="AgentTaskFile">The file to attach.</param>
     /// <returns>This instance of the Agent Task Message Builder.</returns>
-    procedure AddAttachment(AgentTaskFile: Record "Agent Task File"): codeunit "Agent Task Message Builder"
+#if not CLEAN28
+#pragma warning disable AS0078
+#endif
+    procedure AddAttachment(var AgentTaskFile: Record "Agent Task File"): codeunit "Agent Task Message Builder"
     begin
         FeatureAccessManagement.AgentTaskManagementPreviewEnabled(true);
         AgentTaskMsgBuilderImpl.AddAttachment(AgentTaskFile);
         exit(this);
     end;
-
+#if not CLEAN28
+#pragma warning restore AS0078
+#endif
     /// <summary>
     /// Uploads a file to the task message.
     /// The file will be attached when the message is created.
