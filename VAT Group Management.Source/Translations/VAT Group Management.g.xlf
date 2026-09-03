@@ -193,6 +193,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit VAT Group Communication - NamedType InternalServerErrorErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 3917783520 - NamedType 4249582261" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The Group Representative API URL is not a valid Microsoft Business Central endpoint.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit VAT Group Communication - NamedType InvalidGroupRepresentativeURLErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3917783520 - NamedType 3078278031" size-unit="char" translate="yes" xml:space="preserve">
           <source>Bad Request: the server could not understand the request due to invalid syntax.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1448,25 +1453,10 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum VAT Group Auth Type OnPrem - EnumValue OAuth2 - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Enum 1793979745 - EnumValue 3742023362 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Web Service Access Key</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum VAT Group Auth Type OnPrem - EnumValue WebServiceAccessKey - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 1793979745 - EnumValue 3367207849 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Windows Authentication</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum VAT Group Auth Type OnPrem - EnumValue WindowsAuthentication - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Enum 49222336 - EnumValue 1970998423 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>OAuth2</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum VAT Group Auth Type Saas - EnumValue OAuth2 - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 49222336 - EnumValue 3742023362 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Web Service Access Key</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum VAT Group Auth Type Saas - EnumValue WebServiceAccessKey - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3476321473 - EnumValue 1970998423 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>OAuth2</source>
