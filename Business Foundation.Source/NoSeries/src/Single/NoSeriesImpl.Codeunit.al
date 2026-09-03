@@ -41,6 +41,8 @@ codeunit 304 "No. Series - Impl."
         NoSeries: Record "No. Series";
         NoSeriesErrorsImpl: Codeunit "No. Series - Errors Impl.";
     begin
+        if NoSeriesCode = '' then
+            exit;
         NoSeries.Get(NoSeriesCode);
         if not NoSeries."Manual Nos." then
             NoSeriesErrorsImpl.Throw(ErrorText, NoSeriesCode, NoSeriesErrorsImpl.OpenNoSeriesLinesAction());

@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
@@ -29,7 +29,6 @@ page 2901 "Demand Forecast Card"
                 {
                     ApplicationArea = Planning;
                     Caption = 'Demand Forecast Name';
-                    ToolTip = 'Specifies the name of the demand forecast.';
                     trigger OnValidate()
                     begin
                         SetMatrix();
@@ -45,7 +44,6 @@ page 2901 "Demand Forecast Card"
                 {
                     ApplicationArea = Planning;
                     Caption = 'View by';
-                    ToolTip = 'Specifies the period of time for which amounts are displayed.';
 
                     trigger OnValidate()
                     begin
@@ -56,7 +54,6 @@ page 2901 "Demand Forecast Card"
                 {
                     ApplicationArea = Planning;
                     Caption = 'View as';
-                    ToolTip = 'Specifies how amounts are displayed. Net Change: The net change in the balance for the selected period. Balance at Date: The balance as of the last day in the selected period.';
                     trigger OnValidate()
                     begin
                         SetMatrix();
@@ -66,7 +63,6 @@ page 2901 "Demand Forecast Card"
                 {
                     ApplicationArea = Planning;
                     Caption = 'Forecast Type';
-                    ToolTip = 'Specifies whether the demand forecast entry is for a sales item or a component item. If you choose Sales Item, only sales orders net the forecast. If you choose Component Item, demand from production order components net the forecast.';
 
                     trigger OnValidate()
                     begin
@@ -100,7 +96,6 @@ page 2901 "Demand Forecast Card"
                 {
                     ApplicationArea = Planning;
                     Caption = 'Forecast by Locations';
-                    ToolTip = 'Specifies whether to create a forecast entry that includes locations.';
                     Importance = Additional;
 
                     trigger OnValidate()
@@ -140,7 +135,6 @@ page 2901 "Demand Forecast Card"
                 {
                     ApplicationArea = Planning;
                     Caption = 'Forecast by Variants';
-                    ToolTip = 'Use this if you want to create a forecast entry including the variants.';
                     Importance = Additional;
 
                     trigger OnValidate()
@@ -180,7 +174,6 @@ page 2901 "Demand Forecast Card"
                 {
                     ApplicationArea = Planning;
                     Caption = 'Date Filter';
-                    ToolTip = 'Specifies the dates that will be used to filter the amounts in the window.';
                     Editable = IsEditable;
 
                     trigger OnValidate()
@@ -400,7 +393,13 @@ page 2901 "Demand Forecast Card"
 
     protected procedure SetMatrix()
     begin
+        OnBeforeSetMatrix(Rec, MatrixColumnCaptions, MatrixRecords, CurrentSetLength);
         CurrPage.Matrix.PAGE.Load(MatrixColumnCaptions, MatrixRecords, Rec.Name, Rec."Date Filter", Rec."Forecast Type", Rec."Quantity Type", CurrentSetLength, Rec.GetItemFilterBlobAsViewFilters(), Rec.GetLocationFilterBlobAsText(), Rec."Forecast By Locations", Rec."Forecast By Variants", Rec.GetVariantFilterBlobAsText());
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeSetMatrix(var ProductionForecastName: Record "Production Forecast Name"; MatrixColumnCaptions: array[32] of Text[1024]; var MatrixRecords: array[32] of Record Date; CurrentSetLength: Integer)
+    begin
     end;
 }
 

@@ -6,11 +6,17 @@ namespace Microsoft.Finance.AllocationAccount;
 
 using System.Telemetry;
 
+/// <summary>
+/// Main configuration interface for allocation accounts with support for both fixed and variable distribution methods.
+/// Provides integrated setup for allocation rules, destination accounts, and distribution parameters.
+/// </summary>
 page 2670 "Allocation Account"
 {
     PageType = ListPlus;
     SourceTable = "Allocation Account";
     Caption = 'Allocation Account';
+    AboutTitle = 'About Allocation Accounts';
+    AboutText = 'Manage allocation accounts to automatically split amounts across multiple destination accounts Define fixed or variable allocation methods, set destination accounts, and control how values are distributed during posting. Use allocation accounts in journals and documents to apply consistent allocation rules without manual line splitting.';
 
     layout
     {

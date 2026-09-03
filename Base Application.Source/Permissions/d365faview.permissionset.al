@@ -1,14 +1,14 @@
 namespace System.Security.AccessControl;
 
+using Microsoft.Finance.GeneralLedger.Account;
 using Microsoft.FixedAssets.Depreciation;
 using Microsoft.FixedAssets.FixedAsset;
-using Microsoft.FixedAssets.Setup;
+using Microsoft.FixedAssets.Insurance;
 using Microsoft.FixedAssets.Journal;
 using Microsoft.FixedAssets.Ledger;
-using Microsoft.FixedAssets.Posting;
-using Microsoft.Finance.GeneralLedger.Account;
-using Microsoft.FixedAssets.Insurance;
 using Microsoft.FixedAssets.Maintenance;
+using Microsoft.FixedAssets.Posting;
+using Microsoft.FixedAssets.Setup;
 
 permissionset 2381 "D365 FA, VIEW"
 {
@@ -19,6 +19,7 @@ permissionset 2381 "D365 FA, VIEW"
                   tabledata "Depreciation Table Buffer" = R,
                   tabledata "Depreciation Table Header" = R,
                   tabledata "Depreciation Table Line" = R,
+                  tabledata "Adv. Bonus Depreciation Setup" = R,
                   tabledata "FA Allocation" = R,
                   tabledata "FA Buffer Projection" = R,
                   tabledata "FA Class" = R,

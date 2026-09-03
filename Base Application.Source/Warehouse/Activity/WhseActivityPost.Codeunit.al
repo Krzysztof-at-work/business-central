@@ -238,9 +238,12 @@ codeunit 7324 "Whse.-Activity-Post"
         OnAfterCode(WhseActivLine, SuppressCommit, PrintDoc);
         if not SuppressCommit then
             Commit();
+#if not CLEAN29
         OnAfterPostWhseActivHeader(WhseActivHeader, PurchHeader, SalesHeader, TransHeader);
+#endif
 
         Clear(WhseJnlRegisterLine);
+        OnAfterPostWhseActivityCompleted(WhseActivHeader, PurchHeader, SalesHeader, TransHeader, SuppressCommit, IsPreview);
     end;
 
     local procedure CheckQuantityInBinContentForTracking(var WarehouseActivityLine: Record "Warehouse Activity Line")
@@ -253,23 +256,19 @@ codeunit 7324 "Whse.-Activity-Post"
         if not (Location."Require Pick" and Location."Require Receive") then
             exit;
 
-        Item.SetLoadFields("Order Tracking Policy", "Assembly BOM", "Assembly Policy");
-        Item.SetAutoCalcFields("Assembly BOM");
-        Item.Get(WarehouseActivityLine."Item No.");
-        if (Item."Order Tracking Policy" = Item."Order Tracking Policy"::None) then
-            exit;
-        if (Item."Assembly BOM") and (Item."Assembly Policy" = Item."Assembly Policy"::"Assemble-to-Order") then
-            exit;
-
         WarehouseActivityLine2.CopyFilters(WarehouseActivityLine);
         WarehouseActivityLine2.SetFilter("Activity Type", '%1|%2', WarehouseActivityLine2."Activity Type"::"Invt. Pick", WarehouseActivityLine2."Activity Type"::"Invt. Put-away");
+        WarehouseActivityLine2.SetRange("Assemble to Order", false);
+        Item.SetLoadFields("Order Tracking Policy");
         if WarehouseActivityLine2.FindSet() then
             repeat
-                if CheckItemTracking(WarehouseActivityLine2) then begin
-                    CreateWhseJnlLine(TempWhseJnlLine, WarehouseActivityLine2);
-                    if TempWhseJnlLine."Entry Type" = TempWhseJnlLine."Entry Type"::"Negative Adjmt." then
-                        WMSMgt.CheckWhseJnlLine(TempWhseJnlLine, 4, TempWhseJnlLine."Qty. (Base)", false); // 4 = Whse. Journal
-                end;
+                Item.Get(WarehouseActivityLine2."Item No.");
+                if Item."Order Tracking Policy" <> Item."Order Tracking Policy"::None then
+                    if CheckItemTracking(WarehouseActivityLine2) then begin
+                        CreateWhseJnlLine(TempWhseJnlLine, WarehouseActivityLine2);
+                        if TempWhseJnlLine."Entry Type" = TempWhseJnlLine."Entry Type"::"Negative Adjmt." then
+                            WMSMgt.CheckWhseJnlLine(TempWhseJnlLine, 4, TempWhseJnlLine."Qty. (Base)", false); // 4 = Whse. Journal
+                    end;
             until WarehouseActivityLine2.Next() = 0;
     end;
 
@@ -559,7 +558,7 @@ codeunit 7324 "Whse.-Activity-Post"
                     OnUpdateSourceDocumentOnAfterGetPurchLine(PurchLine, TempWhseActivLine);
                     if TempWhseActivLine."Source Document" = TempWhseActivLine."Source Document"::"Purchase Order" then begin
                         OnUpdateSourceDocumentOnSourceDocumentIsPurchaseOrder(PurchLine, TempWhseActivLine);
-                        if (PurchLine."Outstanding Quantity" <> 0) and (TempWhseActivLine."Qty. to Handle" > PurchLine."Outstanding Quantity") then
+                        if (PurchLine."Outstanding Quantity" <> 0) and (Abs(TempWhseActivLine."Qty. to Handle") > Abs(PurchLine."Outstanding Quantity")) then
                             TempWhseActivLine."Qty. to Handle" := PurchLine."Outstanding Quantity";
                         PurchLine.Validate("Qty. to Receive", TempWhseActivLine."Qty. to Handle");
                         PurchLine."Qty. to Receive (Base)" := TempWhseActivLine."Qty. to Handle (Base)";
@@ -1240,6 +1239,15 @@ codeunit 7324 "Whse.-Activity-Post"
                                 TempWarehouseActivityLineForItemTrackingChecking."Qty. to Handle (Base)",
                                 TempWarehouseActivityLineForItemTrackingChecking."Qty. to Handle (Base)", true, InvoiceSourceDoc);
                         end;
+                    Database::"Job Planning Line":
+                        // New format: Warehouse activity line already uses Job Planning Line source type
+                        TrackingSpecification.CheckItemTrackingQuantity(
+                            TempWarehouseActivityLineForItemTrackingChecking."Source Type",
+                            TempWarehouseActivityLineForItemTrackingChecking."Source Subtype",
+                            TempWarehouseActivityLineForItemTrackingChecking."Source No.",
+                            TempWarehouseActivityLineForItemTrackingChecking."Source Line No.",
+                            TempWarehouseActivityLineForItemTrackingChecking."Qty. to Handle (Base)",
+                            TempWarehouseActivityLineForItemTrackingChecking."Qty. to Handle (Base)", true, InvoiceSourceDoc);
                     else
                         TrackingSpecification.CheckItemTrackingQuantity(TempWarehouseActivityLineForItemTrackingChecking."Source Type", TempWarehouseActivityLineForItemTrackingChecking."Source Subtype", TempWarehouseActivityLineForItemTrackingChecking."Source No.", TempWarehouseActivityLineForItemTrackingChecking."Source Line No.", TempWarehouseActivityLineForItemTrackingChecking."Qty. to Handle (Base)", TempWarehouseActivityLineForItemTrackingChecking."Qty. to Handle (Base)", true, InvoiceSourceDoc);
                 end;
@@ -1498,8 +1506,16 @@ codeunit 7324 "Whse.-Activity-Post"
     begin
     end;
 
+#if not CLEAN29
     [IntegrationEvent(false, false)]
+    [Obsolete('Use OnAfterPostWhseActivityCompleted instead. This event fires before PostRelatedInboundTransfer completes.', '29.0')]
     local procedure OnAfterPostWhseActivHeader(WhseActivHeader: Record "Warehouse Activity Header"; var PurchaseHeader: Record "Purchase Header"; var SalesHeader: Record "Sales Header"; var TransferHeader: Record "Transfer Header")
+    begin
+    end;
+#endif
+
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterPostWhseActivityCompleted(WhseActivHeader: Record "Warehouse Activity Header"; var PurchaseHeader: Record "Purchase Header"; var SalesHeader: Record "Sales Header"; var TransferHeader: Record "Transfer Header"; SuppressCommit: Boolean; IsPreview: Boolean)
     begin
     end;
 

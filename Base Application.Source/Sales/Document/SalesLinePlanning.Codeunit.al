@@ -8,6 +8,9 @@ using Microsoft.Inventory.Planning;
 using Microsoft.Inventory.Requisition;
 using Microsoft.Inventory.Tracking;
 
+/// <summary>
+/// Integrates sales lines with the planning worksheet for demand-driven supply planning.
+/// </summary>
 codeunit 99000850 "Sales Line-Planning"
 {
     var
@@ -86,7 +89,7 @@ codeunit 99000850 "Sales Line-Planning"
     [EventSubscriber(ObjectType::Page, Page::"Order Planning", 'OnSetRecDemandFilter', '', false, false)]
     local procedure OnSetRecDemandFilter(var RequisitionLine: Record "Requisition Line"; DemandOrderFilter: Enum "Demand Order Source Type")
     begin
-        if DemandOrderFilter = DemandOrderFilter::"Service Demand" then begin
+        if DemandOrderFilter = DemandOrderFilter::"Sales Demand" then begin
             RequisitionLine.SetRange("Demand Type", Database::"Sales Line");
             RequisitionLine.SetCurrentKey("User ID", "Demand Type", "Worksheet Template Name", "Journal Batch Name", "Line No.");
         end;

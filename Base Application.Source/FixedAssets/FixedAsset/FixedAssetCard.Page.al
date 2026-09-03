@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
@@ -39,7 +39,6 @@ page 5600 "Fixed Asset Card"
                 {
                     ApplicationArea = All;
                     Importance = Standard;
-                    ToolTip = 'Specifies the number of the involved entry or record, according to the specified number series.';
                     Visible = NoFieldVisible;
 
                     trigger OnAssistEdit()
@@ -71,14 +70,12 @@ page 5600 "Fixed Asset Card"
                     {
                         ApplicationArea = FixedAssets;
                         Importance = Promoted;
-                        ToolTip = 'Specifies the class that the fixed asset belongs to.';
                     }
                     field("FA Subclass Code"; Rec."FA Subclass Code")
                     {
                         ApplicationArea = FixedAssets;
                         Importance = Promoted;
                         ShowMandatory = true;
-                        ToolTip = 'Specifies the subclass of the class that the fixed asset belongs to.';
 
                         trigger OnLookup(var Text: Text): Boolean
                         var
@@ -113,13 +110,11 @@ page 5600 "Fixed Asset Card"
                 {
                     ApplicationArea = FixedAssets;
                     Importance = Additional;
-                    ToolTip = 'Specifies the location, such as a building, where the fixed asset is located.';
                 }
                 field("Budgeted Asset"; Rec."Budgeted Asset")
                 {
                     ApplicationArea = FixedAssets;
                     Importance = Additional;
-                    ToolTip = 'Specifies if the asset is for budgeting purposes.';
 
                     trigger OnValidate()
                     begin
@@ -130,56 +125,47 @@ page 5600 "Fixed Asset Card"
                 {
                     ApplicationArea = FixedAssets;
                     Importance = Promoted;
-                    ToolTip = 'Specifies the fixed asset''s serial number.';
                 }
                 field("Main Asset/Component"; Rec."Main Asset/Component")
                 {
                     ApplicationArea = FixedAssets;
                     Importance = Additional;
-                    ToolTip = 'Specifies if the fixed asset is a main fixed asset or a component of a fixed asset.';
                 }
                 field("Component of Main Asset"; Rec."Component of Main Asset")
                 {
                     ApplicationArea = FixedAssets;
                     Editable = false;
                     Importance = Additional;
-                    ToolTip = 'Specifies the number of the main fixed asset.';
                 }
                 field("Search Description"; Rec."Search Description")
                 {
                     ApplicationArea = FixedAssets;
-                    ToolTip = 'Specifies a search description for the fixed asset.';
                 }
                 field("Responsible Employee"; Rec."Responsible Employee")
                 {
                     ApplicationArea = FixedAssets;
                     Importance = Promoted;
-                    ToolTip = 'Specifies which employee is responsible for the fixed asset.';
                 }
                 field(Inactive; Rec.Inactive)
                 {
                     ApplicationArea = FixedAssets;
                     Importance = Additional;
-                    ToolTip = 'Specifies that the fixed asset is inactive (for example, if the asset is not in service or is obsolete).';
                 }
                 field(Blocked; Rec.Blocked)
                 {
                     ApplicationArea = FixedAssets;
                     Importance = Additional;
-                    ToolTip = 'Specifies that the related record is blocked from being posted in transactions, for example a customer that is declared insolvent or an item that is placed in quarantine.';
                 }
                 field(Acquired; Rec.Acquired)
                 {
                     ApplicationArea = FixedAssets;
                     Editable = false;
                     Importance = Additional;
-                    ToolTip = 'Specifies if the fixed asset has been acquired.';
                 }
                 field("Last Date Modified"; Rec."Last Date Modified")
                 {
                     ApplicationArea = FixedAssets;
                     Importance = Additional;
-                    ToolTip = 'Specifies when the fixed asset card was last modified.';
                 }
             }
             group("Depreciation Book")
@@ -286,6 +272,8 @@ page 5600 "Fixed Asset Card"
                 field(BookValue; BookValue)
                 {
                     ApplicationArea = FixedAssets;
+                    AutoFormatType = 1;
+                    AutoFormatExpression = '';
                     Caption = 'Book Value';
                     DrillDown = true;
                     Editable = false;
@@ -294,6 +282,37 @@ page 5600 "Fixed Asset Card"
                     trigger OnDrillDown()
                     begin
                         FADepreciationBook.DrillDownOnBookValue();
+                    end;
+                }
+                field(AcquisitionCost; AcquisitionCost)
+                {
+                    ApplicationArea = FixedAssets;
+                    AutoFormatType = 1;
+                    AutoFormatExpression = '';
+                    Caption = 'Acquisition Cost';
+                    DrillDown = true;
+                    Editable = false;
+                    Visible = AcquisitionCostFieldVisible;
+                    ToolTip = 'Specifies the acquisition cost for the fixed asset.';
+
+                    trigger OnDrillDown()
+                    begin
+                        FADepreciationBook.DrillDownOnAcquisitionCost();
+                    end;
+                }
+                field(BonusDeprAppliedAmount; BonusDeprAppliedAmount)
+                {
+                    ApplicationArea = FixedAssets;
+                    AutoFormatType = 1;
+                    AutoFormatExpression = '';
+                    Caption = 'Bonus Depreciation Applied Amount';
+                    DrillDown = true;
+                    Editable = false;
+                    Visible = BonusDepreciationAppliedAmountFieldVisible;
+                    ToolTip = 'Specifies the bonus depreciation applied amount for the fixed asset.';
+                    trigger OnDrillDown()
+                    begin
+                        FADepreciationBook.DrillDownOnBonusDeprAppliedAmount();
                     end;
                 }
                 field(DepreciationTableCode; FADepreciationBook."Depreciation Table Code")
@@ -308,6 +327,37 @@ page 5600 "Fixed Asset Card"
                     begin
                         LoadFADepreciationBooks();
                         FADepreciationBook.Validate("Depreciation Table Code");
+                        SaveSimpleDepreciationBook(xRec."No.");
+                    end;
+                }
+                field(UseBonusDepreciation; FADepreciationBook."Use Bonus Depreciation")
+                {
+                    ApplicationArea = FixedAssets;
+                    Caption = 'Use Bonus Depreciation';
+                    Importance = Additional;
+                    ToolTip = 'Specifies if the Bonus Depreciation is to be used for this depreciation book.';
+
+                    trigger OnValidate()
+                    begin
+                        LoadFADepreciationBooks();
+                        FADepreciationBook.Validate("Use Bonus Depreciation");
+                        SaveSimpleDepreciationBook(xRec."No.");
+                        UseBonusDepreciationValue := FADepreciationBook."Use Bonus Depreciation";
+                        CurrPage.Update(false);
+                    end;
+                }
+                field(BonusDepreciationPct; FADepreciationBook."Bonus Depreciation %")
+                {
+                    ApplicationArea = FixedAssets;
+                    Caption = 'Bonus Depreciation %';
+                    Importance = Additional;
+                    ToolTip = 'Specifies the bonus depreciation percentage for this fixed asset.';
+                    Editable = UseBonusDepreciationValue;
+
+                    trigger OnValidate()
+                    begin
+                        LoadFADepreciationBooks();
+                        FADepreciationBook.Validate("Bonus Depreciation %");
                         SaveSimpleDepreciationBook(xRec."No.");
                     end;
                 }
@@ -363,34 +413,28 @@ page 5600 "Fixed Asset Card"
                 {
                     ApplicationArea = FixedAssets;
                     Importance = Promoted;
-                    ToolTip = 'Specifies the number of the vendor from which you purchased this fixed asset.';
                 }
                 field("Maintenance Vendor No."; Rec."Maintenance Vendor No.")
                 {
                     ApplicationArea = FixedAssets;
                     Importance = Promoted;
-                    ToolTip = 'Specifies the number of the vendor who performs repairs and maintenance on the fixed asset.';
                 }
                 field("Under Maintenance"; Rec."Under Maintenance")
                 {
                     ApplicationArea = FixedAssets;
-                    ToolTip = 'Specifies if the fixed asset is currently being repaired.';
                 }
                 field("Next Service Date"; Rec."Next Service Date")
                 {
                     ApplicationArea = FixedAssets;
                     Importance = Promoted;
-                    ToolTip = 'Specifies the next scheduled service date for the fixed asset. This is used as a filter in the Maintenance - Next Service report.';
                 }
                 field("Warranty Date"; Rec."Warranty Date")
                 {
                     ApplicationArea = FixedAssets;
-                    ToolTip = 'Specifies the warranty expiration date of the fixed asset.';
                 }
                 field(Insured; Rec.Insured)
                 {
                     ApplicationArea = FixedAssets;
-                    ToolTip = 'Specifies that the fixed asset is linked to an insurance policy.';
                 }
             }
         }
@@ -402,19 +446,6 @@ page 5600 "Fixed Asset Card"
                 Caption = 'Fixed Asset Picture';
                 SubPageLink = "No." = field("No.");
             }
-#if not CLEAN25
-            part("Attached Documents"; "Document Attachment Factbox")
-            {
-                ObsoleteTag = '25.0';
-                ObsoleteState = Pending;
-                ObsoleteReason = 'The "Document Attachment FactBox" has been replaced by "Doc. Attachment List Factbox", which supports multiple files upload.';
-                ApplicationArea = All;
-                Visible = false;
-                Caption = 'Attachments';
-                SubPageLink = "Table ID" = const(Database::"Fixed Asset"),
-                              "No." = field("No.");
-            }
-#endif
             part("Attached Documents List"; "Doc. Attachment List Factbox")
             {
                 ApplicationArea = All;
@@ -633,14 +664,19 @@ page 5600 "Fixed Asset Card"
         }
         area(reporting)
         {
+#if not CLEAN28
             action(Details)
             {
                 ApplicationArea = FixedAssets;
-                Caption = 'Details';
+                Caption = 'Details (Obsolete)';
                 Image = View;
                 RunObject = Report "Fixed Asset - Details";
                 ToolTip = 'View detailed information about the fixed asset ledger entries that have been posted to a specified depreciation book for each fixed asset.';
+                ObsoleteState = Pending;
+                ObsoleteReason = 'This report has been replaced by the report Fixed Asset Details (Excel). This report will be removed in a future release.';
+                ObsoleteTag = '28.0';
             }
+#endif
             action("FA Book Value")
             {
                 ApplicationArea = FixedAssets;
@@ -657,22 +693,30 @@ page 5600 "Fixed Asset Card"
                 RunObject = Report "Fixed Asset - Book Value 02";
                 ToolTip = 'View detailed information about acquisition cost, depreciation, appreciation, write-down and book value for both individual fixed assets and groups of fixed assets. For each of these categories, amounts are calculated at the beginning and at the end of a specified period, as well as for the period itself.';
             }
+#if not CLEAN28
             action(Analysis)
             {
                 ApplicationArea = FixedAssets;
-                Caption = 'Analysis';
+                Caption = 'Analysis (Obsolete)';
                 Image = "Report";
                 RunObject = Report "Fixed Asset - Analysis";
                 ToolTip = 'View an analysis of your fixed assets with various types of data for both individual fixed assets and groups of fixed assets.';
+                ObsoleteState = Pending;
+                ObsoleteReason = 'This report has been replaced by the report Fixed Asset Analysis (Excel). This report will be removed in a future release.';
+                ObsoleteTag = '28.0';
             }
             action("Projected Value")
             {
                 ApplicationArea = FixedAssets;
-                Caption = 'Projected Value';
+                Caption = 'Projected Value (Obsolete)';
                 Image = "Report";
                 RunObject = Report "Fixed Asset - Projected Value";
                 ToolTip = 'View the calculated future depreciation and book value. You can print the report for one depreciation book at a time.';
+                ObsoleteState = Pending;
+                ObsoleteReason = 'This report has been replaced by the report Fixed Asset Projected Value (Excel). This report will be removed in a future release.';
+                ObsoleteTag = '28.0';
             }
+#endif
             action("G/L Analysis")
             {
                 ApplicationArea = FixedAssets;
@@ -730,15 +774,26 @@ page 5600 "Fixed Asset Card"
             {
                 Caption = 'Report', Comment = 'Generated from the PromotedActionCategories property index 2.';
 
+#if not CLEAN28
                 actionref(Analysis_Promoted; Analysis)
                 {
+                    ObsoleteState = Pending;
+                    ObsoleteReason = 'This report has been replaced by the report Fixed Asset Analysis (Excel). This report will be removed in a future release.';
+                    ObsoleteTag = '28.0';
                 }
                 actionref("Projected Value_Promoted"; "Projected Value")
                 {
+                    ObsoleteState = Pending;
+                    ObsoleteReason = 'This report has been replaced by the report Fixed Asset Projected Value (Excel). This report will be removed in a future release.';
+                    ObsoleteTag = '28.0';
                 }
                 actionref(Details_Promoted; Details)
                 {
+                    ObsoleteState = Pending;
+                    ObsoleteReason = 'This report has been replaced by the report Fixed Asset Details (Excel). This report will be removed in a future release.';
+                    ObsoleteTag = '28.0';
                 }
+#endif
             }
         }
     }
@@ -753,6 +808,9 @@ page 5600 "Fixed Asset Card"
         FADepreciationBook.Copy(FADepreciationBookOld);
         ShowAcquisitionNotification();
         BookValue := GetBookValue();
+        AcquisitionCost := GetAcquisitionCost();
+        BonusDeprAppliedAmount := GetBonusDepreciationAppliedAmount();
+        UseBonusDepreciationValue := FADepreciationBook."Use Bonus Depreciation";
     end;
 
     trigger OnOpenPage()
@@ -760,6 +818,8 @@ page 5600 "Fixed Asset Card"
         Simple := true;
         AllowEditDepBookCode := true;
         SetNoFieldVisible();
+        SetAcquisitionCostFieldVisible();
+        SetBonusDepreciationAppliedAmountFieldVisible();
     end;
 
     trigger OnQueryClosePage(CloseAction: Action): Boolean
@@ -769,11 +829,11 @@ page 5600 "Fixed Asset Card"
 
     var
         FAAcquireWizardNotificationId: Guid;
-        NoFieldVisible: Boolean;
+        NoFieldVisible, AcquisitionCostFieldVisible, BonusDepreciationAppliedAmountFieldVisible, UseBonusDepreciationValue : Boolean;
         AddMoreDeprBooksLbl: Label 'Add More Depreciation Books';
         Acquirable: Boolean;
         ShowAddMoreDeprBooksLbl: Boolean;
-        BookValue: Decimal;
+        BookValue, AcquisitionCost, BonusDeprAppliedAmount : Decimal;
         FAPostingGroupChangeDeniedMsg: Label 'The current FA posting group is %1 but the FA subclass %2 has the default FA posting group %3. \Because there are posted FA ledger entries we will not change the FA posting group.', Comment = '%1 = FA Posting Group Code, %2 = FA Subclass Code, %3 = Default FA Posting Group. Example: The current FA posting group is MACHINERY but the FA subclass TANGIBLE has the default FA posting group CAR. \Because there are posted FA ledger entries we will not change the FA posting group.';
         FAPostingGroupChangeConfirmTxt: Label 'The current FA posting group is %1, but the FA subclass %2 has the default FA posting group %3. \Do you want to update the FA posting group?', Comment = '%1 = FA Posting Group Code, %2 = FA Subclass Code, %3 = Default FA Posting Group. The current FA posting group is MACHINERY, but the FA subclass TANGIBLE has the default FA posting group CAR. \Do you want to update the FA posting group?';
         AllowEditDepBookCode: Boolean;
@@ -931,6 +991,7 @@ page 5600 "Fixed Asset Card"
         if FADepreciationBookOld.Count <= 1 then begin
             if FADepreciationBookOld.FindFirst() then begin
                 FADepreciationBookOld.CalcFields("Book Value");
+                FADepreciationBookOld.CalcFields("Acquisition Cost");
                 ShowAddMoreDeprBooksLbl := true
             end;
             Simple := true;
@@ -948,11 +1009,36 @@ page 5600 "Fixed Asset Card"
         NoFieldVisible := DocumentNoVisibility.FixedAssetNoIsVisible();
     end;
 
+    local procedure SetAcquisitionCostFieldVisible()
+    begin
+        Rec.CalcFields("Acquired");
+        AcquisitionCostFieldVisible := Rec.Acquired;
+    end;
+
+    local procedure SetBonusDepreciationAppliedAmountFieldVisible()
+    var
+        FASetup: Record "FA Setup";
+    begin
+        FASetup.Get();
+        BonusDepreciationAppliedAmountFieldVisible := FASetup.BonusDepreciationCorrectlySetup();
+    end;
+
     local procedure GetBookValue(): Decimal
     begin
         if FADepreciationBook."Disposal Date" > 0D then
             exit(0);
         exit(FADepreciationBook."Book Value");
+    end;
+
+    local procedure GetAcquisitionCost(): Decimal
+    begin
+        exit(FADepreciationBook."Acquisition Cost");
+    end;
+
+    local procedure GetBonusDepreciationAppliedAmount(): Decimal
+    begin
+        FADepreciationBook.CalcFields("Bonus Depr. Applied Amount");
+        exit(FADepreciationBook."Bonus Depr. Applied Amount");
     end;
 
     [IntegrationEvent(false, false)]

@@ -5,6 +5,8 @@ using Microsoft.Finance.GeneralLedger.Journal;
 using Microsoft.Finance.GeneralLedger.Posting;
 using Microsoft.Finance.GeneralLedger.Preview;
 using Microsoft.Inventory.Item;
+using Microsoft.Inventory.Journal;
+using Microsoft.Inventory.Requisition;
 using Microsoft.Purchases.Document;
 using Microsoft.Purchases.History;
 using Microsoft.Purchases.Posting;
@@ -71,6 +73,10 @@ codeunit 1520 "Workflow Event Handling"
         CreateGenJnlLineFromIncDocFailsEventDescTxt: Label 'The creation of a general journal line from the incoming document failed.';
         JobQueueEntryApprovalEventDescTxt: Label 'Approval of a job queue entry is requested.';
         JobQueueEntryApprReqCancelledEventDescTxt: Label 'Approval of a job queue entry is cancelled.';
+        RequisitionWkshBatchSendForApprovalEventDescTxt: Label 'An Approval request of a requisition worksheet batch is created.';
+        RequisitionWkshBatchApprovalRequestCancelEventDescTxt: Label 'An approval request for a requisition worksheet batch is canceled.';
+        ItemJournalBatchSendForApprovalEventDescTxt: Label 'Approval of an item journal batch is requested.';
+        ItemJournalBatchApprovalRequestCancelEventDescTxt: Label 'An approval request for an item journal batch is canceled.';
 
     procedure CreateEventsLibrary()
     begin
@@ -160,6 +166,16 @@ codeunit 1520 "Workflow Event Handling"
         AddEventToLibrary(RunWorkflowOnGeneralJournalBatchNotBalancedCode(), DATABASE::"Gen. Journal Batch",
           GeneralJournalBatchNotBalancedEventDescTxt, 0, false);
 
+        AddEventToLibrary(RunWorkflowOnSendItemJournalBatchForApprovalCode(), Database::"Item Journal Batch",
+          ItemJournalBatchSendForApprovalEventDescTxt, 0, false);
+        AddEventToLibrary(RunWorkflowOnCancelItemJournalBatchApprovalRequestCode(), Database::"Item Journal Batch",
+          ItemJournalBatchApprovalRequestCancelEventDescTxt, 0, false);
+
+        AddEventToLibrary(RunWorkflowOnSendRequisitionWkshBatchForApprovalCode(), Database::"Requisition Wksh. Name",
+          RequisitionWkshBatchSendForApprovalEventDescTxt, 0, false);
+        AddEventToLibrary(RunWorkflowOnCancelRequisitionWkshBatchApprovalRequestCode(), Database::"Requisition Wksh. Name",
+          RequisitionWkshBatchApprovalRequestCancelEventDescTxt, 0, false);
+
         AddEventToLibrary(
           RunWorkflowOnBinaryFileAttachedCode(),
           DATABASE::"Incoming Document Attachment", ImageOrPDFIsAttachedToAnIncomingDocEventDescTxt, 0, false);
@@ -205,6 +221,12 @@ codeunit 1520 "Workflow Event Handling"
             RunWorkflowOnCancelGeneralJournalLineApprovalRequestCode():
                 AddEventPredecessor(RunWorkflowOnCancelGeneralJournalLineApprovalRequestCode(),
                   RunWorkflowOnSendGeneralJournalLineForApprovalCode());
+            RunWorkflowOnCancelItemJournalBatchApprovalRequestCode():
+                AddEventPredecessor(RunWorkflowOnCancelItemJournalBatchApprovalRequestCode(),
+                  RunWorkflowOnSendItemJournalBatchForApprovalCode());
+            RunWorkflowOnCancelRequisitionWkshBatchApprovalRequestCode():
+                AddEventPredecessor(RunWorkflowOnCancelRequisitionWkshBatchApprovalRequestCode(),
+                  RunWorkflowOnSendRequisitionWkshBatchForApprovalCode());
             RunWorkflowOnCustomerCreditLimitExceededCode():
                 AddEventPredecessor(RunWorkflowOnCustomerCreditLimitExceededCode(), RunWorkflowOnSendSalesDocForApprovalCode());
             RunWorkflowOnCustomerCreditLimitNotExceededCode():
@@ -220,6 +242,8 @@ codeunit 1520 "Workflow Event Handling"
                     AddEventPredecessor(RunWorkflowOnApproveApprovalRequestCode(), RunWorkflowOnSendGeneralJournalBatchForApprovalCode());
                     AddEventPredecessor(RunWorkflowOnApproveApprovalRequestCode(), RunWorkflowOnGeneralJournalBatchBalancedCode());
                     AddEventPredecessor(RunWorkflowOnApproveApprovalRequestCode(), RunWorkflowOnSendGeneralJournalLineForApprovalCode());
+                    AddEventPredecessor(RunWorkflowOnApproveApprovalRequestCode(), RunWorkflowOnSendItemJournalBatchForApprovalCode());
+                    AddEventPredecessor(RunWorkflowOnApproveApprovalRequestCode(), RunWorkflowOnSendRequisitionWkshBatchForApprovalCode());
                     AddEventPredecessor(RunWorkflowOnApproveApprovalRequestCode(), RunWorkflowOnCustomerChangedCode());
                     AddEventPredecessor(RunWorkflowOnApproveApprovalRequestCode(), RunWorkflowOnVendorChangedCode());
                     AddEventPredecessor(RunWorkflowOnApproveApprovalRequestCode(), RunWorkflowOnItemChangedCode());
@@ -236,6 +260,8 @@ codeunit 1520 "Workflow Event Handling"
                     AddEventPredecessor(RunWorkflowOnRejectApprovalRequestCode(), RunWorkflowOnSendGeneralJournalBatchForApprovalCode());
                     AddEventPredecessor(RunWorkflowOnRejectApprovalRequestCode(), RunWorkflowOnGeneralJournalBatchBalancedCode());
                     AddEventPredecessor(RunWorkflowOnRejectApprovalRequestCode(), RunWorkflowOnSendGeneralJournalLineForApprovalCode());
+                    AddEventPredecessor(RunWorkflowOnRejectApprovalRequestCode(), RunWorkflowOnSendItemJournalBatchForApprovalCode());
+                    AddEventPredecessor(RunWorkflowOnRejectApprovalRequestCode(), RunWorkflowOnSendRequisitionWkshBatchForApprovalCode());
                     AddEventPredecessor(RunWorkflowOnRejectApprovalRequestCode(), RunWorkflowOnCustomerChangedCode());
                     AddEventPredecessor(RunWorkflowOnRejectApprovalRequestCode(), RunWorkflowOnVendorChangedCode());
                     AddEventPredecessor(RunWorkflowOnRejectApprovalRequestCode(), RunWorkflowOnItemChangedCode());
@@ -252,6 +278,8 @@ codeunit 1520 "Workflow Event Handling"
                     AddEventPredecessor(RunWorkflowOnDelegateApprovalRequestCode(), RunWorkflowOnSendGeneralJournalBatchForApprovalCode());
                     AddEventPredecessor(RunWorkflowOnDelegateApprovalRequestCode(), RunWorkflowOnGeneralJournalBatchBalancedCode());
                     AddEventPredecessor(RunWorkflowOnDelegateApprovalRequestCode(), RunWorkflowOnSendGeneralJournalLineForApprovalCode());
+                    AddEventPredecessor(RunWorkflowOnDelegateApprovalRequestCode(), RunWorkflowOnSendItemJournalBatchForApprovalCode());
+                    AddEventPredecessor(RunWorkflowOnDelegateApprovalRequestCode(), RunWorkflowOnSendRequisitionWkshBatchForApprovalCode());
                     AddEventPredecessor(RunWorkflowOnDelegateApprovalRequestCode(), RunWorkflowOnCustomerChangedCode());
                     AddEventPredecessor(RunWorkflowOnDelegateApprovalRequestCode(), RunWorkflowOnVendorChangedCode());
                     AddEventPredecessor(RunWorkflowOnDelegateApprovalRequestCode(), RunWorkflowOnItemChangedCode());
@@ -266,6 +294,19 @@ codeunit 1520 "Workflow Event Handling"
         end;
 
         OnAddWorkflowEventPredecessorsToLibrary(EventFunctionName);
+    end;
+    
+    local procedure HandleEventWithxRecAndRefreshRec(FunctionName: Code[128]; var Rec: Variant; xRec: Variant)
+    var
+        RecRef: RecordRef;
+    begin
+        /// Wraps HandleEventWithxRec and re-fetches Rec from the database afterwards.
+        /// Workflow responses may modify the record and call
+        /// RecRef.Modify(true), which bumps the system version stamp
+        WorkflowManagement.HandleEventWithxRec(FunctionName, Rec, xRec);
+        RecRef.GetTable(Rec);
+        if RecRef.Get(RecRef.RecordId) then
+            RecRef.SetTable(Rec);
     end;
 
     procedure AddEventToLibrary(FunctionName: Code[128]; TableID: Integer; Description: Text[250]; RequestPageID: Integer; UsedForRecordChange: Boolean)
@@ -501,6 +542,26 @@ codeunit 1520 "Workflow Event Handling"
     procedure RunWorkflowOnGeneralJournalBatchNotBalancedCode(): Code[128]
     begin
         exit('RUNWORKFLOWONGENERALJOURNALBATCHNOTBALANCED');
+    end;
+
+    procedure RunWorkflowOnSendItemJournalBatchForApprovalCode(): Code[128]
+    begin
+        exit('RUNWORKFLOWONSENDITEMJOURNALBATCHFORAPPROVAL');
+    end;
+
+    procedure RunWorkflowOnCancelItemJournalBatchApprovalRequestCode(): Code[128]
+    begin
+        exit('RUNWORKFLOWONCANCELITEMJOURNALBATCHAPPROVALREQUEST');
+    end;
+
+    procedure RunWorkflowOnSendRequisitionWkshBatchForApprovalCode(): Code[128]
+    begin
+        exit('RUNWORKFLOWONSENDREQUISITIONWORKSHEETBATCHFORAPPROVAL');
+    end;
+
+    procedure RunWorkflowOnCancelRequisitionWkshBatchApprovalRequestCode(): Code[128]
+    begin
+        exit('RUNWORKFLOWONCANCELAREQUISITIONWORKSHEETBATCHAPPROVALREQUEST');
     end;
 
     procedure RunWorkflowOnBinaryFileAttachedCode(): Code[128]
@@ -787,6 +848,30 @@ codeunit 1520 "Workflow Event Handling"
         WorkflowManagement.HandleEvent(RunWorkflowOnGeneralJournalBatchNotBalancedCode(), Sender);
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnSendItemJournalBatchForApproval', '', false, false)]
+    procedure RunWorkflowOnSendItemJournalBatchForApproval(var ItemJournalBatch: Record "Item Journal Batch")
+    begin
+        WorkflowManagement.HandleEvent(RunWorkflowOnSendItemJournalBatchForApprovalCode(), ItemJournalBatch);
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnCancelItemJournalBatchApprovalRequest', '', false, false)]
+    procedure RunWorkflowOnCancelItemJournalBatchApprovalRequest(var ItemJournalBatch: Record "Item Journal Batch")
+    begin
+        WorkflowManagement.HandleEvent(RunWorkflowOnCancelItemJournalBatchApprovalRequestCode(), ItemJournalBatch);
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnSendRequisitionWkshBatchForApproval', '', false, false)]
+    procedure RunWorkflowOnSendRequisitionWkshBatchForApproval(var RequisitionWkshName: Record "Requisition Wksh. Name")
+    begin
+        WorkflowManagement.HandleEvent(RunWorkflowOnSendRequisitionWkshBatchForApprovalCode(), RequisitionWkshName);
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", 'OnCancelRequisitionWkshBatchApprovalRequest', '', false, false)]
+    procedure RunWorkflowOnCancelRequisitionWkshBatchApprovalRequest(var RequisitionWkshName: Record "Requisition Wksh. Name")
+    begin
+        WorkflowManagement.HandleEvent(RunWorkflowOnCancelRequisitionWkshBatchApprovalRequestCode(), RequisitionWkshName);
+    end;
+
     [EventSubscriber(ObjectType::Table, Database::"Incoming Document Attachment", 'OnAttachBinaryFile', '', false, false)]
     [Scope('OnPrem')]
     procedure RunWorkflowOnBinaryFileAttached(var Sender: Record "Incoming Document Attachment")
@@ -796,48 +881,69 @@ codeunit 1520 "Workflow Event Handling"
 
     [EventSubscriber(ObjectType::Table, Database::"Customer", 'OnAfterModifyEvent', '', false, false)]
     procedure RunWorkflowOnCustomerChanged(var Rec: Record Customer; var xRec: Record Customer; RunTrigger: Boolean)
+    var
+        RecVariant: Variant;
     begin
         if Rec.IsTemporary() then
             exit;
 
-        if Format(xRec) <> Format(Rec) then
-            WorkflowManagement.HandleEventWithxRec(RunWorkflowOnCustomerChangedCode(), Rec, xRec);
+        if Format(xRec) <> Format(Rec) then begin
+            RecVariant := Rec;
+            HandleEventWithxRecAndRefreshRec(RunWorkflowOnCustomerChangedCode(), RecVariant, xRec);
+            Rec := RecVariant;
+        end;
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Customer", 'OnAfterRenameEvent', '', false, false)]
     local procedure RunWorkflowOnCustomerRenamed(var Rec: Record Customer; var xRec: Record Customer; RunTrigger: Boolean)
+    var
+        RecVariant: Variant;
     begin
         if Rec.IsTemporary() then
             exit;
 
-        if Format(xRec) <> Format(Rec) then
-            WorkflowManagement.HandleEventWithxRec(RunWorkflowOnCustomerChangedCode(), Rec, xRec);
+        if Format(xRec) <> Format(Rec) then begin
+            RecVariant := Rec;
+            HandleEventWithxRecAndRefreshRec(RunWorkflowOnCustomerChangedCode(), RecVariant, xRec);
+            Rec := RecVariant;
+        end;
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Vendor", 'OnAfterModifyEvent', '', false, false)]
     procedure RunWorkflowOnVendorChanged(var Rec: Record Vendor; var xRec: Record Vendor; RunTrigger: Boolean)
+    var
+        RecVariant: Variant;
     begin
         if Rec.IsTemporary() then
             exit;
 
-        if Format(xRec) <> Format(Rec) then
-            WorkflowManagement.HandleEventWithxRec(RunWorkflowOnVendorChangedCode(), Rec, xRec);
+        if Format(xRec) <> Format(Rec) then begin
+            RecVariant := Rec;
+            HandleEventWithxRecAndRefreshRec(RunWorkflowOnVendorChangedCode(), RecVariant, xRec);
+            Rec := RecVariant;
+        end;
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Vendor", 'OnAfterRenameEvent', '', false, false)]
     local procedure RunWorkflowOnVendorRenamed(var Rec: Record Vendor; var xRec: Record Vendor; RunTrigger: Boolean)
+    var
+        RecVariant: Variant;
     begin
         if Rec.IsTemporary() then
             exit;
 
-        if Format(xRec) <> Format(Rec) then
-            WorkflowManagement.HandleEventWithxRec(RunWorkflowOnVendorChangedCode(), Rec, xRec);
+        if Format(xRec) <> Format(Rec) then begin
+            RecVariant := Rec;
+            HandleEventWithxRecAndRefreshRec(RunWorkflowOnVendorChangedCode(), RecVariant, xRec);
+            Rec := RecVariant;
+        end;
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Item", 'OnAfterModifyEvent', '', false, false)]
     procedure RunWorkflowOnItemChanged(var Rec: Record Item; var xRec: Record Item; RunTrigger: Boolean)
     var
         GenJnlPostPreview: Codeunit "Gen. Jnl.-Post Preview";
+        RecVariant: Variant;
     begin
         if Rec.IsTemporary() then
             exit;
@@ -845,14 +951,18 @@ codeunit 1520 "Workflow Event Handling"
         if GenJnlPostPreview.IsActive() then
             exit;
 
-        if Format(xRec) <> Format(Rec) then
-            WorkflowManagement.HandleEventWithxRec(RunWorkflowOnItemChangedCode(), Rec, xRec);
+        if Format(xRec) <> Format(Rec) then begin
+            RecVariant := Rec;
+            HandleEventWithxRecAndRefreshRec(RunWorkflowOnItemChangedCode(), RecVariant, xRec);
+            Rec := RecVariant;
+        end;
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Item", 'OnAfterRenameEvent', '', false, false)]
     local procedure RunWorkflowOnItemRenamed(var Rec: Record Item; var xRec: Record Item; RunTrigger: Boolean)
     var
         GenJnlPostPreview: Codeunit "Gen. Jnl.-Post Preview";
+        RecVariant: Variant;
     begin
         if Rec.IsTemporary() then
             exit;
@@ -860,8 +970,11 @@ codeunit 1520 "Workflow Event Handling"
         if GenJnlPostPreview.IsActive() then
             exit;
 
-        if Format(xRec) <> Format(Rec) then
-            WorkflowManagement.HandleEventWithxRec(RunWorkflowOnItemChangedCode(), Rec, xRec);
+        if Format(xRec) <> Format(Rec) then begin
+            RecVariant := Rec;
+            HandleEventWithxRecAndRefreshRec(RunWorkflowOnItemChangedCode(), RecVariant, xRec);
+            Rec := RecVariant;
+        end;
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Incoming Document", 'OnAfterCreateGenJnlLineFromIncomingDocSuccess', '', false, false)]

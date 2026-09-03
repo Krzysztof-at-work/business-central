@@ -67,6 +67,12 @@ codeunit 415 "Release Purchase Document"
         if not (PreviewMode or SkipCheckReleaseRestrictions) then
             PurchaseHeader.CheckPurchaseReleaseRestrictions();
 
+        if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Quote then
+            if PurchaseHeader.CheckVendorCreated(true) then
+                PurchaseHeader.Get(PurchaseHeader."Document Type"::Quote, PurchaseHeader."No.")
+            else
+                exit;
+
         PurchaseHeader.TestField("Buy-from Vendor No.");
 
         IsHandled := false;
@@ -263,12 +269,24 @@ codeunit 415 "Release Purchase Document"
 
     procedure PerformManualReopen(var PurchHeader: Record "Purchase Header")
     begin
-        if PurchHeader.Status = PurchHeader.Status::"Pending Approval" then
-            Error(Text003);
+        CheckReopenStatus(PurchHeader);
 
         OnBeforeManualReopenPurchaseDoc(PurchHeader, PreviewMode);
         Reopen(PurchHeader);
         OnAfterManualReopenPurchaseDoc(PurchHeader, PreviewMode);
+    end;
+
+    local procedure CheckReopenStatus(PurchHeader: Record "Purchase Header")
+    var
+        IsHandled: Boolean;
+    begin
+        IsHandled := false;
+        OnBeforeCheckReopenStatus(PurchHeader, IsHandled);
+        if IsHandled then
+            exit;
+
+        if PurchHeader.Status = PurchHeader.Status::"Pending Approval" then
+            Error(Text003);
     end;
 
     procedure ReleasePurchaseHeader(var PurchHdr: Record "Purchase Header"; Preview: Boolean) LinesWereModified: Boolean
@@ -309,6 +327,11 @@ codeunit 415 "Release Purchase Document"
 
     [IntegrationEvent(false, false)]
     local procedure OnBeforeCheckPurchaseHeaderPendingApproval(var PurchaseHeader: Record "Purchase Header"; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeCheckReopenStatus(var PurchaseHeader: Record "Purchase Header"; var IsHandled: Boolean)
     begin
     end;
 

@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
@@ -8,6 +8,8 @@ using System.Reflection;
 
 page 7401 "Report Selection - Warehouse"
 {
+    AboutTitle = 'About report selection for warehouse';
+    AboutText = 'On this page, you set up the default reports that are used when printing warehouse documents such as picks, put-aways, and shipments. Use the Usage field to select the type of document, then specify which reports to use in the list below.';
     ApplicationArea = Basic, Suite;
     Caption = 'Report Selection - Warehouse';
     PageType = Worksheet;

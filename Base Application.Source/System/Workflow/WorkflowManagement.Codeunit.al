@@ -125,23 +125,24 @@ codeunit 1501 "Workflow Management"
         // Step3   - "Previous Workflow Step ID" = Step2.1
         //
         // Below Loop will find Step2.1 and return true
-        if WorkflowStepInstanceLoop.FindSet() then
-            repeat
-                // below IF statements separated for performance reasons, no short-circuit evaluation in AL
-                if WorkflowStepInstance2.Get(WorkflowStepInstanceLoop.ID, WorkflowStepInstanceLoop."Workflow Code", WorkflowStepInstanceLoop."Previous Workflow Step ID") then
-                    if WorkflowStepInstance2.Status in [WorkflowStepInstance2.Status::Completed, WorkflowStepInstance2.Status::Processing] then
-                        if Format(WorkflowStepInstance2."Record ID") = Format(RecRef.RecordId) then begin
-                            ActiveStepInstanceFound := true;
-                            WorkflowStepInstanceLoop.FindWorkflowRules(WorkflowRule);
-                            if EvaluateCondition(RecRef, xRecRef, WorkflowStepInstanceLoop.Argument, WorkflowRule) then begin // Step2.1 in above example
-                                WorkflowStepInstance.Get(WorkflowStepInstanceLoop.ID, WorkflowStepInstanceLoop."Workflow Code", WorkflowStepInstanceLoop."Workflow Step ID");
-                                GetTelemetryDimensions(FunctionName, WorkflowStepInstance.ToString(), TelemetryDimensions);
-                                Session.LogMessage('0000DZB', WorkflowStepFoundTelemetryTxt, Verbosity::Normal, DataClassification::SystemMetadata, TelemetryScope::ExtensionPublisher, TelemetryDimensions);
+        if not WorkflowStepInstanceLoop.IsEmpty() then
+            if WorkflowStepInstanceLoop.FindSet() then
+                repeat
+                    // below IF statements separated for performance reasons, no short-circuit evaluation in AL
+                    if WorkflowStepInstance2.Get(WorkflowStepInstanceLoop.ID, WorkflowStepInstanceLoop."Workflow Code", WorkflowStepInstanceLoop."Previous Workflow Step ID") then
+                        if WorkflowStepInstance2.Status in [WorkflowStepInstance2.Status::Completed, WorkflowStepInstance2.Status::Processing] then
+                            if Format(WorkflowStepInstance2."Record ID") = Format(RecRef.RecordId) then begin
+                                ActiveStepInstanceFound := true;
+                                WorkflowStepInstanceLoop.FindWorkflowRules(WorkflowRule);
+                                if EvaluateCondition(RecRef, xRecRef, WorkflowStepInstanceLoop.Argument, WorkflowRule) then begin // Step2.1 in above example
+                                    WorkflowStepInstance.Get(WorkflowStepInstanceLoop.ID, WorkflowStepInstanceLoop."Workflow Code", WorkflowStepInstanceLoop."Workflow Step ID");
+                                    GetTelemetryDimensions(FunctionName, WorkflowStepInstance.ToString(), TelemetryDimensions);
+                                    Session.LogMessage('0000DZB', WorkflowStepFoundTelemetryTxt, Verbosity::Normal, DataClassification::SystemMetadata, TelemetryScope::ExtensionPublisher, TelemetryDimensions);
 
-                                exit(true);
+                                    exit(true);
+                                end;
                             end;
-                        end;
-            until WorkflowStepInstanceLoop.Next() = 0;
+                until WorkflowStepInstanceLoop.Next() = 0;
 
         // This occurs when there are active steps found, but the conditions were not met
         // e.g. If Step2.1 from above scenario doesn't exist, we will find Step2.2 and return false instead
@@ -672,12 +673,14 @@ codeunit 1501 "Workflow Management"
                 if WorkflowStepInstance.Status = WorkflowStepInstance.Status::Processing then begin
                     WorkflowRecordManagement.RestoreRecord(WorkflowEventQueue."Record Index", Variant);
                     WorkflowRecordManagement.RestoreRecord(WorkflowEventQueue."xRecord Index", xVariant);
-                    RecRef.GetTable(Variant);
-                    xRecRef.GetTable(xVariant);
-                    WorkflowStepInstance.FindWorkflowRules(WorkflowRule);
-                    if EvaluateCondition(RecRef, xRecRef, WorkflowStepInstance.Argument, WorkflowRule) then begin
-                        ExecuteResponses(RecRef, xRecRef, WorkflowStepInstance);
-                        WorkflowEventQueue.Delete();
+                    if Variant.IsRecord and xVariant.IsRecord then begin
+                        RecRef.GetTable(Variant);
+                        xRecRef.GetTable(xVariant);
+                        WorkflowStepInstance.FindWorkflowRules(WorkflowRule);
+                        if EvaluateCondition(RecRef, xRecRef, WorkflowStepInstance.Argument, WorkflowRule) then begin
+                            ExecuteResponses(RecRef, xRecRef, WorkflowStepInstance);
+                            WorkflowEventQueue.Delete();
+                        end;
                     end;
                 end;
             until WorkflowEventQueue.Next() = 0;

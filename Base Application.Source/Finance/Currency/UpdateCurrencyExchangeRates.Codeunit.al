@@ -7,11 +7,21 @@ namespace Microsoft.Finance.Currency;
 using Microsoft.Utilities;
 using System;
 using System.Environment.Configuration;
-using System.IO;
 using System.Integration;
+using System.IO;
 using System.Utilities;
 using System.Xml;
 
+/// <summary>
+/// Manages automatic updates of currency exchange rates from external services.
+/// Provides functionality to synchronize exchange rates, handle data transformations,
+/// and maintain currency rate accuracy through automated scheduled updates.
+/// </summary>
+/// <remarks>
+/// Integrates with Data Exchange Framework for rate import processing.
+/// Supports multiple currency exchange rate services and includes error handling
+/// and telemetry logging for monitoring service reliability.
+/// </remarks>
 codeunit 1281 "Update Currency Exchange Rates"
 {
     Permissions = TableData "Data Exch." = rimd;
@@ -42,6 +52,7 @@ codeunit 1281 "Update Currency Exchange Rates"
         SourceName: Text;
     begin
         CurrExchRateUpdateSetup.SetRange(Enabled, true);
+        OnSyncCurrencyExchangeRatesOnBeforeFindCurrExchRateUpdateSetup(CurrExchRateUpdateSetup);
 
         if CurrExchRateUpdateSetup.FindSet() then
             repeat
@@ -244,6 +255,16 @@ codeunit 1281 "Update Currency Exchange Rates"
 
     [IntegrationEvent(false, false)]
     local procedure OnBeforeSyncCurrencyExchangeRatesLoop(var CurrExchRateUpdateSetup: Record "Curr. Exch. Rate Update Setup")
+    begin
+    end;
+
+    /// <summary>
+    /// Integration event raised after the enabled filter is applied to the currency exchange rate update setup and before the setup records are read.
+    /// Enables subscribers to apply additional filters to the setup before the synchronization loop runs.
+    /// </summary>
+    /// <param name="CurrExchRateUpdateSetup">Currency exchange rate update setup, passed by reference so subscribers can apply additional filters.</param>
+    [IntegrationEvent(false, false)]
+    local procedure OnSyncCurrencyExchangeRatesOnBeforeFindCurrExchRateUpdateSetup(var CurrExchRateUpdateSetup: Record "Curr. Exch. Rate Update Setup")
     begin
     end;
 }

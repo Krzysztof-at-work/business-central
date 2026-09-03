@@ -5,9 +5,7 @@
 namespace Microsoft.Purchases.Pricing;
 
 using Microsoft.Pricing.Asset;
-#if not CLEAN25
 using Microsoft.Pricing.Calculation;
-#endif
 using Microsoft.Pricing.PriceList;
 using Microsoft.Pricing.Source;
 
@@ -126,14 +124,13 @@ page 7017 "Purchase Price Lists"
         }
     }
 
-#if not CLEAN25
     trigger OnInit()
     var
         FeaturePriceCalculation: Codeunit "Feature - Price Calculation";
     begin
+        OnBeforeOnInit();
         FeaturePriceCalculation.FailIfFeatureDisabled();
     end;
-#endif
 
     trigger OnAfterGetRecord()
     begin
@@ -175,6 +172,11 @@ page 7017 "Purchase Price Lists"
 
     [IntegrationEvent(false, false)]
     local procedure OnAfterSetCurrRecOnAfterGetRecord(var PriceListHeader: Record "Price List Header"; var PriceListHeaderCurrRec: Record "Price List Header")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeOnInit()
     begin
     end;
 

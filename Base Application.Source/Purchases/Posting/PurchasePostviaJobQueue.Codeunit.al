@@ -40,6 +40,8 @@ codeunit 98 "Purchase Post via Job Queue"
                 BatchProcessingMgt.ResetBatchID();
             Error(GetLastErrorText);
         end;
+        if PurchHeader."Document Type" = PurchHeader."Document Type"::"Credit Memo" then
+            PurchHeader.UpdatePurchaseOrderLineIfExist();
         if PurchHeader."Print Posted Documents" then begin
             RecRefToPrint.GetTable(PurchHeader);
             BatchPostingPrintMgt.PrintPurchaseDocument(RecRefToPrint);
@@ -48,6 +50,7 @@ codeunit 98 "Purchase Post via Job Queue"
             BatchProcessingMgt.ResetBatchID();
         BatchProcessingMgt.DeleteBatchProcessingSessionMapForRecordId(PurchHeader.RecordId);
         SetJobQueueStatus(PurchHeader, PurchHeader."Job Queue Status"::" ", Rec);
+        LockTimeout(SavedLockTimeout);
     end;
 
     var

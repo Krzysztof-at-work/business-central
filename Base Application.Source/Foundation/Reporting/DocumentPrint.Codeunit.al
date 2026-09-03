@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
@@ -337,25 +337,7 @@ codeunit 229 "Document-Print"
         ReportSelections.PrintReport(ReportSelections.Usage::Inv1, TransHeader);
     end;
 
-#if not CLEAN25
-    [Obsolete('Replaced by procedure PrintServiceContract in codeunit Serv. Report Management', '25.0')]
-    procedure PrintServiceContract(ServiceContractHeader: Record Microsoft.Service.Contract."Service Contract Header")
-    var
-        ServDocumentPrint: Codeunit "Serv. Document Print";
-    begin
-        ServDocumentPrint.PrintServiceContract(ServiceContractHeader);
-    end;
-#endif
 
-#if not CLEAN25
-    [Obsolete('Replaced by procedure PrintServiceHeader in codeunit Serv. Report Management', '25.0')]
-    procedure PrintServiceHeader(ServiceHeader: Record Microsoft.Service.Document."Service Header")
-    var
-        ServDocumentPrint: Codeunit "Serv. Document Print";
-    begin
-        ServDocumentPrint.PrintServiceHeader(ServiceHeader);
-    end;
-#endif
 
     procedure PrintAsmHeader(AsmHeader: Record "Assembly Header")
     var
@@ -450,141 +432,99 @@ codeunit 229 "Document-Print"
     end;
 
     procedure PrintInvtOrderTest(PhysInvtOrderHeader: Record "Phys. Invt. Order Header"; ShowRequestForm: Boolean)
-    var
-        ReportSelections: Record "Report Selections";
     begin
         PhysInvtOrderHeader.SetRange("No.", PhysInvtOrderHeader."No.");
-        ReportSelections.SetRange(Usage, ReportSelections.Usage::"Phys.Invt.Order Test");
-        ReportSelections.SetFilter("Report ID", '<>0');
-        if ReportSelections.FindSet() then
-            repeat
-                REPORT.RunModal(ReportSelections."Report ID", ShowRequestForm, false, PhysInvtOrderHeader);
-            until ReportSelections.Next() = 0;
+        PrintDocumentWithReportUsage(PhysInvtOrderHeader, Enum::"Report Selection Usage"::"Phys.Invt.Order Test", ShowRequestForm);
     end;
 
     procedure PrintInvtOrder(PhysInvtOrderHeader: Record "Phys. Invt. Order Header"; ShowRequestForm: Boolean)
-    var
-        ReportSelections: Record "Report Selections";
     begin
         PhysInvtOrderHeader.SetRange("No.", PhysInvtOrderHeader."No.");
-        ReportSelections.SetRange(Usage, ReportSelections.Usage::"Phys.Invt.Order");
-        ReportSelections.SetFilter("Report ID", '<>0');
-        if ReportSelections.FindSet() then
-            repeat
-                REPORT.RunModal(ReportSelections."Report ID", ShowRequestForm, false, PhysInvtOrderHeader);
-            until ReportSelections.Next() = 0;
+        PrintDocumentWithReportUsage(PhysInvtOrderHeader, Enum::"Report Selection Usage"::"Phys.Invt.Order", ShowRequestForm);
     end;
 
     procedure PrintPostedInvtOrder(PstdPhysInvtOrderHdr: Record "Pstd. Phys. Invt. Order Hdr"; ShowRequestForm: Boolean)
-    var
-        ReportSelections: Record "Report Selections";
     begin
         PstdPhysInvtOrderHdr.SetRange("No.", PstdPhysInvtOrderHdr."No.");
-        ReportSelections.SetRange(Usage, ReportSelections.Usage::"P.Phys.Invt.Order");
-        ReportSelections.SetFilter("Report ID", '<>0');
-        if ReportSelections.FindSet() then
-            repeat
-                REPORT.RunModal(ReportSelections."Report ID", ShowRequestForm, false, PstdPhysInvtOrderHdr);
-            until ReportSelections.Next() = 0;
+        PrintDocumentWithReportUsage(PstdPhysInvtOrderHdr, Enum::"Report Selection Usage"::"P.Phys.Invt.Order", ShowRequestForm);
     end;
 
     procedure PrintInvtRecording(PhysInvtRecordHeader: Record "Phys. Invt. Record Header"; ShowRequestForm: Boolean)
-    var
-        ReportSelections: Record "Report Selections";
     begin
         PhysInvtRecordHeader.SetRange("Order No.", PhysInvtRecordHeader."Order No.");
         PhysInvtRecordHeader.SetRange("Recording No.", PhysInvtRecordHeader."Recording No.");
-        ReportSelections.SetRange(Usage, ReportSelections.Usage::"Phys.Invt.Rec.");
-        ReportSelections.SetFilter("Report ID", '<>0');
-        if ReportSelections.FindSet() then
-            repeat
-                REPORT.RunModal(ReportSelections."Report ID", ShowRequestForm, false, PhysInvtRecordHeader);
-            until ReportSelections.Next() = 0;
+        PrintDocumentWithReportUsage(PhysInvtRecordHeader, Enum::"Report Selection Usage"::"Phys.Invt.Rec.", ShowRequestForm);
     end;
 
     procedure PrintPostedInvtRecording(PstdPhysInvtRecordHdr: Record "Pstd. Phys. Invt. Record Hdr"; ShowRequestForm: Boolean)
-    var
-        ReportSelections: Record "Report Selections";
     begin
         PstdPhysInvtRecordHdr.SetRange("Order No.", PstdPhysInvtRecordHdr."Order No.");
         PstdPhysInvtRecordHdr.SetRange("Recording No.", PstdPhysInvtRecordHdr."Recording No.");
-        ReportSelections.SetRange(Usage, ReportSelections.Usage::"P.Phys.Invt.Rec.");
-        ReportSelections.SetFilter("Report ID", '<>0');
-        if ReportSelections.FindSet() then
-            repeat
-                REPORT.RunModal(ReportSelections."Report ID", ShowRequestForm, false, PstdPhysInvtRecordHdr);
-            until ReportSelections.Next() = 0;
+        PrintDocumentWithReportUsage(PstdPhysInvtRecordHdr, Enum::"Report Selection Usage"::"P.Phys.Invt.Rec.", ShowRequestForm);
     end;
 
     procedure PrintInvtDocument(var NewInvtDocHeader: Record "Invt. Document Header"; ShowRequestPage: Boolean)
     var
         InvtDocHeader: Record "Invt. Document Header";
         ReportSelections: Record "Report Selections";
+        ReportUsage: Enum "Report Selection Usage";
     begin
         InvtDocHeader.Copy(NewInvtDocHeader);
         InvtDocHeader.SetRecFilter();
 
         case InvtDocHeader."Document Type" of
             InvtDocHeader."Document Type"::Receipt:
-                ReportSelections.SetRange(Usage, ReportSelections.Usage::"Inventory Receipt");
+                ReportUsage := ReportSelections.Usage::"Inventory Receipt";
             InvtDocHeader."Document Type"::Shipment:
-                ReportSelections.SetRange(Usage, ReportSelections.Usage::"Inventory Shipment");
+                ReportUsage := ReportSelections.Usage::"Inventory Shipment";
         end;
+        ReportSelections.SetRange(Usage, ReportUsage);
         ReportSelections.SetFilter("Report ID", '<>0');
-
         CheckNoReportSelectionThrowError(ReportSelections, InvtDocHeader);
 
-        if ReportSelections.FindSet() then
-            repeat
-                REPORT.RunModal(ReportSelections."Report ID", ShowRequestPage, false, InvtDocHeader);
-            until ReportSelections.Next() = 0;
+        PrintDocumentWithReportUsage(InvtDocHeader, ReportUsage, ShowRequestPage);
     end;
 
     procedure PrintInvtReceipt(NewInvtReceiptHeader: Record "Invt. Receipt Header"; ShowRequestPage: Boolean)
     var
-        ReportSelections: Record "Report Selections";
         InvtReceiptHeader: Record "Invt. Receipt Header";
     begin
         InvtReceiptHeader.Copy(NewInvtReceiptHeader);
         InvtReceiptHeader.SetRecFilter();
-
-        ReportSelections.SetRange(Usage, ReportSelections.Usage::"P.Inventory Receipt");
-        ReportSelections.SetFilter("Report ID", '<>0');
-        if ReportSelections.FindSet() then
-            repeat
-                REPORT.RunModal(ReportSelections."Report ID", ShowRequestPage, false, InvtReceiptHeader);
-            until ReportSelections.Next() = 0;
+        PrintDocumentWithReportUsage(InvtReceiptHeader, Enum::"Report Selection Usage"::"P.Inventory Receipt", ShowRequestPage);
     end;
 
     procedure PrintInvtShipment(NewInvtShipmentHeader: Record "Invt. Shipment Header"; ShowRequestPage: Boolean)
     var
-        ReportSelections: Record "Report Selections";
         InvtShipmentHeader: Record "Invt. Shipment Header";
     begin
         InvtShipmentHeader.Copy(NewInvtShipmentHeader);
         InvtShipmentHeader.SetRecFilter();
-
-        ReportSelections.SetRange(Usage, ReportSelections.Usage::"P.Inventory Shipment");
-        ReportSelections.SetFilter("Report ID", '<>0');
-        if ReportSelections.FindSet() then
-            repeat
-                REPORT.RunModal(ReportSelections."Report ID", ShowRequestPage, false, InvtShipmentHeader);
-            until ReportSelections.Next() = 0;
+        PrintDocumentWithReportUsage(InvtShipmentHeader, Enum::"Report Selection Usage"::"P.Inventory Shipment", ShowRequestPage);
     end;
 
     procedure PrintDirectTransfer(NewDirectTransHeader: Record "Direct Trans. Header"; ShowRequestPage: Boolean)
     var
-        ReportSelections: Record "Report Selections";
         DirectTransHeader: Record "Direct Trans. Header";
     begin
         DirectTransHeader.Copy(NewDirectTransHeader);
         DirectTransHeader.SetRecFilter();
+        PrintDocumentWithReportUsage(DirectTransHeader, Enum::"Report Selection Usage"::"P.Direct Transfer", ShowRequestPage);
+    end;
 
-        ReportSelections.SetRange(Usage, ReportSelections.Usage::"P.Direct Transfer");
+    local procedure PrintDocumentWithReportUsage(DocumentVariant: Variant; ReportUsage: Enum "Report Selection Usage"; ShowRequestPage: Boolean)
+    var
+        ReportSelections: Record "Report Selections";
+        SkipReportRunModal: Boolean;
+    begin
+        ReportSelections.SetRange(Usage, ReportUsage);
         ReportSelections.SetFilter("Report ID", '<>0');
         if ReportSelections.FindSet() then
             repeat
-                REPORT.RunModal(ReportSelections."Report ID", ShowRequestPage, false, DirectTransHeader);
+                SkipReportRunModal := false;
+                OnBeforePrintDocumentWithReportSelections(ReportSelections, DocumentVariant, ShowRequestPage, SkipReportRunModal);
+                if not SkipReportRunModal then
+                    Report.RunModal(ReportSelections."Report ID", ShowRequestPage, false, DocumentVariant);
             until ReportSelections.Next() = 0;
     end;
 
@@ -652,25 +592,7 @@ codeunit 229 "Document-Print"
         end;
     end;
 
-#if not CLEAN25
-    [Obsolete('Replaced by same procedure in codeunit Serv. Report Management ', '25.0')]
-    procedure GetServContractTypeUsage(ServiceContractHeader: Record Microsoft.Service.Contract."Service Contract Header"): Enum "Report Selection Usage"
-    var
-        ServDocumentPrint: Codeunit "Serv. Document Print";
-    begin
-        exit(ServDocumentPrint.GetServContractTypeUsage(ServiceContractHeader));
-    end;
-#endif
 
-#if not CLEAN25
-    [Obsolete('Replaced by same procedure in codeunit Serv. Report Management ', '25.0')]
-    procedure GetServHeaderDocTypeUsage(ServiceHeader: Record Microsoft.Service.Document."Service Header"): Enum "Report Selection Usage"
-    var
-        ServDocumentPrint: Codeunit "Serv. Document Print";
-    begin
-        exit(ServDocumentPrint.GetServHeaderDocTypeUsage(ServiceHeader));
-    end;
-#endif
 
     procedure GetAsmHeaderDocTypeUsage(AsmHeader: Record "Assembly Header"): Enum "Report Selection Usage"
     var
@@ -807,15 +729,6 @@ codeunit 229 "Document-Print"
         end;
     end;
 
-#if not CLEAN25
-    [Obsolete('Replaced by same procedure in codeunit Serv. Report Management', '25.0')]
-    procedure CalcServDisc(var ServHeader: Record Microsoft.Service.Document."Service Header")
-    var
-        ServDocumentPrint: Codeunit "Serv. Document Print";
-    begin
-        ServDocumentPrint.CalcServDisc(ServHeader);
-    end;
-#endif
 
     local procedure CheckNoReportSelectionThrowError(var ReportSelections: Record "Report Selections"; InvtDocumentHeader: Record "Invt. Document Header")
     var
@@ -860,25 +773,7 @@ codeunit 229 "Document-Print"
         ReportSelectionInventory.RunModal();
     end;
 
-#if not CLEAN25
-    [Obsolete('Replaced by same procedure in codeunit Serv. Report Management ', '25.0')]
-    procedure PrintServiceHeaderToDocumentAttachment(var ServiceHeader: Record Microsoft.Service.Document."Service Header");
-    var
-        ServDocumentPrint: Codeunit "Serv. Document Print";
-    begin
-        ServDocumentPrint.PrintServiceHeaderToDocumentAttachment(ServiceHeader);
-    end;
-#endif
 
-#if not CLEAN25
-    [Obsolete('Replaced by same procedure in codeunit Serv. Report Management ', '25.0')]
-    procedure PrintServiceContractToDocumentAttachment(var ServiceContractHeader: Record Microsoft.Service.Contract."Service Contract Header");
-    var
-        ServDocumentPrint: Codeunit "Serv. Document Print";
-    begin
-        ServDocumentPrint.PrintServiceContractToDocumentAttachment(ServiceContractHeader);
-    end;
-#endif
 
     [IntegrationEvent(false, false)]
     local procedure OnAfterDoPrintSalesHeader(var SalesHeader: Record "Sales Header"; SendAsEmail: Boolean)
@@ -905,18 +800,6 @@ codeunit 229 "Document-Print"
     begin
     end;
 
-#if not CLEAN25
-    internal procedure RunOnBeforeCalcServDisc(var ServiceHeader: Record Microsoft.Service.Document."Service Header"; var IsHandled: Boolean)
-    begin
-        OnBeforeCalcServDisc(ServiceHeader, IsHandled);
-    end;
-
-    [Obsolete('Replaced by same event in codeunit Serv. Report Management', '25.0')]
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeCalcServDisc(var ServiceHeader: Record Microsoft.Service.Document."Service Header"; var IsHandled: Boolean)
-    begin
-    end;
-#endif
 
     [IntegrationEvent(false, false)]
     local procedure OnBeforeCalcPurchDisc(var PurchaseHeader: Record "Purchase Header"; var IsHandled: Boolean)
@@ -968,31 +851,7 @@ codeunit 229 "Document-Print"
     begin
     end;
 
-#if not CLEAN25
-    internal procedure RunOnBeforePrintServiceContract(var ServiceContractHeader: Record Microsoft.Service.Contract."Service Contract Header"; ReportUsage: Integer; var IsPrinted: Boolean)
-    begin
-        OnBeforePrintServiceContract(ServiceContractHeader, ReportUsage, IsPrinted);
-    end;
 
-    [Obsolete('Replaced by same event in codeunit Serv. Report Management', '25.0')]
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforePrintServiceContract(var ServiceContractHeader: Record Microsoft.Service.Contract."Service Contract Header"; ReportUsage: Integer; var IsPrinted: Boolean)
-    begin
-    end;
-#endif
-
-#if not CLEAN25
-    internal procedure RunOnBeforePrintServiceHeader(var ServiceHeader: Record Microsoft.Service.Document."Service Header"; ReportUsage: Integer; var IsPrinted: Boolean)
-    begin
-        OnBeforePrintServiceHeader(ServiceHeader, ReportUsage, IsPrinted);
-    end;
-
-    [Obsolete('Replaced by same event in codeunit Serv. Report Management', '25.0')]
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforePrintServiceHeader(var ServiceHeader: Record Microsoft.Service.Document."Service Header"; ReportUsage: Integer; var IsPrinted: Boolean)
-    begin
-    end;
-#endif
 
     [IntegrationEvent(false, false)]
     local procedure OnBeforePrintAsmHeader(var AssemblyHeader: Record "Assembly Header"; ReportUsage: Integer; var IsPrinted: Boolean)
@@ -1039,31 +898,7 @@ codeunit 229 "Document-Print"
     begin
     end;
 
-#if not CLEAN25
-    internal procedure RunOnGetServHeaderDocTypeUsageElseCase(ServiceHeader: Record Microsoft.Service.Document."Service Header"; var TypeUsage: Integer; var IsHandled: Boolean)
-    begin
-        OnGetServHeaderDocTypeUsageElseCase(ServiceHeader, TypeUsage, IsHandled);
-    end;
 
-    [Obsolete('Replaced by same event in codeunit Serv. Report Management', '25.0')]
-    [IntegrationEvent(false, false)]
-    local procedure OnGetServHeaderDocTypeUsageElseCase(ServiceHeader: Record Microsoft.Service.Document."Service Header"; var TypeUsage: Integer; var IsHandled: Boolean)
-    begin
-    end;
-#endif
-
-#if not CLEAN25
-    internal procedure RunOnGetServContractTypeUsageElseCase(ServiceContractHeader: Record Microsoft.Service.Contract."Service Contract Header"; var TypeUsage: Integer; var IsHandled: Boolean)
-    begin
-        OnGetServContractTypeUsageElseCase(ServiceContractHeader, TypeUsage, IsHandled);
-    end;
-
-    [Obsolete('Replaced by same event in codeunit Serv. Report Management', '25.0')]
-    [IntegrationEvent(false, false)]
-    local procedure OnGetServContractTypeUsageElseCase(ServiceContractHeader: Record Microsoft.Service.Contract."Service Contract Header"; var TypeUsage: Integer; var IsHandled: Boolean)
-    begin
-    end;
-#endif
 
     [IntegrationEvent(false, false)]
     local procedure OnGetSalesArchDocTypeUsageElseCase(SalesHeaderArchive: Record "Sales Header Archive"; var TypeUsage: Integer; var IsHandled: Boolean)
@@ -1104,5 +939,9 @@ codeunit 229 "Document-Print"
     local procedure OnBeforeProcessPrintSalesOrder(var SalesHeader: Record "Sales Header"; Usage: Option "Order Confirmation","Work Order","Pick Instruction"; var IsHandled: Boolean)
     begin
     end;
-}
 
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforePrintDocumentWithReportSelections(ReportSelections: Record "Report Selections"; DocumentVariant: Variant; ShowRequestPage: Boolean; var SkipReportRunModal: Boolean)
+    begin
+    end;
+}

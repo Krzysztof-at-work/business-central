@@ -3,17 +3,19 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
 namespace System.Environment;
-
+#if not CLEAN28
 using Microsoft.CRM.Outlook;
+#endif
 using Microsoft.EServices.EDocument;
 using Microsoft.Finance.Currency;
 using Microsoft.Finance.VAT.Registration;
 using Microsoft.Integration.Dataverse;
 using Microsoft.Utilities;
-using System.DataAdministration;
-using System.Threading;
 using System.Automation;
-using System.Feedback;
+using System.DataAdministration;
+using System.Environment.Configuration;
+using System.Integration.PowerBI;
+using System.Threading;
 
 codeunit 8912 "Environment Cleanup Subs"
 {
@@ -27,7 +29,9 @@ codeunit 8912 "Environment Cleanup Subs"
         CurrExchRateUpdateSetup: Record "Curr. Exch. Rate Update Setup";
         VATRegNoSrvConfig: Record "VAT Reg. No. Srv Config";
         ServiceConnection: Record "Service Connection";
+#if not CLEAN28
         ExchangeSync: Record "Exchange Sync";
+#endif
         JobQueueManagement: Codeunit "Job Queue Management";
         CDSIntegrationImpl: Codeunit "CDS Integration Impl.";
         nullGUID: Guid;
@@ -39,7 +43,9 @@ codeunit 8912 "Environment Cleanup Subs"
             CurrExchRateUpdateSetup.ChangeCompany(CompanyName);
             VATRegNoSrvConfig.ChangeCompany(CompanyName);
             ServiceConnection.ChangeCompany(CompanyName);
+#if not CLEAN28
             ExchangeSync.ChangeCompany(CompanyName);
+#endif
         end;
 
         OCRServiceSetup.ModifyAll("Password Key", nullGUID);
@@ -54,8 +60,9 @@ codeunit 8912 "Environment Cleanup Subs"
         CDSIntegrationImpl.CleanCDSIntegration(CompanyName);
 
         ServiceConnection.ModifyAll(Status, ServiceConnection.Status::Disabled);
+#if not CLEAN28
         ExchangeSync.ModifyAll(Enabled, false);
-
+#endif
         JobQueueManagement.SetRecurringJobsOnHold(CompanyName);
     end;
 
@@ -74,11 +81,9 @@ codeunit 8912 "Environment Cleanup Subs"
     local procedure ClearDatabaseConfigGeneral(SourceEnv: Enum "Environment Type"; DestinationEnv: Enum "Environment Type")
     var
         FlowServiceConfiguration: Record "Flow Service Configuration";
-        SatisfactionSurveyMgt: Codeunit "Satisfaction Survey Mgt.";
     begin
         // For behavior in all cases of copying a new env.
 
-        SatisfactionSurveyMgt.ResetState();
         FlowServiceConfiguration.ModifyAll("Flow Service", FlowServiceConfiguration."Flow Service"::"Testing Service (TIP 1)");
         Commit();
     end;
@@ -86,11 +91,22 @@ codeunit 8912 "Environment Cleanup Subs"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Environment Cleanup", 'OnClearDatabaseConfig', '', false, false)]
     local procedure ClearDatabaseConfigProdToProd(SourceEnv: Enum "Environment Type"; DestinationEnv: Enum "Environment Type")
     begin
-        // Example on how to enfore a specific scenario. For instance prod to prod. 
+        // Example on how to enfore a specific scenario. For instance prod to prod.
         if (SourceEnv <> SourceEnv::Production) or (DestinationEnv <> DestinationEnv::Production) then
             exit;
 
         // Prod to prod copy cleanup code goes here
 
+    end;
+
+    [EventSubscriber(ObjectType::Report, Report::"Copy Company", 'OnAfterCreatedNewCompanyByCopyCompany', '', false, false)]
+    local procedure ClearPowerBIDeploymentsOnCopiedCompany(NewCompanyName: Text[30])
+    var
+        PBIDeploymentEvents: Codeunit "PBI Deployment Events";
+    begin
+        // Copy Company replicates Power BI deployment rows from the source company. Start the
+        // new company clean. Hosted here (rather than inside Modules/System/PowerBI) because
+        // the Power BI module can't reference Report::"Copy Company".
+        PBIDeploymentEvents.ClearDeploymentsForCompany(NewCompanyName);
     end;
 }

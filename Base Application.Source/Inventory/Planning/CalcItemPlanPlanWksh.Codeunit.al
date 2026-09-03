@@ -8,8 +8,8 @@ using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Location;
 using Microsoft.Inventory.Planning;
 using Microsoft.Inventory.Requisition;
-using Microsoft.Inventory.Tracking;
 using Microsoft.Inventory.Setup;
+using Microsoft.Inventory.Tracking;
 using Microsoft.Projects.Project.Planning;
 using Microsoft.Purchases.Document;
 using Microsoft.Sales.Document;
@@ -78,16 +78,12 @@ codeunit 5431 "Calc. Item Plan - Plan Wksh."
 
         Item.CopyFilter(Item."Variant Filter", PlanningAssignment."Variant Code");
         Item.CopyFilter(Item."Location Filter", PlanningAssignment."Location Code");
+        PlanningAssignment.SetRange("Item No.", Item."No.");
         PlanningAssignment.SetRange(Inactive, false);
         PlanningAssignment.SetRange("Net Change Planning", true);
-        PlanningAssignment.SetRange("Item No.", Item."No.");
-        if PlanningAssignment.Find('-') then
-            repeat
-                if PlanningAssignment."Latest Date" <= ToDate then begin
-                    PlanningAssignment.Inactive := true;
-                    PlanningAssignment.Modify();
-                end;
-            until PlanningAssignment.Next() = 0;
+        PlanningAssignment.SetFilter("Latest Date", '..%1', ToDate);
+        if not PlanningAssignment.IsEmpty() then
+            PlanningAssignment.ModifyAll(Inactive, true);
 
         OnCodeOnAfterGetPlanningComponents(Item);
 
@@ -306,6 +302,25 @@ codeunit 5431 "Calc. Item Plan - Plan Wksh."
     procedure GetResiliencyError(var PlanningErrorLogEntry: Record "Planning Error Log"): Boolean
     begin
         exit(InvtProfileOffsetting.GetResiliencyError(PlanningErrorLogEntry));
+    end;
+
+    /// <summary> 
+    /// Gets the resiliency errors for the current item in planning and logs them in the "Planning Error Log" table. 
+    /// </summary>
+    /// <param name="PlanningErrorLogEntry"> A record of the "Planning Error Log" table used to log the resiliency errors. </param>
+    /// <returns> True if there are resiliency errors for the current item in planning; otherwise, false. </returns>
+    procedure GetResiliencyErrors(var PlanningErrorLogEntry: Record "Planning Error Log"): Boolean
+    begin
+        exit(InvtProfileOffsetting.GetResiliencyErrors(PlanningErrorLogEntry));
+    end;
+
+    /// <summary>
+    /// Gets whether planning was skipped for the current item due to a missing SKU policy.
+    /// </summary>
+    /// <returns> True if planning was skipped for the current item due to a missing SKU policy; otherwise, false. </returns>
+    procedure GetPlanningSkippedForMissingSKUPolicy(): Boolean
+    begin
+        exit(InvtProfileOffsetting.GetPlanningSkippedForMissingSKUPolicy());
     end;
 
     procedure ClearInvtProfileOffsetting()

@@ -8,6 +8,7 @@ using Microsoft.CRM.Outlook;
 using Microsoft.EServices.EDocument;
 using Microsoft.Purchases.Vendor;
 using Microsoft.Sales.Customer;
+using Microsoft.Sales.History;
 using System.Email;
 using System.IO;
 using System.Reflection;
@@ -479,6 +480,7 @@ table 60 "Document Sending Profile"
         if Rec."Combine Email Documents" then
             FeatureTelemetry.LogUsage('0000II3', 'Document Sending Profile - Combine PDF', 'Combine');
 
+        UpdateDocumentProfileForRecord(Rec, RecordVariant);
         SendToVAN(RecordVariant);
         SendToPrinter("Report Selection Usage".FromInteger(ReportUsage), RecordVariant, CustomerFieldNo);
         TrySendToEMailGroupedMultipleSelection(
@@ -551,7 +553,7 @@ table 60 "Document Sending Profile"
         IsCustomer: Boolean;
     begin
         IsCustomer := true;
-        OnBeforeTrySendToEMail(ReportUsage, RecordVariant, DocumentNoFieldNo, DocName, CustomerFieldNo, ShowDialog, Handled, IsCustomer);
+        OnBeforeTrySendToEMail(ReportUsage, RecordVariant, DocumentNoFieldNo, DocName, CustomerFieldNo, ShowDialog, Handled, IsCustomer, Rec);
         if Handled then
             exit;
 
@@ -678,7 +680,7 @@ table 60 "Document Sending Profile"
     begin
         SendWithReportDistributionManagement := true;
         OnSendWithReportDistributionManagement(Rec, SendWithReportDistributionManagement);
-        
+
         if (not SendWithReportDistributionManagement) or ("Electronic Document" = "Electronic Document"::No) then
             exit;
 
@@ -986,6 +988,33 @@ table 60 "Document Sending Profile"
         DataCompression.CloseZipArchive();
     end;
 
+    local procedure UpdateDocumentProfileForRecord(var DocumentSendingProfile: Record "Document Sending Profile"; RecordVariant: Variant)
+    var
+        RecordRef: RecordRef;
+    begin
+        RecordRef.GetTable(RecordVariant);
+        if RecordRef.Number in [Database::"Sales Shipment Header", Database::"Return Receipt Header"] then
+            UpdateDocumentProfileForCustomer(DocumentSendingProfile);
+    end;
+
+    local procedure UpdateDocumentProfileForCustomer(var DocumentSendingProfile: Record "Document Sending Profile")
+    begin
+        if DocumentSendingProfile."E-Mail Attachment" <> DocumentSendingProfile."E-Mail Attachment"::PDF then begin
+            DocumentSendingProfile."E-Mail Attachment" := DocumentSendingProfile."E-Mail Attachment"::PDF;
+            DocumentSendingProfile."E-Mail Format" := '';
+        end;
+
+        if DocumentSendingProfile.Disk <> DocumentSendingProfile.Disk::No then begin
+            DocumentSendingProfile.Disk := DocumentSendingProfile.Disk::PDF;
+            DocumentSendingProfile."Disk Format" := '';
+        end;
+
+        if (DocumentSendingProfile."Electronic Document" <> DocumentSendingProfile."Electronic Document"::No) then begin
+            DocumentSendingProfile."Electronic Document" := DocumentSendingProfile."Electronic Document"::No;
+            DocumentSendingProfile."Electronic Format" := '';
+        end;
+    end;
+
     [IntegrationEvent(true, false)]
     local procedure OnAfterSend(ReportUsage: Integer; RecordVariant: Variant; DocNo: Code[20]; ToCust: Code[20]; DocName: Text[150]; CustomerFieldNo: Integer; DocumentNoFieldNo: Integer; DocumentSendingProfile: Record "Document Sending Profile")
     begin
@@ -1067,7 +1096,7 @@ table 60 "Document Sending Profile"
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnBeforeTrySendToEMail(ReportUsage: Integer; RecordVariant: Variant; DocumentNoFieldNo: Integer; DocName: Text[150]; CustomerFieldNo: Integer; var ShowDialog: Boolean; var Handled: Boolean; var IsCustomer: Boolean)
+    local procedure OnBeforeTrySendToEMail(ReportUsage: Integer; RecordVariant: Variant; DocumentNoFieldNo: Integer; DocName: Text[150]; CustomerFieldNo: Integer; var ShowDialog: Boolean; var Handled: Boolean; var IsCustomer: Boolean; var DocumentSendingProfile: Record "Document Sending Profile")
     begin
     end;
 

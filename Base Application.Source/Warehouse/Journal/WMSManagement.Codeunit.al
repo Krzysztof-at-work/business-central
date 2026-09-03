@@ -116,7 +116,6 @@ codeunit 7302 "WMS Management"
             WhseJnlLine."Reference Document" := WhseJnlLine."Reference Document"::"Job Journal";
         WhseJnlLine."Reference No." := ItemJnlLine."Document No.";
         TransferWhseItemTracking(WhseJnlLine, ItemJnlLine);
-        WhseJnlLine.Description := ItemJnlLine.Description;
         OnAfterCreateWhseJnlLine(WhseJnlLine, ItemJnlLine, ToTransfer);
         exit(true);
     end;
@@ -1021,6 +1020,7 @@ codeunit 7302 "WMS Management"
         WarehouseJournalLine."Qty. (Absolute)" := Abs(WarehouseJournalLine.Quantity);
         WarehouseJournalLine."Qty. (Absolute, Base)" := Abs(QuantityBase);
 
+        WarehouseJournalLine.Description := ItemJournalLine.Description;
         WarehouseJournalLine."Source Code" := ItemJournalLine."Source Code";
         WarehouseJournalLine."Reason Code" := ItemJournalLine."Reason Code";
         WarehouseJournalLine."Registering No. Series" := ItemJournalLine."Posting No. Series";
@@ -1290,14 +1290,21 @@ codeunit 7302 "WMS Management"
 
     procedure ShowPostedSourceDocument(PostedSourceDoc: Enum "Warehouse Shipment Posted Source Document"; PostedSourceNo: Code[20])
     var
+        DummyWarehouseActivitySourceDocument: Enum "Warehouse Activity Source Document";
+    begin
+        ShowPostedSourceDocument(PostedSourceDoc, PostedSourceNo, DummyWarehouseActivitySourceDocument);
+    end;
+
+    procedure ShowPostedSourceDocument(PostedSourceDoc: Enum "Warehouse Shipment Posted Source Document"; PostedSourceNo: Code[20]; WarehouseActivitySourceDocument: Enum "Warehouse Activity Source Document")
+    var
         IsHandled: Boolean;
     begin
         IsHandled := false;
-        OnBeforeShowPostedSourceDocument(PostedSourceDoc, PostedSourceNo, IsHandled);
+        OnBeforeShowPostedSourceDocument(PostedSourceDoc, PostedSourceNo, WarehouseActivitySourceDocument, IsHandled);
         if IsHandled then
             exit;
 
-        OnShowPostedSourceDoc(PostedSourceDoc.AsInteger(), PostedSourceNo);
+        OnShowPostedSourceDoc(PostedSourceDoc.AsInteger(), PostedSourceNo, WarehouseActivitySourceDocument);
     end;
 
     procedure ShowSourceDocCard(SourceType: Integer; SourceSubType: Option; SourceNo: Code[20])
@@ -1726,7 +1733,7 @@ codeunit 7302 "WMS Management"
 
     procedure GetATOJobPlanningLine(SourceType: Integer; SourceID: Code[20]; SourceRefNo: Integer; SourceLineNo: Integer; var JobPlanningLine: Record "Job Planning Line"): Boolean
     begin
-        if SourceType <> Database::Job then
+        if not (SourceType in [Database::Job, Database::"Job Planning Line"]) then
             exit(false);
         JobPlanningLine.SetRange("Job No.", SourceID);
         JobPlanningLine.SetRange("Job Contract Entry No.", SourceRefNo);
@@ -1748,7 +1755,7 @@ codeunit 7302 "WMS Management"
     begin
         WarehouseActivityLine.SetRange(WarehouseActivityLine."Activity Type", WarehouseActivityLine."Activity Type"::"Invt. Pick");
         WarehouseActivityLine.SetSourceFilter(
-            Database::"Job", 0, JobPlanningLine."Document No.", JobPlanningLine."Job Contract Entry No.", JobPlanningLine."Line No.", false);
+            Database::"Job Planning Line", "Job Planning Line Status"::Order.AsInteger(), JobPlanningLine."Job No.", JobPlanningLine."Job Contract Entry No.", JobPlanningLine."Line No.", false);
         WarehouseActivityLine.SetRange(WarehouseActivityLine."Assemble to Order", true);
         WarehouseActivityLine.SetTrackingFilterIfNotEmpty();
     end;
@@ -2028,7 +2035,7 @@ codeunit 7302 "WMS Management"
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnBeforeShowPostedSourceDocument(PostedSourceDoc: Enum "Warehouse Shipment Posted Source Document"; PostedSourceNo: Code[20]; var IsHandled: Boolean)
+    local procedure OnBeforeShowPostedSourceDocument(PostedSourceDoc: Enum "Warehouse Shipment Posted Source Document"; PostedSourceNo: Code[20]; WarehouseActivitySourceDocument: Enum "Warehouse Activity Source Document"; var IsHandled: Boolean)
     begin
     end;
 
@@ -2083,7 +2090,7 @@ codeunit 7302 "WMS Management"
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnShowPostedSourceDoc(PostedSourceDoc: Option; PostedSourceNo: Code[20])
+    local procedure OnShowPostedSourceDoc(PostedSourceDoc: Option; PostedSourceNo: Code[20]; WarehouseActivitySourceDocument: Enum "Warehouse Activity Source Document")
     begin
     end;
 

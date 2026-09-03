@@ -4,6 +4,13 @@
 // ------------------------------------------------------------------------------------------------
 namespace Microsoft.Finance.Analysis;
 
+/// <summary>
+/// List page for managing company size definitions used in financial analysis and reporting.
+/// Provides setup interface for company size categories that support analysis and classification.
+/// </summary>
+/// <remarks>
+/// Company size definitions are used for analysis categorization and reporting segmentation.
+/// </remarks>
 page 532 "Company Sizes"
 {
     PageType = List;
@@ -24,6 +31,10 @@ page 532 "Company Sizes"
                 field(Description; Rec.Description)
                 {
                     ToolTip = 'Specifies the description of the company size.';
+                }
+                field("Small Business"; Rec."Small Business")
+                {
+                    ToolTip = 'Specifies whether this company size category represents a small business.';
                 }
             }
         }

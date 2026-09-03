@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
@@ -20,6 +20,20 @@ using Microsoft.Purchases.Vendor;
 using Microsoft.Sales.Customer;
 using Microsoft.Sales.Receivables;
 
+/// <summary>
+/// Temporary table for managing payment application proposals during bank reconciliation processes.
+/// This table stores potential matches between bank statement lines and ledger entries, allowing
+/// users to review, modify, and approve automatic payment applications before final posting.
+/// Provides comprehensive proposal details including amounts, currencies, match quality, and
+/// supporting documentation for informed decision-making.
+/// </summary>
+/// <remarks>
+/// Key functionality includes proposal validation, amount calculations with currency handling,
+/// applied amount tracking, difference management, and integration with multiple ledger entry types
+/// (customer, vendor, employee, bank account). Supports both automatic proposal generation and
+/// manual proposal creation workflows with comprehensive audit trails and approval mechanisms.
+/// Used extensively in payment reconciliation journals for proposal review and application processing.
+/// </remarks>
 table 1293 "Payment Application Proposal"
 {
     Caption = 'Payment Application Proposal';
@@ -27,37 +41,63 @@ table 1293 "Payment Application Proposal"
 
     fields
     {
+        /// <summary>
+        /// Bank account number for the payment application proposal.
+        /// Identifies the bank account where the payment was received or will be processed.
+        /// </summary>
         field(1; "Bank Account No."; Code[20])
         {
             Caption = 'Bank Account No.';
             TableRelation = "Bank Account";
         }
+        /// <summary>
+        /// Statement number from the bank reconciliation being processed.
+        /// Links the proposal to the specific bank statement import or reconciliation session.
+        /// </summary>
         field(2; "Statement No."; Code[20])
         {
             Caption = 'Statement No.';
             TableRelation = "Bank Acc. Reconciliation"."Statement No." where("Bank Account No." = field("Bank Account No."),
                                                                               "Statement Type" = field("Statement Type"));
         }
+        /// <summary>
+        /// Line number within the bank statement being processed.
+        /// Identifies the specific transaction line for payment application.
+        /// </summary>
         field(3; "Statement Line No."; Integer)
         {
             Caption = 'Statement Line No.';
         }
+        /// <summary>
+        /// Type of statement being processed for payment application.
+        /// Determines whether this is a bank reconciliation or payment application workflow.
+        /// </summary>
         field(20; "Statement Type"; Enum "Bank Acc. Rec. Stmt. Type")
         {
             Caption = 'Statement Type';
         }
+        /// <summary>
+        /// Type of account that the payment should be applied to.
+        /// Determines the target ledger entry table for payment application.
+        /// </summary>
         field(21; "Account Type"; Enum "Gen. Journal Account Type")
         {
             Caption = 'Account Type';
+            ToolTip = 'Specifies the type of account that the payment application will be posted to when you post the payment reconciliation journal.';
 
             trigger OnValidate()
             begin
                 VerifyLineIsNotApplied();
             end;
         }
+        /// <summary>
+        /// Account number for the payment application target.
+        /// Identifies the specific customer, vendor, or other account for payment application.
+        /// </summary>
         field(22; "Account No."; Code[20])
         {
             Caption = 'Account No.';
+            ToolTip = 'Specifies the account number the payment application will be posted to when you post the payment reconciliation journal.';
             TableRelation = if ("Account Type" = const("G/L Account")) "G/L Account" where("Account Type" = const(Posting),
                                                                                           Blocked = const(false))
             else
@@ -76,9 +116,14 @@ table 1293 "Payment Application Proposal"
                 VerifyLineIsNotApplied();
             end;
         }
+        /// <summary>
+        /// Entry number of the ledger entry to apply the payment to.
+        /// Links the payment to a specific open customer, vendor, or other ledger entry.
+        /// </summary>
         field(23; "Applies-to Entry No."; Integer)
         {
             Caption = 'Applies-to Entry No.';
+            ToolTip = 'Specifies the number of the customer or vendor ledger entry that the payment will be applied to when you post the payment reconciliation journal line.';
             TableRelation = if ("Account Type" = const("G/L Account")) "G/L Entry"
             else
             if ("Account Type" = const(Customer)) "Cust. Ledger Entry" where(Open = const(true))
@@ -87,6 +132,10 @@ table 1293 "Payment Application Proposal"
             else
             if ("Account Type" = const("Bank Account")) "Bank Account Ledger Entry" where(Open = const(true));
         }
+        /// <summary>
+        /// Amount to apply from the payment to the target ledger entry.
+        /// Can be partial amount allowing for split applications across multiple entries.
+        /// </summary>
         field(24; "Applied Amount"; Decimal)
         {
             Caption = 'Applied Amount';
@@ -101,9 +150,14 @@ table 1293 "Payment Application Proposal"
                     UpdateAppliedAmt();
             end;
         }
+        /// <summary>
+        /// Indicates whether the payment application proposal has been applied.
+        /// Controls the application state and enables unapplication functionality.
+        /// </summary>
         field(25; Applied; Boolean)
         {
             Caption = 'Applied';
+            ToolTip = 'Specifies that the payment specified on the header of the Payment Application window is applied to the open entry.';
 
             trigger OnValidate()
             var
@@ -128,65 +182,118 @@ table 1293 "Payment Application Proposal"
                 end;
             end;
         }
+        /// <summary>
+        /// Payment discount amount applied during the payment application.
+        /// Reduces the payment amount when early payment discounts are taken.
+        /// </summary>
         field(29; "Applied Pmt. Discount"; Decimal)
         {
             AutoFormatExpression = Rec."Currency Code";
             Caption = 'Applied Pmt. Discount';
             AutoFormatType = 1;
         }
+        /// <summary>
+        /// Quality score for the automatic matching proposal.
+        /// Higher values indicate better matching confidence based on matching criteria.
+        /// </summary>
         field(30; Quality; Integer)
         {
             Caption = 'Quality';
         }
+        /// <summary>
+        /// Original posting date of the target ledger entry.
+        /// Used for matching and validation during payment application processing.
+        /// </summary>
         field(31; "Posting Date"; Date)
         {
             Caption = 'Posting Date';
+            ToolTip = 'Specifies the posting date of the open entry.';
         }
+        /// <summary>
+        /// Document type of the target ledger entry.
+        /// Determines application behavior and business logic for different transaction types.
+        /// </summary>
         field(32; "Document Type"; Enum "Gen. Journal Document Type")
         {
             Caption = 'Document Type';
+            ToolTip = 'Specifies the type of document that is related to the open entry.';
         }
+        /// <summary>
+        /// Document number of the target ledger entry.
+        /// Used for reference matching and identification during payment application.
+        /// </summary>
         field(33; "Document No."; Code[20])
         {
             Caption = 'Document No.';
+            ToolTip = 'Specifies the number of the document that is related to the open entry.';
         }
+        /// <summary>
+        /// Description from the target ledger entry.
+        /// Provides context and identification information for payment application.
+        /// </summary>
         field(34; Description; Text[100])
         {
             Caption = 'Description';
+            ToolTip = 'Specifies the description of the open entry.';
         }
+        /// <summary>
+        /// Currency code for the payment application proposal.
+        /// Must match the currency of both payment and target ledger entry.
+        /// </summary>
         field(35; "Currency Code"; Code[10])
         {
             Caption = 'Currency Code';
+            ToolTip = 'Specifies the currency code of the open entry.';
             Editable = false;
             TableRelation = Currency;
         }
+        /// <summary>
+        /// Due date of the target ledger entry.
+        /// Used for payment discount calculations and aging analysis.
+        /// </summary>
         field(36; "Due Date"; Date)
         {
             Caption = 'Due Date';
+            ToolTip = 'Specifies the due date of the open entry.';
             Editable = false;
         }
+        /// <summary>
+        /// External document number from the target ledger entry.
+        /// Used for matching with external references in payment data.
+        /// </summary>
         field(37; "External Document No."; Code[35])
         {
             Caption = 'External Document No.';
+            ToolTip = 'Specifies a document number that refers to the customer''s or vendor''s numbering system.';
         }
+        /// <summary>
+        /// Confidence level for the automatic matching proposal.
+        /// Indicates the system's confidence in the accuracy of the proposed application.
+        /// </summary>
         field(50; "Match Confidence"; Enum "Bank Rec. Match Confidence")
         {
             Caption = 'Match Confidence';
+            ToolTip = 'Specifies the quality of the match between the payment and the open entry for payment application purposes.';
             Editable = false;
             InitValue = "None";
         }
         field(51; "Pmt. Disc. Due Date"; Date)
         {
             Caption = 'Pmt. Disc. Due Date';
+            ToolTip = 'Specifies the date on which the remaining amount on the open entry must be paid to grant a discount.';
 
             trigger OnValidate()
             begin
                 ChangeDiscountAmounts();
             end;
         }
+        /// <summary>
+        /// Specifies the remaining payment discount amount that can still be utilized.
+        /// </summary>
         field(52; "Remaining Pmt. Disc. Possible"; Decimal)
         {
             Caption = 'Remaining Pmt. Disc. Possible';
+            ToolTip = 'Specifies how much discount you can grant for the payment if you apply it to the open entry.';
             AutoFormatExpression = Rec."Currency Code";
             AutoFormatType = 1;
 
@@ -195,18 +302,26 @@ table 1293 "Payment Application Proposal"
                 ChangeDiscountAmounts();
             end;
         }
+        /// <summary>
+        /// Specifies the payment discount tolerance date for the payment application.
+        /// </summary>
         field(53; "Pmt. Disc. Tolerance Date"; Date)
         {
             Caption = 'Pmt. Disc. Tolerance Date';
+            ToolTip = 'Specifies the latest date the amount in the entry must be paid in order for payment discount tolerance to be granted.';
 
             trigger OnValidate()
             begin
                 ChangeDiscountAmounts();
             end;
         }
+        /// <summary>
+        /// Specifies the applied amount including any payment discount applied.
+        /// </summary>
         field(60; "Applied Amt. Incl. Discount"; Decimal)
         {
             Caption = 'Applied Amt. Incl. Discount';
+            ToolTip = 'Specifies the payment amount, excluding the value in the Applied Pmt. Discount field, that is applied to the open entry.';
             AutoFormatExpression = Rec."Currency Code";
             AutoFormatType = 1;
 
@@ -218,31 +333,48 @@ table 1293 "Payment Application Proposal"
                     Validate("Applied Amount", "Applied Amt. Incl. Discount");
             end;
         }
+        /// <summary>
+        /// Specifies the remaining amount after application of this payment proposal.
+        /// </summary>
         field(61; "Remaining Amount"; Decimal)
         {
             Caption = 'Remaining Amount';
+            ToolTip = 'Specifies the amount that remains to be paid for the open entry.';
             Editable = false;
             AutoFormatExpression = Rec."Currency Code";
             AutoFormatType = 1;
         }
+        /// <summary>
+        /// Specifies the remaining amount including any available payment discount.
+        /// </summary>
         field(62; "Remaining Amt. Incl. Discount"; Decimal)
         {
             Caption = 'Remaining Amt. Incl. Discount';
+            ToolTip = 'Specifies the amount that remains to be paid for the open entry, minus any granted payment discount.';
             Editable = false;
             AutoFormatExpression = Rec."Currency Code";
             AutoFormatType = 1;
         }
+        /// <summary>
+        /// Specifies the type of ledger entry being applied to in this payment proposal.
+        /// </summary>
         field(63; Type; Option)
         {
             Caption = 'Type';
             OptionCaption = 'Bank Account Ledger Entry,Check Ledger Entry';
             OptionMembers = "Bank Account Ledger Entry","Check Ledger Entry";
         }
+        /// <summary>
+        /// Specifies the sorting order for displaying payment application proposals.
+        /// </summary>
         field(100; "Sorting Order"; Integer)
         {
             Caption = 'Sorting Order';
             Editable = false;
         }
+        /// <summary>
+        /// Specifies the difference between the statement amount and the remaining amount after application.
+        /// </summary>
         field(101; "Stmt To Rem. Amount Difference"; Decimal)
         {
             Caption = 'Stmt To Rem. Amount Difference';
@@ -353,6 +485,133 @@ table 1293 "Payment Application Proposal"
         TransferFields(TempAppliedPmtEntry);
     end;
 
+    local procedure LoadLedgEntryInfoAndRemainingAmount(BankAccount: Record "Bank Account")
+    var
+        CustLedgEntry: Record "Cust. Ledger Entry";
+        VendLedgEntry: Record "Vendor Ledger Entry";
+        EmployeeLedgEntry: Record "Employee Ledger Entry";
+        BankAccLedgEntry: Record "Bank Account Ledger Entry";
+        LedgerRemainingAmount: Decimal;
+        IsHandled: Boolean;
+        RemainingAmountHandled: Boolean;
+        LedgEntryInfoLoaded: Boolean;
+    begin
+        // Reads the applied ledger entry only once to populate both the informational fields and the remaining amount.
+        IsHandled := false;
+        OnBeforeLoadLedgEntryInfoAndRemainingAmount(Rec, BankAccount, IsHandled);
+        if IsHandled then begin
+            GetLedgEntryInfo();
+            exit;
+        end;
+
+        "Remaining Amount" := 0;
+        if "Applies-to Entry No." = 0 then
+            exit;
+
+        LedgEntryInfoLoaded := true;
+        case "Account Type" of
+            "Account Type"::Customer:
+                begin
+                    CustLedgEntry.SetLoadFields(
+                      Description, "Posting Date", "Due Date", "Document Type", "Document No.", "External Document No.", "Currency Code");
+                    if BankAccount.IsInLocalCurrency() then
+                        CustLedgEntry.SetAutoCalcFields("Remaining Amt. (LCY)")
+                    else
+                        CustLedgEntry.SetAutoCalcFields("Remaining Amount");
+                    CustLedgEntry.Get("Applies-to Entry No.");
+                    Description := CustLedgEntry.Description;
+                    "Posting Date" := CustLedgEntry."Posting Date";
+                    "Due Date" := CustLedgEntry."Due Date";
+                    "Document Type" := CustLedgEntry."Document Type";
+                    "Document No." := CustLedgEntry."Document No.";
+                    "External Document No." := CustLedgEntry."External Document No.";
+                    "Currency Code" := CustLedgEntry."Currency Code";
+                    if BankAccount.IsInLocalCurrency() then
+                        LedgerRemainingAmount := CustLedgEntry."Remaining Amt. (LCY)"
+                    else
+                        LedgerRemainingAmount := CustLedgEntry."Remaining Amount";
+                end;
+            "Account Type"::Vendor:
+                begin
+                    VendLedgEntry.SetLoadFields(
+                      Description, "Posting Date", "Due Date", "Document Type", "Document No.", "External Document No.", "Currency Code");
+                    if BankAccount.IsInLocalCurrency() then
+                        VendLedgEntry.SetAutoCalcFields("Remaining Amt. (LCY)")
+                    else
+                        VendLedgEntry.SetAutoCalcFields("Remaining Amount");
+                    VendLedgEntry.Get("Applies-to Entry No.");
+                    Description := VendLedgEntry.Description;
+                    "Posting Date" := VendLedgEntry."Posting Date";
+                    "Due Date" := VendLedgEntry."Due Date";
+                    "Document Type" := VendLedgEntry."Document Type";
+                    "Document No." := VendLedgEntry."Document No.";
+                    "External Document No." := VendLedgEntry."External Document No.";
+                    "Currency Code" := VendLedgEntry."Currency Code";
+                    if BankAccount.IsInLocalCurrency() then
+                        LedgerRemainingAmount := VendLedgEntry."Remaining Amt. (LCY)"
+                    else
+                        LedgerRemainingAmount := VendLedgEntry."Remaining Amount";
+                end;
+            "Account Type"::Employee:
+                begin
+                    EmployeeLedgEntry.SetLoadFields(
+                      Description, "Posting Date", "Document Type", "Document No.", "Currency Code");
+                    if BankAccount.IsInLocalCurrency() then
+                        EmployeeLedgEntry.SetAutoCalcFields("Remaining Amt. (LCY)")
+                    else
+                        EmployeeLedgEntry.SetAutoCalcFields("Remaining Amount");
+                    EmployeeLedgEntry.Get("Applies-to Entry No.");
+                    Description := EmployeeLedgEntry.Description;
+                    "Posting Date" := EmployeeLedgEntry."Posting Date";
+                    "Document Type" := EmployeeLedgEntry."Document Type";
+                    "Document No." := EmployeeLedgEntry."Document No.";
+                    "Currency Code" := EmployeeLedgEntry."Currency Code";
+                    if BankAccount.IsInLocalCurrency() then
+                        LedgerRemainingAmount := EmployeeLedgEntry."Remaining Amt. (LCY)"
+                    else
+                        LedgerRemainingAmount := EmployeeLedgEntry."Remaining Amount";
+                end;
+            "Account Type"::"Bank Account":
+                begin
+                    BankAccLedgEntry.SetLoadFields(
+                      Description, "Posting Date", "Document Type", "Document No.", "External Document No.", "Currency Code", "Remaining Amount");
+                    BankAccLedgEntry.Get("Applies-to Entry No.");
+                    Description := BankAccLedgEntry.Description;
+                    "Posting Date" := BankAccLedgEntry."Posting Date";
+                    "Due Date" := 0D;
+                    "Document Type" := BankAccLedgEntry."Document Type";
+                    "Document No." := BankAccLedgEntry."Document No.";
+                    "External Document No." := BankAccLedgEntry."External Document No.";
+                    "Currency Code" := BankAccLedgEntry."Currency Code";
+                    LedgerRemainingAmount := BankAccLedgEntry."Remaining Amount";
+                end;
+            else begin
+                GetLedgEntryInfo();
+                LedgEntryInfoLoaded := false;
+            end;
+        end;
+
+        // Re-fire the legacy OnAfterGetLedgEntryInfo extension point for the fast path without a second ledger read.
+        if LedgEntryInfoLoaded then
+            RaiseOnAfterGetLedgEntryInfoEvent();
+
+        // Keep firing the legacy event so extensions that override the remaining amount still run when a proposal is created.
+        RemainingAmountHandled := false;
+        OnBeforeUpdateRemainingAmount(Rec, BankAccount, RemainingAmountHandled);
+        if not RemainingAmountHandled then
+            "Remaining Amount" := LedgerRemainingAmount;
+    end;
+
+    local procedure RaiseOnAfterGetLedgEntryInfoEvent()
+    var
+        TempAppliedPmtEntry: Record "Applied Payment Entry" temporary;
+    begin
+        // Round-trips already-loaded fields through a temp Applied Payment Entry so existing OnAfterGetLedgEntryInfo subscribers still run.
+        TempAppliedPmtEntry.TransferFields(Rec);
+        TempAppliedPmtEntry.RunOnAfterGetLedgEntryInfo();
+        TransferFields(TempAppliedPmtEntry);
+    end;
+
     procedure TransferFromBankAccReconLine(BankAccReconLine: Record "Bank Acc. Reconciliation Line")
     begin
         "Statement Type" := BankAccReconLine."Statement Type";
@@ -392,12 +651,12 @@ table 1293 "Payment Application Proposal"
         else
             "Applies-to Entry No." := TempBankStmtMatchingBuffer."Entry No.";
 
-        GetLedgEntryInfo();
+        LoadLedgEntryInfoAndRemainingAmount(BankAccount);
         Quality := TempBankStmtMatchingBuffer.Quality;
         "Match Confidence" :=
             Enum::"Bank Rec. Match Confidence".FromInteger(BankPmtApplRule.GetMatchConfidence(TempBankStmtMatchingBuffer.Quality));
 
-        UpdateDefaultCalculatedFields(BankAccount, Rec."Applies-to Entry No.");
+        UpdateDefaultCalculatedFields(BankAccount, Rec."Applies-to Entry No.", true);
 
         "Stmt To Rem. Amount Difference" := Abs(BankAccReconciliationLine."Statement Amount" - "Remaining Amount");
         "Applied Amt. Incl. Discount" := "Applied Amount" - "Applied Pmt. Discount";
@@ -407,8 +666,14 @@ table 1293 "Payment Application Proposal"
 
     procedure UpdateDefaultCalculatedFields(var BankAccount: Record "Bank Account"; AppliesToEntryNo: Integer)
     begin
+        UpdateDefaultCalculatedFields(BankAccount, AppliesToEntryNo, false);
+    end;
+
+    procedure UpdateDefaultCalculatedFields(var BankAccount: Record "Bank Account"; AppliesToEntryNo: Integer; SkipRemainingAmountUpdate: Boolean)
+    begin
         UpdatePaymentDiscInfo();
-        UpdateRemainingAmount(BankAccount);
+        if not SkipRemainingAmountUpdate then
+            UpdateRemainingAmount(BankAccount);
         UpdateRemainingAmountExclDiscount();
 
         if AppliesToEntryNo > 0 then
@@ -808,6 +1073,12 @@ table 1293 "Payment Application Proposal"
     var
         CheckLedgerEntry: Record "Check Ledger Entry";
     begin
+        // Type only distinguishes bank account entries; the check-ledger lookup is skipped for other account types.
+        if "Account Type" <> "Account Type"::"Bank Account" then begin
+            Type := Type::"Bank Account Ledger Entry";
+            exit;
+        end;
+
         CheckLedgerEntry.SetRange("Bank Account Ledger Entry No.", EntryNo);
         if CheckLedgerEntry.FindFirst() then
             Type := Type::"Check Ledger Entry"
@@ -853,6 +1124,11 @@ table 1293 "Payment Application Proposal"
 
     [IntegrationEvent(false, false)]
     local procedure OnBeforeUpdateRemainingAmount(var PaymentApplicationProposal: Record "Payment Application Proposal"; BankAccount: Record "Bank Account"; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeLoadLedgEntryInfoAndRemainingAmount(var PaymentApplicationProposal: Record "Payment Application Proposal"; BankAccount: Record "Bank Account"; var IsHandled: Boolean)
     begin
     end;
 

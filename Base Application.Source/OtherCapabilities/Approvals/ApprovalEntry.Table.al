@@ -4,6 +4,7 @@
 // ------------------------------------------------------------------------------------------------
 namespace System.Automation;
 
+using Microsoft.CRM.Team;
 using Microsoft.Finance.Currency;
 using Microsoft.Purchases.Document;
 using Microsoft.Purchases.Vendor;
@@ -107,6 +108,7 @@ table 454 "Approval Entry"
         field(16; "Amount (LCY)"; Decimal)
         {
             AutoFormatType = 1;
+            AutoFormatExpression = '';
             Caption = 'Amount (LCY)';
         }
         field(17; "Currency Code"; Code[10])
@@ -126,6 +128,7 @@ table 454 "Approval Entry"
         {
             Caption = 'Available Credit Limit (LCY)';
             AutoFormatType = 1;
+            AutoFormatExpression = '';
         }
         field(21; "Pending Approvals"; Integer)
         {
@@ -174,6 +177,24 @@ table 454 "Approval Entry"
             CalcFormula = exist("Workflow - Record Change" where("Workflow Step Instance ID" = field("Workflow Step Instance ID"),
                                                                   "Record ID" = field("Record ID to Approve")));
             Caption = 'Related to Change';
+            FieldClass = FlowField;
+        }
+        field(32; "Approver Full Name"; Text[80])
+        {
+            Caption = 'Approver Full Name';
+            CalcFormula = lookup(User."Full Name" where("User Name" = field("Approver ID")));
+            FieldClass = FlowField;
+        }
+        field(33; "Sender Full Name"; Text[80])
+        {
+            Caption = 'Sender Full Name';
+            CalcFormula = lookup(User."Full Name" where("User Name" = field("Sender ID")));
+            FieldClass = FlowField;
+        }
+        field(34; "Salespers./Purch. Name"; Text[80])
+        {
+            Caption = 'Salespers./Purch. Full Name';
+            CalcFormula = lookup("Salesperson/Purchaser".Name where("Code" = field("Salespers./Purch. Code")));
             FieldClass = FlowField;
         }
     }

@@ -1,11 +1,11 @@
 namespace System.Integration.PowerBI;
 
 using System.Environment;
+using System.Environment.Configuration;
+using System.Globalization;
+using System.Integration;
 using System.Telemetry;
 using System.Utilities;
-using System.Environment.Configuration;
-using System.Integration;
-using System.Globalization;
 
 page 6325 "Power BI Embedded Report Part"
 {
@@ -136,37 +136,6 @@ page 6325 "Power BI Embedded Report Part"
                     end;
                 }
             }
-#if not CLEAN25
-            group(ErrorGroup)
-            {
-                ShowCaption = false;
-                Visible = false;
-                ObsoleteReason = 'Error messages are now shown as page notifications.';
-                ObsoleteState = Pending;
-                ObsoleteTag = '25.0';
-                label(Spacer)
-                {
-                    ApplicationArea = All;
-                    Caption = ' ';
-                    Visible = false;
-                    ObsoleteReason = 'Error messages are now shown as page notifications.';
-                    ObsoleteState = Pending;
-                    ObsoleteTag = '25.0';
-                }
-                field(ErrorMessageText; ErrorMessageText)
-                {
-                    ApplicationArea = All;
-                    MultiLine = true;
-                    Editable = false;
-                    ShowCaption = false;
-                    ToolTip = 'Specifies the error message from Power BI.';
-                    Visible = false;
-                    ObsoleteReason = 'Error messages are now shown as page notifications.';
-                    ObsoleteState = Pending;
-                    ObsoleteTag = '25.0';
-                }
-            }
-#endif
             group(NoReportGroup)
             {
                 ShowCaption = false;
@@ -363,7 +332,7 @@ page 6325 "Power BI Embedded Report Part"
                 Caption = 'Upload Report';
                 ToolTip = 'Uploads a report from a PBIX file.';
                 Image = Add;
-                Visible = IsSaaSUser;
+                Visible = CanSynchronizeReports;
                 Enabled = (PageState = PageState::ElementVisible) or (PageState = PageState::NoElementSelected) or (PageState = PageState::NoElementSelectedButDeploying) or (PageState = PageState::ShouldDeploy);
 
                 trigger OnAction()
@@ -442,11 +411,9 @@ page 6325 "Power BI Embedded Report Part"
     }
 
     trigger OnInit()
-    var
-        EnvironmentInformation: Codeunit "Environment Information";
     begin
         IsPBIAdmin := PowerBiServiceMgt.IsUserAdminForPowerBI(UserSecurityId());
-        IsSaaSUser := EnvironmentInformation.IsSaaSInfrastructure(); // SaaS but not Docker
+        CanSynchronizeReports := PowerBIReportSynchronizer.CanSynchronizeReports();
     end;
 
     trigger OnOpenPage()
@@ -492,6 +459,7 @@ page 6325 "Power BI Embedded Report Part"
     var
         PowerBIFilter: Record "Power BI Filter";
         MediaResources: Record "Media Resources";
+        PowerBIReportSynchronizer: Codeunit "Power BI Report Synchronizer";
         PowerBiServiceMgt: Codeunit "Power BI Service Mgt.";
         PowerBiFilterHelper: Codeunit "Power BI Filter Helper";
         FeatureTelemetry: Codeunit "Feature Telemetry";
@@ -511,10 +479,7 @@ page 6325 "Power BI Embedded Report Part"
         AvailableReportLevelFilters: JsonArray;
         PageContext: Text[30];
         AddInReady: Boolean;
-#if not CLEAN25
-        ErrorMessageText: Text;
-#endif
-        IsSaaSUser: Boolean;
+        CanSynchronizeReports: Boolean;
         IsPBIAdmin: Boolean;
         IsPartVisible: Boolean;
         LockedToFirstElement: Boolean;
@@ -714,17 +679,6 @@ page 6325 "Power BI Embedded Report Part"
 
     #region ExternalInterface
 
-#if not CLEAN25
-    [Obsolete('Setting the page ratio is no longer supported. The add-in will instead be sized based on the available space in the client.', '25.0')]
-    procedure InitPageRatio(ReportFrameRatioInput: Text)
-    begin
-    end;
-
-    [Obsolete('Setting full page mode is no longer supported. The add-in will instead be sized based on the available space in the client.', '25.0')]
-    procedure SetFullPageMode(NewFullPageMode: Boolean)
-    begin
-    end;
-#endif
 
     procedure SetPageContext(InputContext: Text)
     begin

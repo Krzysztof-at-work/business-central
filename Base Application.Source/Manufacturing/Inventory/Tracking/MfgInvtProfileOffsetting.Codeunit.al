@@ -5,13 +5,13 @@
 namespace Microsoft.Inventory.Tracking;
 
 using Microsoft.Inventory.Item;
-using Microsoft.Inventory.Requisition;
-using Microsoft.Manufacturing.Document;
 using Microsoft.Inventory.Location;
-using Microsoft.Inventory.Setup;
-using Microsoft.Manufacturing.Setup;
 using Microsoft.Inventory.Planning;
+using Microsoft.Inventory.Requisition;
+using Microsoft.Inventory.Setup;
+using Microsoft.Manufacturing.Document;
 using Microsoft.Manufacturing.ProductionBOM;
+using Microsoft.Manufacturing.Setup;
 
 codeunit 99000869 "Mfg. Invt. Profile Offsetting"
 {
@@ -181,6 +181,52 @@ codeunit 99000869 "Mfg. Invt. Profile Offsetting"
         RequisitionLine.SetRange("Operation No.", '');
 
         exit(not RequisitionLine.IsEmpty());
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Inventory Profile Offsetting", 'OnAfterShouldDeleteReservEntry', '', true, false)]
+    local procedure OnAfterShouldDeleteReservEntry(ReservationEntry: Record "Reservation Entry"; ToDate: Date; var DeleteCondition: Boolean; TemplateName: Code[10]; WorksheetName: Code[10])
+    var
+        SupplyReservationEntry: Record "Reservation Entry";
+    begin
+        if DeleteCondition then
+            exit;
+        if not (ReservationEntry."Reservation Status" in
+                [ReservationEntry."Reservation Status"::Reservation, ReservationEntry."Reservation Status"::Tracking]) then
+            exit;
+        if ReservationEntry.Binding <> ReservationEntry.Binding::"Order-to-Order" then
+            exit;
+        if ReservationEntry."Shipment Date" > ToDate then
+            exit;
+        if ReservationEntry.Positive then
+            exit;
+        if not ProdComponentItemOnMultipleLines(ReservationEntry) then
+            exit;
+
+        if SupplyReservationEntry.Get(ReservationEntry."Entry No.", true) then
+            SupplyReservationEntry.Delete();
+        DeleteCondition := true;
+    end;
+
+    local procedure ProdComponentItemOnMultipleLines(DemandReservationEntry: Record "Reservation Entry"): Boolean
+    var
+        ProdOrderComponent: Record "Prod. Order Component";
+        SameItemProdOrderComponent: Record "Prod. Order Component";
+    begin
+        if DemandReservationEntry."Source Type" <> Database::"Prod. Order Component" then
+            exit(false);
+
+        ProdOrderComponent.SetLoadFields(Status, "Prod. Order No.", "Item No.", "Line No.");
+        if not ProdOrderComponent.Get(
+             DemandReservationEntry."Source Subtype", DemandReservationEntry."Source ID",
+             DemandReservationEntry."Source Prod. Order Line", DemandReservationEntry."Source Ref. No.")
+        then
+            exit(false);
+
+        SameItemProdOrderComponent.SetRange(Status, ProdOrderComponent.Status);
+        SameItemProdOrderComponent.SetRange("Prod. Order No.", ProdOrderComponent."Prod. Order No.");
+        SameItemProdOrderComponent.SetRange("Item No.", ProdOrderComponent."Item No.");
+        SameItemProdOrderComponent.SetFilter("Line No.", '<>%1', ProdOrderComponent."Line No.");
+        exit(not SameItemProdOrderComponent.IsEmpty());
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Inventory Profile Offsetting", 'OnMaintainPlanningLineOnAfterValidateFieldsForNewReqLine', '', true, false)]

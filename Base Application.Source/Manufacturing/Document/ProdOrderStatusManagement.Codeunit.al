@@ -8,6 +8,7 @@ using Microsoft.Finance.Currency;
 using Microsoft.Finance.Dimension;
 using Microsoft.Finance.GeneralLedger.Setup;
 using Microsoft.Foundation.AuditCodes;
+using Microsoft.Foundation.Enums;
 using Microsoft.Foundation.UOM;
 using Microsoft.Inventory.Costing;
 using Microsoft.Inventory.Item;
@@ -19,7 +20,6 @@ using Microsoft.Inventory.Setup;
 using Microsoft.Inventory.Tracking;
 using Microsoft.Manufacturing.Capacity;
 using Microsoft.Manufacturing.Setup;
-using Microsoft.Foundation.Enums;
 using Microsoft.Purchases.Document;
 using Microsoft.Utilities;
 using Microsoft.Warehouse.Activity;
@@ -32,6 +32,7 @@ using System.Utilities;
 codeunit 5407 "Prod. Order Status Management"
 {
     Permissions = TableData "Source Code Setup" = r,
+                  TableData Item = m,
                   TableData "Production Order" = rimd,
                   TableData "Prod. Order Capacity Need" = rid,
                   TableData "Inventory Adjmt. Entry (Order)" = rim;
@@ -107,12 +108,14 @@ codeunit 5407 "Prod. Order Status Management"
         ReopenedProductionOrderLbl: Label 'The production order is reopened and moved to the %1 Production Order with status Released.', Comment = '%1 = Production Order No.';
         ProductionOrderHasAlreadyBeenReopenedErr: Label 'This production order has already been reopened before. This can only be done once.';
         ProductionOrderCannotBeReopenedErr: Label 'This production order cannot be reopened because one or more production order lines have no posted output.';
+        ReopenProdOrderBeforeEarliestAllowedValDateErr: Label 'Production order %1 cannot be reopened because it has value entries with a Valuation Date before the Earliest Allowed Valuation Date %2 in Inventory Setup.', Comment = '%1 = Production Order No., %2 = Earliest Allowed Valuation Date';
         FinishOrderWithOutputWarningQst: Label '%1 %2 has not been finished:\\  * Some output is still missing.\\ Do you still want to finish the order?', Comment = '%1 - Production Order Table Name ; %2 - Production Order No.';
         FinishOrderWithConsumptionWarningQst: Label '%1 %2 has not been finished:\\  * Some consumption is still missing.\\ Do you still want to finish the order?', Comment = '%1 - Production Order Table Name ; %2 - Production Order No.';
         FinishOrderWithOutputAndConsumptionWarningQst: Label '%1 %2 has not been finished:\\  * Some output is still missing.\  * Some consumption is still missing.\\ Do you still want to finish the order?', Comment = '%1 - Production Order Table Name ; %2 - Production Order No.';
 
     procedure ChangeProdOrderStatus(ProdOrder: Record "Production Order"; NewStatus: Enum "Production Order Status"; NewPostingDate: Date; NewUpdateUnitCost: Boolean)
     var
+        xProductionOrder: Record "Production Order";
         SuppressCommit: Boolean;
         IsHandled: Boolean;
     begin
@@ -121,6 +124,11 @@ codeunit 5407 "Prod. Order Status Management"
         OnBeforeChangeStatusOnProdOrder(ProdOrder, NewStatus.AsInteger(), IsHandled, NewPostingDate, NewUpdateUnitCost);
         if IsHandled then
             exit;
+
+        if (ProdOrder.Status = ProdOrder.Status::Finished) and (NewStatus <> ProdOrder.Status::Finished) then
+            CheckReopenBeforeEarliestAllowedValDate(ProdOrder);
+
+        xProductionOrder := ProdOrder;
         if (NewStatus = Enum::"Production Order Status"::Released) and (ProdOrder."Source Type" = ProdOrder."Source Type"::Item) then
             Item.CheckItemAndVariantForProdBlocked(ProdOrder."Source No.", '', Enum::"Item Production Blocked"::Output);
         if NewStatus = NewStatus::Finished then begin
@@ -147,7 +155,7 @@ codeunit 5407 "Prod. Order Status Management"
             WhseProdRelease.Release(ProdOrder);
         end;
         SuppressCommit := false;
-        OnAfterChangeStatusOnProdOrder(ProdOrder, ToProdOrder, NewStatus, NewPostingDate, NewUpdateUnitCost, SuppressCommit);
+        OnAfterChangeStatusOnProdOrder(ProdOrder, ToProdOrder, NewStatus, NewPostingDate, NewUpdateUnitCost, SuppressCommit, xProductionOrder);
 
         if not SuppressCommit then
             Commit();
@@ -207,7 +215,13 @@ codeunit 5407 "Prod. Order Status Management"
     local procedure ShowReleasedProdOrderDocument(var ProdOrder: Record "Production Order")
     var
         NewProductionOrder: Record "Production Order";
+        IsHandled: Boolean;
     begin
+        IsHandled := false;
+        OnBeforeShowReleasedProdOrderDocument(ProdOrder, IsHandled);
+        if IsHandled then
+            exit;
+
         if not Confirm(StrSubstNo(OpenReleasedProdOrderQst, ProdOrder."No.")) then
             exit;
 
@@ -247,6 +261,8 @@ codeunit 5407 "Prod. Order Status Management"
         ProductionOrder.Status := ProductionOrder.Status::Released;
         ProductionOrder."Reopened" := true;
         ProductionOrder.Insert();
+
+        ToProdOrder := ProductionOrder;
 
         OnAfterTransferReopenProdOrder(ProductionOrder, FromProdOrder);
     end;
@@ -455,6 +471,8 @@ codeunit 5407 "Prod. Order Status Management"
         InventoryPostingToGL: Codeunit "Inventory Posting To G/L";
     begin
         InventoryPostingToGL.SetRunOnlyCheck(true, false, false);
+        if NewPostingDate <> 0D then
+            ValueEntry."Posting Date" := NewPostingDate;
         if not InventoryPostingToGL.AdjustPostedWIPForProduction(ValueEntry) then
             exit;
 
@@ -1034,17 +1052,20 @@ codeunit 5407 "Prod. Order Status Management"
         OnFlushProdOrderOnAfterProdOrderCompSetFilters(ProdOrder, ProdOrderComp);
         if ProdOrderComp.FindSet() then begin
             NoOfRecords := ProdOrderComp.Count;
-            Window.Open(
-              Text002 +
-              Text003);
+            if GuiAllowed() then
+                Window.Open(
+                    Text002 +
+                    Text003);
             LineCount := 0;
 
             repeat
                 LineCount := LineCount + 1;
                 Item.Get(ProdOrderComp."Item No.");
                 Item.TestField("Rounding Precision");
-                Window.Update(1, LineCount);
-                Window.Update(2, Round(LineCount / NoOfRecords * 10000, 1));
+                if GuiAllowed() then begin
+                    Window.Update(1, LineCount);
+                    Window.Update(2, Round(LineCount / NoOfRecords * 10000, 1));
+                end;
                 ProdOrderLine.Get(ProdOrderComp.Status, ProdOrder."No.", ProdOrderComp."Prod. Order Line No.");
                 if NewStatus = NewStatus::Released then
                     QtyToPost := ProdOrderComp.GetNeededQty(1, false)
@@ -1074,7 +1095,8 @@ codeunit 5407 "Prod. Order Status Management"
                     OnFlushProdOrderOnAfterPostFlushItemJnlLine(ItemJnlLine);
                 end;
             until ProdOrderComp.Next() = 0;
-            Window.Close();
+            if GuiAllowed() then
+                Window.Close();
         end;
     end;
 
@@ -1256,7 +1278,7 @@ codeunit 5407 "Prod. Order Status Management"
         OnAfterInitItemJnlLineFromProdOrderComp(ItemJnlLine, ProdOrder, ProdOrderLine, ProdOrderComp);
     end;
 
-    local procedure CheckBeforeFinishProdOrder(ProdOrder: Record "Production Order")
+    procedure CheckBeforeFinishProdOrder(ProdOrder: Record "Production Order")
     var
         ProdOrderLine: Record "Prod. Order Line";
         ProdOrderComp: Record "Prod. Order Component";
@@ -1383,6 +1405,22 @@ codeunit 5407 "Prod. Order Status Management"
         NewStatus := Status;
         NewPostingDate := PostingDate;
         NewUpdateUnitCost := UpdateUnitCost;
+    end;
+
+    local procedure CheckReopenBeforeEarliestAllowedValDate(ProdOrder: Record "Production Order")
+    var
+        ValueEntry: Record "Value Entry";
+    begin
+        InventorySetup.GetRecordOnce();
+        if InventorySetup."Earliest Allowed Val. Date" = 0D then
+            exit;
+
+        ValueEntry.SetCurrentKey("Order Type", "Order No.", "Order Line No.");
+        ValueEntry.SetRange("Order Type", ValueEntry."Order Type"::Production);
+        ValueEntry.SetRange("Order No.", ProdOrder."No.");
+        ValueEntry.SetFilter("Valuation Date", '<%1', InventorySetup."Earliest Allowed Val. Date");
+        if not ValueEntry.IsEmpty() then
+            Error(ReopenProdOrderBeforeEarliestAllowedValDateErr, ProdOrder."No.", InventorySetup."Earliest Allowed Val. Date");
     end;
 
     local procedure ErrorIfUnableToClearWIP(ProdOrder: Record "Production Order")
@@ -1691,7 +1729,7 @@ codeunit 5407 "Prod. Order Status Management"
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnAfterChangeStatusOnProdOrder(var ProdOrder: Record "Production Order"; var ToProdOrder: Record "Production Order"; NewStatus: Enum "Production Order Status"; NewPostingDate: Date; NewUpdateUnitCost: Boolean; var SuppressCommit: Boolean)
+    local procedure OnAfterChangeStatusOnProdOrder(var ProdOrder: Record "Production Order"; var ToProdOrder: Record "Production Order"; NewStatus: Enum "Production Order Status"; NewPostingDate: Date; NewUpdateUnitCost: Boolean; var SuppressCommit: Boolean; xProductionOrder: Record "Production Order")
     begin
     end;
 
@@ -2004,5 +2042,9 @@ codeunit 5407 "Prod. Order Status Management"
     local procedure OnTransferReopenProdOrderRtngLineOnAfterInsert(FromProdOrderRoutingLine: Record "Prod. Order Routing Line"; ToProdOrderRoutingLine: Record "Prod. Order Routing Line"; FromProductionOrder: Record "Production Order")
     begin
     end;
-}
 
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeShowReleasedProdOrderDocument(var ProductionOrder: Record "Production Order"; var IsHandled: Boolean)
+    begin
+    end;
+}

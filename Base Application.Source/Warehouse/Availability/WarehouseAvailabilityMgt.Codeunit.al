@@ -5,6 +5,7 @@
 namespace Microsoft.Warehouse.Availability;
 
 using Microsoft.Assembly.Document;
+using Microsoft.Inventory.Availability;
 using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Ledger;
 using Microsoft.Inventory.Location;
@@ -12,7 +13,6 @@ using Microsoft.Inventory.Tracking;
 using Microsoft.Projects.Project.Job;
 using Microsoft.Projects.Project.Planning;
 using Microsoft.Warehouse.Activity;
-using Microsoft.Inventory.Availability;
 using Microsoft.Warehouse.Document;
 using Microsoft.Warehouse.History;
 using Microsoft.Warehouse.Ledger;
@@ -47,8 +47,11 @@ codeunit 7314 "Warehouse Availability Mgt."
     begin
         // Returns the reserved quantity against ILE for the demand line
         case SourceType of
-            Database::Job:
+            Database::Job, Database::"Job Planning Line":
                 begin
+                    // Both old (Database::Job) and new (Database::"Job Planning Line") formats 
+                    // should look up reservations with Job Planning Line source type
+                    // Reservation entries always have Source Subtype = Order (2), regardless of caller's SourceSubType
                     ReservEntry.SetSourceFilter(
                       Database::"Job Planning Line", "Job Planning Line Status"::Order.AsInteger(), SourceNo, SourceLineNo, true);
                     ReservEntry.SetSourceFilter('', 0);
@@ -147,6 +150,7 @@ codeunit 7314 "Warehouse Availability Mgt."
                 QtyPicked :=
                   CalcQtyRegisteredPick(
                     LocationCode, TempReservEntryBuffer."Source Type", TempReservEntryBuffer."Source Subtype", TempReservEntryBuffer."Source ID", TempReservEntryBuffer."Source Ref. No.", TempReservEntryBuffer."Source Prod. Order Line");
+                ValidateQtyPickedInShipmentBin(QtyPicked, LocationCode, ItemNo, VariantCode, TrackingSpecification, TempReservEntryBuffer."Source Type");
                 QtyToPick :=
                   CalcQtyOutstandingPick(
                     TempReservEntryBuffer."Source Type", TempReservEntryBuffer."Source Subtype", TempReservEntryBuffer."Source ID", TempReservEntryBuffer."Source Ref. No.", TempReservEntryBuffer."Source Prod. Order Line", WarehouseActivityLine);
@@ -877,9 +881,7 @@ codeunit 7314 "Warehouse Availability Mgt."
         end else
             AvailQtyBase := CalcInvtAvailQty(Item, Location, WhseWorksheetLine."Variant Code", TempWhseActivLine);
 
-        if Location."Require Pick" or
-           (Location."Prod. Consump. Whse. Handling" = Location."Prod. Consump. Whse. Handling"::"Warehouse Pick (mandatory)")
-        then
+        if Location."Require Pick" or Location.IsProdConsumpWhseHandlingTypeWarehousePick() then
             QtyReservedOnPickShip := CalcReservQtyOnPicksShips(WhseWorksheetLine."Location Code", WhseWorksheetLine."Item No.", WhseWorksheetLine."Variant Code", TempWhseActivLine);
 
         QtyReservedForCurrLine :=
@@ -902,8 +904,40 @@ codeunit 7314 "Warehouse Availability Mgt."
         exit(WarehouseShipmentLine."Qty. Picked (Base)" - WarehouseShipmentLine."Qty. Shipped (Base)")
     end;
 
+    local procedure ValidateQtyPickedInShipmentBin(var QtyPicked: Decimal; LocationCode: Code[10]; ItemNo: Code[20]; VariantCode: Code[10]; TrackingSpecification: Record "Tracking Specification"; SourceType: Integer)
+    var
+        Location: Record Location;
+        ItemTrackingSetup: Record "Item Tracking Setup";
+        QtyOnShipmentBin: Decimal;
+        IsHandled: Boolean;
+    begin
+        IsHandled := false;
+        OnBeforeValidateQtyPickedInShipmentBin(QtyPicked, LocationCode, ItemNo, VariantCode, TrackingSpecification, SourceType, IsHandled);
+        if IsHandled then
+            exit;
+
+        if not (Location.RequireShipment(LocationCode) and (QtyPicked <> 0)) then
+            exit;
+
+        if SourceType <> 37 then // Database::Sales Line
+            exit;
+
+        ItemTrackingSetup.CopyTrackingFromTrackingSpec(TrackingSpecification);
+        if not (Location.Get(LocationCode) and Location."Bin Mandatory" and (Location."Shipment Bin Code" <> '')) then
+            exit;
+
+        QtyOnShipmentBin := CalcQtyOnBin(LocationCode, Location."Shipment Bin Code", ItemNo, VariantCode, ItemTrackingSetup);
+        if QtyOnShipmentBin = 0 then
+            QtyPicked := 0
+    end;
+
     [IntegrationEvent(false, false)]
     local procedure OnAfterCalcQtyPicked(var Item: Record Item; var QtyPicked: Decimal; Location: Record Location)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeValidateQtyPickedInShipmentBin(var QtyPicked: Decimal; LocationCode: Code[10]; ItemNo: Code[20]; VariantCode: Code[10]; TrackingSpecification: Record "Tracking Specification"; SourceType: Integer; var IsHandled: Boolean)
     begin
     end;
 
@@ -994,9 +1028,6 @@ codeunit 7314 "Warehouse Availability Mgt."
         ItemAvailabilityFormsMgt.FilterItem(Item, WhseRcptLine."Location Code", WhseRcptLine."Variant Code", WhseRcptLine."Due Date");
 
         OnBeforeShowItemAvailFromWhseRcptLine(Item, WhseRcptLine, AvailabilityType);
-#if not CLEAN25
-        ItemAvailabilityFormsMgt.RunOnBeforeShowItemAvailFromWhseRcptLine(Item, WhseRcptLine, AvailabilityType);
-#endif
         case AvailabilityType of
             AvailabilityType::Period:
                 ItemAvailabilityFormsMgt.ShowItemAvailabilityByPeriod(Item, WhseRcptLine.FieldCaption(WhseRcptLine."Due Date"), WhseRcptLine."Due Date", NewDate);
@@ -1033,9 +1064,6 @@ codeunit 7314 "Warehouse Availability Mgt."
         ItemAvailabilityFormsMgt.FilterItem(Item, WhseActivLine."Location Code", WhseActivLine."Variant Code", WhseActivLine."Due Date");
 
         OnBeforeShowItemAvailabilityFromWhseActivLine(Item, WhseActivLine, AvailabilityType);
-#if not CLEAN25
-        ItemAvailabilityFormsMgt.RunOnBeforeShowItemAvailFromWhseActivLine(Item, WhseActivLine, AvailabilityType);
-#endif
         case AvailabilityType of
             AvailabilityType::Period:
                 ItemAvailabilityFormsMgt.ShowItemAvailabilityByPeriod(Item, WhseActivLine.FieldCaption(WhseActivLine."Due Date"), WhseActivLine."Due Date", NewDate);
@@ -1105,4 +1133,3 @@ codeunit 7314 "Warehouse Availability Mgt."
     begin
     end;
 }
-

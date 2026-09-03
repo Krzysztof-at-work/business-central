@@ -1,10 +1,11 @@
-// ------------------------------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
 namespace Microsoft.Manufacturing.Document;
 
 using Microsoft.Finance.Dimension;
+using Microsoft.Inventory.Ledger;
 
 page 5407 "Prod. Order Comp. Line List"
 {
@@ -27,44 +28,41 @@ page 5407 "Prod. Order Comp. Line List"
                 field(Status; Rec.Status)
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the status of the production order to which the component list belongs.';
                 }
                 field("Prod. Order No."; Rec."Prod. Order No.")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the number of the related production order.';
                 }
                 field("Prod. Order Line No."; Rec."Prod. Order Line No.")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the number of the production order line to which the component list belongs.';
                 }
                 field("Item No."; Rec."Item No.")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the number of the item that is a component in the production order component list.';
                 }
                 field("Variant Code"; Rec."Variant Code")
                 {
                     ApplicationArea = Planning;
-                    ToolTip = 'Specifies the variant of the item on the line.';
                     Visible = false;
                 }
                 field(Description; Rec.Description)
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies a description of the item on the line.';
+                }
+                field("Description 2"; Rec."Description 2")
+                {
+                    ApplicationArea = Manufacturing;
+                    Visible = false;
                 }
                 field("Shortcut Dimension 1 Code"; Rec."Shortcut Dimension 1 Code")
                 {
                     ApplicationArea = Dimensions;
-                    ToolTip = 'Specifies the code for Shortcut Dimension 1, which is one of two global dimension codes that you set up in the General Ledger Setup window.';
                     Visible = false;
                 }
                 field("Shortcut Dimension 2 Code"; Rec."Shortcut Dimension 2 Code")
                 {
                     ApplicationArea = Dimensions;
-                    ToolTip = 'Specifies the code for Shortcut Dimension 2, which is one of two global dimension codes that you set up in the General Ledger Setup window.';
                     Visible = false;
                 }
                 field("ShortcutDimCode[3]"; ShortcutDimCode[3])
@@ -124,64 +122,88 @@ page 5407 "Prod. Order Comp. Line List"
                 field("Location Code"; Rec."Location Code")
                 {
                     ApplicationArea = Location;
-                    ToolTip = 'Specifies the location where the component is stored. Copies the location code from the corresponding field on the production order line.';
                     Visible = true;
                 }
                 field("Quantity per"; Rec."Quantity per")
                 {
+                    AutoFormatType = 0;
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies how many units of the component are required to produce the parent item.';
                 }
                 field("Expected Quantity"; Rec."Expected Quantity")
                 {
+                    AutoFormatType = 0;
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the quantity of the component expected to be consumed during the production of the quantity on this line.';
                 }
                 field("Remaining Quantity"; Rec."Remaining Quantity")
                 {
+                    AutoFormatType = 0;
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the difference between the finished and planned quantities, or zero if the finished quantity is greater than the remaining quantity.';
+                }
+                field("Act. Consumption (Qty)"; ActConsumptionQtyValue)
+                {
+                    ApplicationArea = Manufacturing;
+                    AutoFormatType = 0;
+                    Caption = 'Consumed Quantity (Base)';
+                    ToolTip = 'Specifies the quantity of the component that has been posted as consumed by the production order.';
+                    DecimalPlaces = 0 : 5;
+
+                    trigger OnDrillDown()
+                    var
+                        ItemLedgerEntry: Record "Item Ledger Entry";
+                    begin
+                        if not (Rec.Status in [Rec.Status::Released, Rec.Status::Finished]) then
+                            exit;
+                        ItemLedgerEntry.SetCurrentKey("Order Type", "Order No.", "Order Line No.", "Entry Type", "Prod. Order Comp. Line No.");
+                        ItemLedgerEntry.SetRange("Order Type", ItemLedgerEntry."Order Type"::Production);
+                        ItemLedgerEntry.SetRange("Order No.", Rec."Prod. Order No.");
+                        ItemLedgerEntry.SetRange("Order Line No.", Rec."Prod. Order Line No.");
+                        ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::Consumption);
+                        ItemLedgerEntry.SetRange("Prod. Order Comp. Line No.", Rec."Line No.");
+                        Page.Run(0, ItemLedgerEntry);
+                    end;
                 }
                 field("Due Date"; Rec."Due Date")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the date when the produced item must be available. The date is copied from the header of the production order.';
                 }
                 field("Unit Cost"; Rec."Unit Cost")
                 {
+                    AutoFormatType = 2;
+                    AutoFormatExpression = '';
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the cost of one unit of the item or resource on the line.';
                     Visible = false;
                 }
                 field("Cost Amount"; Rec."Cost Amount")
                 {
+                    AutoFormatType = 1;
+                    AutoFormatExpression = '';
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the total cost on the line by multiplying the unit cost by the quantity.';
                     Visible = false;
                 }
                 field(Position; Rec.Position)
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the position of the component on the bill of material.';
                     Visible = false;
                 }
                 field("Position 2"; Rec."Position 2")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the components position in the BOM. It is copied from the production BOM when you calculate the production order.';
                     Visible = false;
                 }
                 field("Position 3"; Rec."Position 3")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the third reference number for the component position on a bill of material, such as the alternate position number of a component on a print card.';
                     Visible = false;
                 }
                 field("Lead-Time Offset"; Rec."Lead-Time Offset")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the lead-time offset for the component line. It is copied from the corresponding field in the production BOM when you calculate the production order.';
                     Visible = false;
+                }
+                field("Routing Link Code"; Rec."Routing Link Code")
+                {
+                    ApplicationArea = Manufacturing;
+                    ToolTip = 'Specifies the routing link code when you calculate the production order.';
                 }
             }
         }
@@ -228,6 +250,11 @@ page 5407 "Prod. Order Comp. Line List"
     trigger OnAfterGetRecord()
     begin
         Rec.ShowShortcutDimCode(ShortcutDimCode);
+        if Rec.Status in [Rec.Status::Released, Rec.Status::Finished] then begin
+            Rec.CalcFields("Act. Consumption (Qty)");
+            ActConsumptionQtyValue := Rec."Act. Consumption (Qty)";
+        end else
+            ActConsumptionQtyValue := 0;
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean)
@@ -237,5 +264,6 @@ page 5407 "Prod. Order Comp. Line List"
 
     protected var
         ShortcutDimCode: array[8] of Code[20];
+        ActConsumptionQtyValue: Decimal;
 }
 

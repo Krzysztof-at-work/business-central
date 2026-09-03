@@ -15,7 +15,7 @@ report 99000791 "Production Order Statistics"
     ApplicationArea = Manufacturing;
     Caption = 'Production Order Statistics';
     UsageCategory = ReportsAndAnalysis;
-    DefaultRenderingLayout = ProdOrderStatisticsWord;
+    DefaultRenderingLayout = ProdOrderStatisticsExcel;
 
     dataset
     {
@@ -184,6 +184,7 @@ report 99000791 "Production Order Statistics"
                 ProdOrderLine.SetRange(Status, Status);
                 ProdOrderLine.SetRange("Prod. Order No.", "No.");
                 ProdOrderLine.SetRange("Planning Level Code", 0);
+                OnAfterSetProdOrderLineFilters(ProdOrderLine, "Production Order");
                 if ProdOrderLine.FindSet() then
                     repeat
                         MfgCostCalcMgt.CalcShareOfTotalCapCost(ProdOrderLine, ShareOfTotalCapCost);
@@ -382,10 +383,7 @@ report 99000791 "Production Order Statistics"
         MfgCostCalcMgt: Codeunit "Mfg. Cost Calculation Mgt.";
         ProdOrderFilter: Text;
         ShareOfTotalCapCost: Decimal;
-        ExpCost: array[6] of Decimal;
-        ActCost: array[6] of Decimal;
         StdCost: array[6] of Decimal;
-        VarPct: array[6] of Decimal;
         ExpCostTotal: array[6] of Decimal;
         ActCostTotal: array[6] of Decimal;
         VarPctTotal: array[6] of Decimal;
@@ -403,6 +401,11 @@ report 99000791 "Production Order Statistics"
         ActualCaptionLbl: Label 'Actual';
         DeviationCaptionLbl: Label 'Deviation %';
         TotalCaptionLbl: Label 'Total';
+
+    protected var
+        ExpCost: array[6] of Decimal;
+        ActCost: array[6] of Decimal;
+        VarPct: array[6] of Decimal;
 
     local procedure CalcTotal(Operand: array[6] of Decimal; var Total: Decimal)
     var
@@ -444,6 +447,11 @@ report 99000791 "Production Order Statistics"
     begin
         for i := 1 to ArrayLen(VarPctTotal) do
             VarPctTotal[i] := CalcIndicatorPct(ExpCostTotal[i], ActCostTotal[i]);
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterSetProdOrderLineFilters(var ProdOrderLine: Record "Prod. Order Line"; ProductionOrder: Record "Production Order")
+    begin
     end;
 }
 

@@ -17,6 +17,15 @@ using Microsoft.Inventory.Setup;
 using Microsoft.Utilities;
 using System.Globalization;
 
+/// <summary>
+/// Year-end report that closes income statement accounts by transferring balances to retained earnings.
+/// Processes G/L entries, creates closing entries with configurable dimensions, and maintains audit trail.
+/// </summary>
+/// <remarks>
+/// Key features: Closes by business unit and dimensions, validates posting rules, supports test mode.
+/// Integration events available for customizing closing entry creation and dimension handling.
+/// Critical year-end process affecting all financial reporting and compliance requirements.
+/// </remarks>
 report 94 "Close Income Statement"
 {
     AdditionalSearchTerms = 'year closing statement,close accounting period statement,close fiscal year statement';
@@ -74,18 +83,17 @@ report 94 "Close Income Statement"
                             until TempSelectedDim.Next() = 0;
 
                         DimensionBufferID := DimBufMgt.GetDimensionId(TempDimBuf2);
-
                         TempEntryNoAmountBuffer.Reset();
                         if ClosePerBusUnit and FieldActive("Business Unit Code") then
                             TempEntryNoAmountBuffer."Business Unit Code" := "Business Unit Code"
                         else
                             TempEntryNoAmountBuffer."Business Unit Code" := '';
-                        TempEntryNoAmountBuffer."Entry No." := DimensionBufferID;
+                        TempEntryNoAmountBuffer."Source Currency Code" := "Source Currency Code";
+                        TempEntryNoAmountBuffer."Entry No." := GetEntryNo(DimensionBufferID, TempEntryNoAmountBuffer."Business Unit Code", "Source Currency Code");
                         if TempEntryNoAmountBuffer.Find() then begin
                             TempEntryNoAmountBuffer.Amount := TempEntryNoAmountBuffer.Amount + Amount;
                             TempEntryNoAmountBuffer.Amount2 := TempEntryNoAmountBuffer.Amount2 + "Additional-Currency Amount";
                             if "Source Currency Code" <> '' then begin
-                                TempEntryNoAmountBuffer."Source Currency Code" := "Source Currency Code";
                                 TempEntryNoAmountBuffer."Source Currency Amount" := TempEntryNoAmountBuffer."Source Currency Amount" + "Source Currency Amount";
                                 TempEntryNoAmountBuffer."Source Currency VAT Amount" := TempEntryNoAmountBuffer."Source Currency VAT Amount" + "Source Currency VAT Amount";
                             end;
@@ -134,12 +142,11 @@ report 94 "Close Income Statement"
                                 GenJnlLine.Validate(Amount, -TempEntryNoAmountBuffer.Amount);
                                 if not AddSourceCurrencyFields() then
                                     GenJnlLine."Source Currency Amount" := -TempEntryNoAmountBuffer.Amount2;
-                                if "Source Currency Code" <> '' then
-                                    GenJnlLine."Source Currency Code" := TempEntryNoAmountBuffer."Source Currency Code";
                                 GenJnlLine."Business Unit Code" := TempEntryNoAmountBuffer."Business Unit Code";
 
                                 TempDimBuf2.DeleteAll();
-                                DimBufMgt.RetrieveDimensions(TempEntryNoAmountBuffer."Entry No.", TempDimBuf2);
+                                DimBufMgt.RetrieveDimensions(
+                                    GetDimensionBufferID(TempEntryNoAmountBuffer."Business Unit Code", TempEntryNoAmountBuffer."Entry No."), TempDimBuf2);
                                 NewDimensionID := DimMgt.CreateDimSetIDFromDimBuf(TempDimBuf2);
                                 GenJnlLine."Dimension Set ID" := NewDimensionID;
                                 DimMgt.UpdateGlobalDimFromDimSetID(NewDimensionID, GlobalDimVal1, GlobalDimVal2);
@@ -190,6 +197,7 @@ report 94 "Close Income Statement"
 
                     TempEntryNoAmountBuffer.DeleteAll();
                     EntryCount := 0;
+                    ResetEntryNoGrouping();
 
                     LastWindowUpdateDateTime := CurrentDateTime;
                 end;
@@ -222,8 +230,6 @@ report 94 "Close Income Statement"
                       GenJnlLine."Additional-Currency Posting"::None;
                     GenJnlLine.Validate(Amount, TotalAmount);
                     GenJnlLine."Source Currency Amount" := TotalAmountAddCurr;
-                    if "G/L Entry"."Source Currency Code" <> '' then
-                        GenJnlLine."Source Currency Code" := "G/L Entry"."Source Currency Code";
                     OnGLAccountOnOnPostDataItemOnAfterGenJnlLinePopulateFields(GenJnlLine, RetainedEarningsGLAcc);
                     HandleGenJnlLine();
                     Window.Update(1, GenJnlLine."Account No.");
@@ -522,6 +528,9 @@ report 94 "Close Income Statement"
         ColumnDim: Text[250];
         NoOfAccounts: Integer;
         ThisAccountNo: Integer;
+        EntryNo: Integer;
+        GroupEntryNos: Dictionary of [Text, Integer];
+        EntryNoDimensionIds: Dictionary of [Text, Integer];
 #pragma warning disable AA0074
         Text000: Label 'Enter the ending date for the fiscal year.';
         Text001: Label 'Enter a Document No.';
@@ -564,6 +573,11 @@ report 94 "Close Income Statement"
         ClosePerBusUnit: Boolean;
         PostToRetainedEarningsAcc: Option Balance,Details;
 
+    /// <summary>
+    /// Validates the end date for the fiscal year closing process.
+    /// </summary>
+    /// <param name="RealMode">True for real validation, false for testing scenarios</param>
+    /// <returns>True if validation passes, false otherwise</returns>
     local procedure ValidateEndDate(RealMode: Boolean) Result: Boolean
     var
         OK: Boolean;
@@ -599,6 +613,10 @@ report 94 "Close Income Statement"
         exit(true);
     end;
 
+    /// <summary>
+    /// Validates the journal line and generates a document number if necessary.
+    /// </summary>
+    /// <returns>True if validation passes, false otherwise</returns>
     local procedure ValidateJnl()
     var
         NoSeries: Codeunit "No. Series";
@@ -609,6 +627,12 @@ report 94 "Close Income Statement"
                 DocNo := NoSeries.PeekNextNo(GenJnlBatch."No. Series", EndDateReq);
     end;
 
+    /// <summary>
+    /// Handles the generation and posting of the general journal line.
+    /// </summary>
+    /// <remarks>
+    /// This includes setting up additional currency fields and calling the posting routine.
+    /// </remarks>
     local procedure HandleGenJnlLine()
     var
         NoSeries: Codeunit "No. Series";
@@ -618,7 +642,6 @@ report 94 "Close Income Statement"
         GenJnlLine."Additional-Currency Posting" :=
           GenJnlLine."Additional-Currency Posting"::None;
         if GLSetup."Additional Reporting Currency" <> '' then begin
-            GenJnlLine."Source Currency Code" := GLSetup."Additional Reporting Currency";
             if ZeroGenJnlAmount() then begin
                 GenJnlLine."Additional-Currency Posting" :=
                   GenJnlLine."Additional-Currency Posting"::"Additional-Currency Amount Only";
@@ -635,11 +658,17 @@ report 94 "Close Income Statement"
                 GenJnlLine.Insert();
     end;
 
+    /// <summary>
+    /// Calculates the sum of amounts in the G/L Entry record based on the current filter.
+    /// </summary>
+    /// <param name="GLEntrySource">Source G/L Entry record</param>
+    /// <param name="Offset">Row offset for the calculation</param>
     local procedure CalcSumsInFilter(var GLEntrySource: Record "G/L Entry"; var Offset: Integer)
     var
         GLEntry: Record "G/L Entry";
     begin
         GLEntry.CopyFilters(GLEntrySource);
+        GLEntry.SetRange("Source Currency Code", GLEntrySource."Source Currency Code");
         if ClosePerBusUnit then begin
             GLEntry.SetRange("Business Unit Code", GLEntrySource."Business Unit Code");
             GenJnlLine."Business Unit Code" := GLEntrySource."Business Unit Code";
@@ -661,6 +690,12 @@ report 94 "Close Income Statement"
         Offset := GLEntry.Count - 1;
     end;
 
+    /// <summary>
+    /// Retrieves and inserts G/L Entry dimensions into the dimension buffer record.
+    /// </summary>
+    /// <param name="EntryNo">Entry number to retrieve dimensions for</param>
+    /// <param name="DimBuf">Dimension buffer record to populate</param>
+    /// <param name="DimensionSetID">Dimension set ID to filter by</param>
     local procedure GetGLEntryDimensions(EntryNo: Integer; var DimBuf: Record "Dimension Buffer"; DimensionSetID: Integer)
     var
         DimSetEntry: Record "Dimension Set Entry";
@@ -676,6 +711,11 @@ report 94 "Close Income Statement"
             until DimSetEntry.Next() = 0;
     end;
 
+    /// <summary>
+    /// Validates selected dimension posting rules and returns an error message when mandatory dimensions are missing.
+    /// </summary>
+    /// <param name="SelectedDim">Selected dimensions to validate</param>
+    /// <returns>Error text to present to the user; empty when validation passes</returns>
     procedure CheckDimPostingRules(var SelectedDim: Record "Selected Dimension"): Text[1024]
     var
         DefaultDim: Record "Default Dimension";
@@ -726,6 +766,13 @@ report 94 "Close Income Statement"
         exit(InvtPeriod.IsInvtPeriodClosed(AccPeriod."Starting Date"));
     end;
 
+    /// <summary>
+    /// Initializes the report for test execution with specified parameters.
+    /// </summary>
+    /// <param name="EndDate">Fiscal year end date for closing</param>
+    /// <param name="GenJournalLine">General journal line template for closing entries</param>
+    /// <param name="GLAccount">Retained earnings G/L account for closing transfers</param>
+    /// <param name="CloseByBU">Whether to close by business unit</param>
     procedure InitializeRequestTest(EndDate: Date; GenJournalLine: Record "Gen. Journal Line"; GLAccount: Record "G/L Account"; CloseByBU: Boolean)
     begin
         EndDateReq := EndDate;
@@ -747,50 +794,158 @@ report 94 "Close Income Statement"
 
     local procedure AddSourceCurrencyFields(): Boolean
     begin
-        if (TempEntryNoAmountBuffer.Amount2 <> 0) or (TempEntryNoAmountBuffer."Source Currency Amount" = 0) then
+        // The source currency of the group is always carried over, also when the group nets to a zero source
+        // currency amount. Otherwise a consolidated closing line would lose the currency it was closed for.
+        GenJnlLine."Source Currency Code" := TempEntryNoAmountBuffer."Source Currency Code";
+
+        if TempEntryNoAmountBuffer."Source Currency Amount" = 0 then
             exit(false);
 
-        GenJnlLine."Source Currency Code" := TempEntryNoAmountBuffer."Source Currency Code";
         GenJnlLine."Source Currency Amount" := -(TempEntryNoAmountBuffer."Source Currency Amount");
         GenJnlLine."Source Curr. VAT Amount" := -(TempEntryNoAmountBuffer."Source Currency VAT Amount");
         exit(true);
     end;
 
+    local procedure GetEntryNo(DimensionBufferID: Integer; BusinessUnitCode: Code[20]; SourceCurrencyCode: Code[10]): Integer
+    var
+        GroupKey: Text;
+        AssignedEntryNo: Integer;
+    begin
+        // Closing entries are grouped per business unit, per selected dimension combination and per source
+        // currency. The dimension buffer ID alone cannot carry the source currency, so when one dimension
+        // combination is used by more than one source currency the extra groups get a synthetic negative
+        // ID. GetDimensionBufferID() translates such an ID back to the real dimension buffer ID.
+        GroupKey := MakeGroupKey(BusinessUnitCode, Format(DimensionBufferID), SourceCurrencyCode);
+        if GroupEntryNos.Get(GroupKey, AssignedEntryNo) then
+            exit(AssignedEntryNo);
+
+        AssignedEntryNo := DimensionBufferID;
+        if EntryNoDimensionIds.ContainsKey(MakeGroupKey(BusinessUnitCode, Format(AssignedEntryNo), '')) then begin
+            EntryNo := EntryNo - 1;
+            AssignedEntryNo := EntryNo;
+        end;
+
+        GroupEntryNos.Add(GroupKey, AssignedEntryNo);
+        EntryNoDimensionIds.Add(MakeGroupKey(BusinessUnitCode, Format(AssignedEntryNo), ''), DimensionBufferID);
+        exit(AssignedEntryNo);
+    end;
+
+    local procedure GetDimensionBufferID(BusinessUnitCode: Code[20]; BufferEntryNo: Integer): Integer
+    var
+        DimensionBufferID: Integer;
+    begin
+        if EntryNoDimensionIds.Get(MakeGroupKey(BusinessUnitCode, Format(BufferEntryNo), ''), DimensionBufferID) then
+            exit(DimensionBufferID);
+
+        exit(BufferEntryNo);
+    end;
+
+    local procedure MakeGroupKey(BusinessUnitCode: Code[20]; DimensionPart: Text; SourceCurrencyCode: Code[10]): Text
+    begin
+        // The parts are length-prefixed so that a separator character inside one of the code fields cannot make
+        // two different groups collapse onto the same key.
+        exit(Format(StrLen(BusinessUnitCode)) + '|' + BusinessUnitCode +
+             '|' + Format(StrLen(DimensionPart)) + '|' + DimensionPart +
+             '|' + SourceCurrencyCode);
+    end;
+
+    local procedure ResetEntryNoGrouping()
+    begin
+        Clear(GroupEntryNos);
+        Clear(EntryNoDimensionIds);
+        EntryNo := 0;
+    end;
+
+    /// <summary>
+    /// Integration event fired before checking dimension posting rules during income statement closing.
+    /// </summary>
+    /// <param name="SelectedDimension">Selected dimensions for validation</param>
+    /// <param name="ErrorText">Error message text to be returned if validation fails</param>
+    /// <param name="Handled">Set to true if custom validation is performed</param>
+    /// <param name="GenJnlLine">General journal line being processed</param>
     [IntegrationEvent(false, false)]
     local procedure OnBeforeCheckDimPostingRules(var SelectedDimension: Record "Selected Dimension"; var ErrorText: Text[1024]; var Handled: Boolean; GenJnlLine: Record "Gen. Journal Line")
     begin
     end;
 
+    /// <summary>
+    /// Integration event fired before handling general journal line during closing process.
+    /// </summary>
+    /// <param name="GenJournalLine">General journal line being processed</param>
     [IntegrationEvent(false, false)]
     local procedure OnBeforeHandleGenJnlLine(var GenJournalLine: Record "Gen. Journal Line")
     begin
     end;
 
+    /// <summary>
+    /// Integration event fired after populating general journal line fields for G/L account closing entries.
+    /// </summary>
+    /// <param name="GenJournalLine">General journal line being populated</param>
+    /// <param name="RetainedEarningsGLAcc">Retained earnings G/L account used for closing</param>
     [IntegrationEvent(false, false)]
     local procedure OnGLAccountOnOnPostDataItemOnAfterGenJnlLinePopulateFields(var GenJournalLine: Record "Gen. Journal Line"; RetainedEarningsGLAcc: Record "G/L Account")
     begin
     end;
 
+    /// <summary>
+    /// Integration event fired after updating dimensions on general journal line during posting.
+    /// </summary>
+    /// <param name="GenJnlLine">General journal line with updated dimensions</param>
+    /// <param name="ClosePerGlobalDim1">Whether closing per global dimension 1</param>
+    /// <param name="ClosePerGlobalDim2">Whether closing per global dimension 2</param>
+    /// <param name="TempEntryNoAmountBuffer">Temporary entry number amount buffer. The "Entry No." field is a logical grouping key
+    /// for business unit, dimension combination and source currency, and is not always a valid dimension buffer ID that can be
+    /// passed to Dimension Buffer Management.RetrieveDimensions.</param>
     [IntegrationEvent(false, false)]
     local procedure OnPostDataItemOnAfterGenJnlLineDimUpdated(var GenJnlLine: Record "Gen. Journal Line"; ClosePerGlobalDim1: Boolean; ClosePerGlobalDim2: Boolean; var TempEntryNoAmountBuffer: Record "Entry No. Amount Buffer" temporary)
     begin
     end;
 
+    /// <summary>
+    /// Integration event fired before checking dimension posting rules in pre-report processing.
+    /// </summary>
+    /// <param name="IsHandled">Set to true if custom handling is performed</param>
+    /// <param name="TempSelectedDim">Temporary selected dimensions table</param>
+    /// <param name="GenJnlLine">General journal line template</param>
     [IntegrationEvent(false, false)]
     local procedure OnPreReportOnBeforeCheckDimPostingRules(var IsHandled: Boolean; var TempSelectedDim: Record "Selected Dimension" temporary; GenJnlLine: Record "Gen. Journal Line")
     begin
     end;
 
+    /// <summary>
+    /// Integration event fired after processing G/L entry into amount buffer during closing.
+    /// </summary>
+    /// <param name="TempEntryNoAmountBuffer">Temporary entry number amount buffer. The "Entry No." field is a logical grouping key
+    /// for business unit, dimension combination and source currency, and is not always a valid dimension buffer ID that can be
+    /// passed to Dimension Buffer Management.RetrieveDimensions.</param>
+    /// <param name="GEntry">G/L entry being processed</param>
     [IntegrationEvent(false, false)]
     local procedure OnGLEntryOnAfterGetRecordOnAfterEntryNoAmountBuf(var TempEntryNoAmountBuffer: Record "Entry No. Amount Buffer" temporary; GEntry: Record "G/L Entry")
     begin
     end;
 
+    /// <summary>
+    /// Integration event fired after handling general journal line during G/L entry processing.
+    /// </summary>
+    /// <param name="GenJnlLine">General journal line being handled</param>
+    /// <param name="TempEntryNoAmountBuf">Temporary entry number amount buffer. The "Entry No." field is a logical grouping key
+    /// for business unit, dimension combination and source currency, and is not always a valid dimension buffer ID that can be
+    /// passed to Dimension Buffer Management.RetrieveDimensions.</param>
     [IntegrationEvent(false, false)]
     local procedure OnGLEntryOnPostDataItemOnAfterHandleGenJnlLine(var GenJnlLine: Record "Gen. Journal Line"; var TempEntryNoAmountBuf: Record "Entry No. Amount Buffer" temporary)
     begin
     end;
 
+    /// <summary>
+    /// Integration event fired before validating the end date for income statement closing.
+    /// </summary>
+    /// <param name="EndDateReq">Requested end date for closing</param>
+    /// <param name="FiscalYearStartDate">Fiscal year start date</param>
+    /// <param name="FiscYearClosingDate">Fiscal year closing date</param>
+    /// <param name="OK">Validation result</param>
+    /// <param name="Result">Overall validation result</param>
+    /// <param name="RealMode">Whether running in real mode vs test mode</param>
+    /// <param name="IsHandled">Set to true if custom validation is performed</param>
     [IntegrationEvent(false, false)]
     local procedure OnBeforeValidateEndDate(EndDateReq: Date; var FiscalYearStartDate: Date; var FiscYearClosingDate: Date; var OK: Boolean; var Result: Boolean; RealMode: Boolean; var IsHandled: Boolean);
     begin

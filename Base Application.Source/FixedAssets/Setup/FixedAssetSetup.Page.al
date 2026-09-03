@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
@@ -30,34 +30,48 @@ page 5607 "Fixed Asset Setup"
                 field("Default Depr. Book"; Rec."Default Depr. Book")
                 {
                     ApplicationArea = FixedAssets;
-                    ToolTip = 'Specifies the default depreciation book on journal lines and purchase lines and when you run batch jobs and reports.';
                 }
                 field("Allow Posting to Main Assets"; Rec."Allow Posting to Main Assets")
                 {
                     ApplicationArea = FixedAssets;
-                    ToolTip = 'Specifies whether you have split your fixed assets into main assets and components, and you want to be able to post directly to main assets.';
                 }
                 field("Allow FA Posting From"; Rec."Allow FA Posting From")
                 {
                     ApplicationArea = FixedAssets;
-                    ToolTip = 'Specifies the earliest date when posting to the fixed assets is allowed.';
                 }
                 field("Allow FA Posting To"; Rec."Allow FA Posting To")
                 {
                     ApplicationArea = FixedAssets;
-                    ToolTip = 'Specifies the latest date when posting to the fixed assets is allowed.';
                 }
                 field("Insurance Depr. Book"; Rec."Insurance Depr. Book")
                 {
                     ApplicationArea = FixedAssets;
                     Importance = Additional;
-                    ToolTip = 'Specifies a depreciation book code. If you use the insurance facilities, you must enter a code to post insurance coverage ledger entries.';
                 }
                 field("Automatic Insurance Posting"; Rec."Automatic Insurance Posting")
                 {
                     ApplicationArea = FixedAssets;
                     Importance = Additional;
-                    ToolTip = 'Specifies you want to post insurance coverage ledger entries when you post acquisition cost entries with the Insurance No. field filled in.';
+                }
+                field("Bonus Depreciation Percentage"; Rec."Bonus Depreciation %")
+                {
+                    ApplicationArea = FixedAssets;
+                    Importance = Additional;
+
+                    trigger OnValidate()
+                    begin
+                        UpdateActionVisibility();
+                    end;
+                }
+                field("Bonus Depr. Effective Date"; Rec."Bonus Depr. Effective Date")
+                {
+                    ApplicationArea = FixedAssets;
+                    Importance = Additional;
+
+                    trigger OnValidate()
+                    begin
+                        UpdateActionVisibility();
+                    end;
                 }
             }
             group(Numbering)
@@ -66,12 +80,10 @@ page 5607 "Fixed Asset Setup"
                 field("Fixed Asset Nos."; Rec."Fixed Asset Nos.")
                 {
                     ApplicationArea = FixedAssets;
-                    ToolTip = 'Specifies the code for the number series that will be used to assign numbers to fixed assets.';
                 }
                 field("Insurance Nos."; Rec."Insurance Nos.")
                 {
                     ApplicationArea = FixedAssets;
-                    ToolTip = 'Specifies the number series code that will be used to assign numbers to insurance policies.';
                 }
             }
         }
@@ -133,6 +145,15 @@ page 5607 "Fixed Asset Setup"
                 Image = FixedAssets;
                 RunObject = Page "FA Locations";
                 ToolTip = 'Set up different locations, such as a warehouse or a location within a warehouse, that you can assign to fixed assets.';
+            }
+            action("Advanced Bonus Depreciation Setup")
+            {
+                ApplicationArea = FixedAssets;
+                Caption = 'Advanced Bonus Depreciation Setup';
+                Image = SetupList;
+                RunObject = Page "Adv. Bonus Depr. Setup";
+                ToolTip = 'Set up multiple bonus depreciation percentages per effective date and asset class.';
+                Enabled = BonusDeprEnabled;
             }
             group(Posting)
             {
@@ -201,6 +222,9 @@ page 5607 "Fixed Asset Setup"
                 actionref("Depreciation Tables_Promoted"; "Depreciation Tables")
                 {
                 }
+                actionref("Advanced Bonus Depreciation Setup_Promoted"; "Advanced Bonus Depreciation Setup")
+                {
+                }
             }
             group(Category_Category6)
             {
@@ -234,6 +258,15 @@ page 5607 "Fixed Asset Setup"
             Rec.Init();
             Rec.Insert();
         end;
+        UpdateActionVisibility();
     end;
+
+    local procedure UpdateActionVisibility()
+    begin
+        BonusDeprEnabled := Rec.BonusDepreciationCorrectlySetup();
+    end;
+
+    var
+        BonusDeprEnabled: Boolean;
 }
 

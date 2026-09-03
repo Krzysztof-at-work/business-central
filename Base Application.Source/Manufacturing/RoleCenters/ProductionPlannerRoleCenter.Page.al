@@ -6,6 +6,7 @@ namespace Microsoft.Manufacturing.RoleCenters;
 
 using Microsoft.EServices.EDocument;
 using Microsoft.Foundation.Navigate;
+using Microsoft.Foundation.Task;
 using Microsoft.Inventory.Availability;
 using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Journal;
@@ -18,7 +19,6 @@ using Microsoft.Manufacturing.Capacity;
 using Microsoft.Manufacturing.Document;
 using Microsoft.Manufacturing.Family;
 using Microsoft.Manufacturing.Forecast;
-using Microsoft.Manufacturing.Journal;
 using Microsoft.Manufacturing.MachineCenter;
 using Microsoft.Manufacturing.ProductionBOM;
 using Microsoft.Manufacturing.Reports;
@@ -33,7 +33,6 @@ using Microsoft.Sales.Document;
 using System.Automation;
 using System.Email;
 using System.Integration.PowerBI;
-using Microsoft.Foundation.Task;
 using System.Threading;
 using System.Visualization;
 
@@ -119,12 +118,25 @@ page 9010 "Production Planner Role Center"
                     RunObject = Report "Routing Sheet";
                     ToolTip = 'View basic information for routings, such as send-ahead quantity, setup time, run time and time unit. This report shows you the operations to be performed in this routing, the work or machine centers to be used, the personnel, the tools, and the description of each operation.';
                 }
+#if not CLEAN28
                 action("Inventory - &Availability Plan")
                 {
                     ApplicationArea = Manufacturing;
-                    Caption = 'Inventory - &Availability Plan';
+                    Caption = 'Inventory - &Availability Plan (Obsolete)';
                     Image = ItemAvailability;
                     RunObject = Report "Inventory - Availability Plan";
+                    ToolTip = 'View a list of the quantity of each item in customer, purchase, and transfer orders and the quantity available in inventory. The list is divided into columns that cover six periods with starting and ending dates as well as the periods before and after those periods. The list is useful when you are planning your inventory purchases.';
+                    ObsoleteState = Pending;
+                    ObsoleteReason = 'This report has been replaced by the report Inventory - Availability Plan (Excel). This report will be removed in a future release.';
+                    ObsoleteTag = '28.0';
+                }
+#endif
+                action("Inventory - &Availability Plan Excel")
+                {
+                    ApplicationArea = Manufacturing;
+                    Caption = 'Inventory - &Availability Plan (Excel)';
+                    Image = ItemAvailability;
+                    RunObject = Report "Inv. Availability Plan";
                     ToolTip = 'View a list of the quantity of each item in customer, purchase, and transfer orders and the quantity available in inventory. The list is divided into columns that cover six periods with starting and ending dates as well as the periods before and after those periods. The list is useful when you are planning your inventory purchases.';
                 }
 #if not CLEAN27
@@ -425,15 +437,22 @@ page 9010 "Production Planner Role Center"
                                         Recurring = const(false));
                     ToolTip = 'Calculate a supply plan to fulfill item demand with purchases or transfers.';
                 }
+#if not CLEAN28
                 action(SubcontractingWorksheets)
                 {
                     ApplicationArea = Manufacturing;
-                    Caption = 'Subcontracting Worksheets';
+                    Caption = 'Subcontracting Worksheets (Obsolete)';
                     RunObject = Page "Req. Wksh. Names";
+#pragma warning disable AL0432
                     RunPageView = where("Template Type" = const("For. Labor"),
                                         Recurring = const(false));
+#pragma warning restore AL0432
+                    ObsoleteReason = 'Will be replaced by the Subcontracting App.';
+                    ObsoleteState = Pending;
+                    ObsoleteTag = '28.0';
                     ToolTip = 'Calculate the needed production supply, find the production orders that have material ready to send to a subcontractor, and automatically create purchase orders for subcontracted operations from production order routings.';
                 }
+#endif
                 action("Standard Cost Worksheet")
                 {
                     ApplicationArea = Manufacturing;
@@ -719,14 +738,21 @@ page 9010 "Production Planner Role Center"
                     RunObject = Page "Planning Worksheet";
                     ToolTip = 'Plan supply orders automatically to fulfill new demand.';
                 }
+#if not CLEAN28
                 action("Subcontracting &Worksheet")
                 {
                     ApplicationArea = Manufacturing;
-                    Caption = 'Subcontracting &Worksheet';
+                    Caption = 'Subcontracting &Worksheet (Obsolete)';
                     Image = SubcontractingWorksheet;
-                    RunObject = Page "Subcontracting Worksheet";
+#pragma warning disable AL0432
+                    RunObject = Page Microsoft.Manufacturing.Journal."Subcontracting Worksheet";
+#pragma warning restore AL0432
+                    ObsoleteReason = 'Will be replaced by the Subcontracting App.';
+                    ObsoleteState = Pending;
+                    ObsoleteTag = '28.0';
                     ToolTip = 'Calculate the needed production supply, find the production orders that have material ready to send to a subcontractor, and automatically create purchase orders for subcontracted operations from production order routings.';
                 }
+#endif
                 action("Change Pro&duction Order Status")
                 {
                     ApplicationArea = Manufacturing;

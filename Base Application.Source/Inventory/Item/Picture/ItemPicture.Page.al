@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
@@ -25,9 +25,8 @@ page 346 "Item Picture"
         {
             field(Picture; Rec.Picture)
             {
-                ApplicationArea = Invoicing, Basic, Suite;
+                ApplicationArea = Basic, Suite;
                 ShowCaption = false;
-                ToolTip = 'Specifies the picture that has been inserted for the item.';
             }
         }
     }
@@ -81,7 +80,6 @@ page 346 "Item Picture"
                     ExportPath: Text;
                 begin
                     Rec.TestField("No.");
-                    Rec.TestField(Description);
                     ConvertedCodeType := Format(Rec."No.");
                     ToFile := DummyPictureEntity.GetDefaultMediaDescription(Rec);
                     ConvertedCodeType := StringConversionManager.RemoveNonAlphaNumericCharacters(ConvertedCodeType);
@@ -126,14 +124,12 @@ page 346 "Item Picture"
         SelectPictureTxt: Label 'Select a picture to upload';
         DeleteExportEnabled: Boolean;
         HideActions: Boolean;
-        MustSpecifyDescriptionErr: Label 'You must add a description to the item before you can import a picture.';
         MimeTypeTok: Label 'image/jpeg', Locked = true;
 
     procedure TakeNewPicture()
     begin
         Rec.Find();
         Rec.TestField("No.");
-        Rec.TestField(Description);
 
         OnAfterTakeNewPicture(Rec, DoTakeNewPicture());
     end;
@@ -147,8 +143,6 @@ page 346 "Item Picture"
     begin
         Rec.Find();
         Rec.TestField("No.");
-        if Rec.Description = '' then
-            Error(MustSpecifyDescriptionErr);
 
         if Rec.Picture.Count > 0 then
             if not Confirm(OverrideImageQst) then
@@ -229,4 +223,3 @@ page 346 "Item Picture"
     begin
     end;
 }
-

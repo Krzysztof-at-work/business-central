@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
@@ -9,9 +9,9 @@ using Microsoft.Inventory.Journal;
 using Microsoft.Inventory.Ledger;
 using Microsoft.Inventory.Location;
 using Microsoft.Inventory.Planning;
-using Microsoft.Inventory.Tracking;
 using Microsoft.Inventory.Requisition;
 using Microsoft.Inventory.Setup;
+using Microsoft.Inventory.Tracking;
 
 codeunit 99000837 "Prod. Order Line-Reserve"
 {
@@ -617,7 +617,18 @@ codeunit 99000837 "Prod. Order Line-Reserve"
     var
         ProdOrderLine: Record "Prod. Order Line";
     begin
-        ProdOrderLine.Get(ReservationEntry."Source Subtype", ReservationEntry."Source ID", ReservationEntry."Source Prod. Order Line");
+        if not ProdOrderLine.Get(ReservationEntry."Source Subtype", ReservationEntry."Source ID", ReservationEntry."Source Prod. Order Line") then begin
+            ProdOrderLine.Init();
+            ProdOrderLine.Status := Enum::"Production Order Status".FromInteger(ReservationEntry."Source Subtype");
+            ProdOrderLine."Prod. Order No." := ReservationEntry."Source ID";
+            ProdOrderLine."Line No." := ReservationEntry."Source Prod. Order Line";
+            ProdOrderLine."Item No." := ReservationEntry."Item No.";
+            ProdOrderLine."Variant Code" := ReservationEntry."Variant Code";
+            SourceRecordRef.GetTable(ProdOrderLine);
+            OnAfterGetSourceValue(ReservationEntry, SourceRecordRef, ReturnOption);
+            exit(0);
+        end;
+
         SourceRecordRef.GetTable(ProdOrderLine);
         case ReturnOption of
             ReturnOption::"Net Qty. (Base)":
@@ -716,13 +727,6 @@ codeunit 99000837 "Prod. Order Line-Reserve"
         ReservQty: Decimal;
         IsReserved: Boolean;
     begin
-#if not CLEAN25
-        IsReserved := false;
-        sender.RunOnBeforeAutoReserveProdOrderLine(
-          ReservSummEntryNo, RemainingQtyToReserve, RemainingQtyToReserve, Description, AvailabilityDate, IsReserved, Search, NextStep, CalcReservEntry);
-        if IsReserved then
-            exit;
-#endif
         IsReserved := false;
         OnBeforeAutoReserveProdOrderLine(
           ReservSummEntryNo, RemainingQtyToReserve, RemainingQtyToReserveBase, Description, AvailabilityDate, IsReserved, Search, NextStep, CalcReservEntry);
@@ -916,9 +920,6 @@ codeunit 99000837 "Prod. Order Line-Reserve"
             ProdOrderLine."Finished Qty. (Base)");
 
         OnAfterInitFromProdOrderLine(TrackingSpecification, ProdOrderLine);
-#if not CLEAN25
-        TrackingSpecification.RunOnAfterInitFromProdOrderLine(TrackingSpecification, ProdOrderLine);
-#endif
     end;
 
     [IntegrationEvent(false, false)]
@@ -1082,9 +1083,6 @@ codeunit 99000837 "Prod. Order Line-Reserve"
         InventoryProfile.IsSupply := InventoryProfile."Untracked Quantity" >= 0;
 
         OnAfterTransferInventoryProfileFromProdOrderLine(InventoryProfile, ProdOrderLine);
-#if not CLEAN25
-        InventoryProfile.RunOnAfterTransferFromProdOrderLine(InventoryProfile, ProdOrderLine);
-#endif
     end;
 
     [IntegrationEvent(false, false)]

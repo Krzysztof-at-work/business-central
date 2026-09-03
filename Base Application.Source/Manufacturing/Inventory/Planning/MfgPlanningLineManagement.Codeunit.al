@@ -4,16 +4,16 @@
 // ------------------------------------------------------------------------------------------------
 namespace Microsoft.Inventory.Planning;
 
+using Microsoft.Foundation.UOM;
 using Microsoft.Inventory.Costing;
 using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Location;
 using Microsoft.Inventory.Requisition;
 using Microsoft.Manufacturing.Document;
+using Microsoft.Manufacturing.MachineCenter;
 using Microsoft.Manufacturing.ProductionBOM;
 using Microsoft.Manufacturing.Routing;
-using Microsoft.Foundation.UOM;
 using Microsoft.Manufacturing.Setup;
-using Microsoft.Manufacturing.MachineCenter;
 
 codeunit 99000819 "Mfg. Planning Line Management"
 {
@@ -325,10 +325,12 @@ codeunit 99000819 "Mfg. Planning Line Management"
         PlanningComponent."Worksheet Batch Name" := ReqLine."Journal Batch Name";
         PlanningComponent."Worksheet Line No." := ReqLine."Line No.";
         PlanningComponent."Line No." := NextPlanningCompLineNo;
+        OnCreatePlanningComponentFromProdBOMOnBeforeGetPlanningParameters(PlanningComponent, ReqLine, ProdBOMLine, CompSKU, LineQtyPerUOM, ItemQtyPerUOM, NextPlanningCompLineNo, SKU, Blocked);
         PlanningComponent.Validate("Item No.", ProdBOMLine."No.");
         PlanningComponent."Variant Code" := ProdBOMLine."Variant Code";
         PlanningComponent."Location Code" := SKU."Components at Location";
         PlanningComponent.Description := ProdBOMLine.Description;
+        PlanningComponent."Description 2" := ProdBOMLine."Description 2";
         PlanningComponent."Planning Line Origin" := ReqLine."Planning Line Origin";
         PlanningComponent.Validate("Unit of Measure Code", ProdBOMLine."Unit of Measure Code");
         PlanningComponent."Quantity per" := ProdBOMLine."Quantity per" * LineQtyPerUOM / ItemQtyPerUOM;
@@ -564,6 +566,11 @@ codeunit 99000819 "Mfg. Planning Line Management"
 
     [IntegrationEvent(false, false)]
     local procedure OnBeforeInsertPlanningComponent(var ReqLine: Record "Requisition Line"; var ProductionBOMLine: Record "Production BOM Line"; var PlanningComponent: Record "Planning Component"; LineQtyPerUOM: Decimal; ItemQtyPerUOM: Decimal)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnCreatePlanningComponentFromProdBOMOnBeforeGetPlanningParameters(var PlanningComponent: Record "Planning Component"; RequisitionLine: Record "Requisition Line"; ProductionBOMLine: Record "Production BOM Line"; CompStockkeepingUnit: Record "Stockkeeping Unit"; LineQtyPerUOM: Decimal; ItemQtyPerUOM: Decimal; var NextPlanningCompLineNo: Integer; StockkeepingUnit: Record "Stockkeeping Unit"; Blocked: Boolean)
     begin
     end;
 }

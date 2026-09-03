@@ -8,6 +8,10 @@ using Microsoft.Finance.GeneralLedger.Journal;
 using Microsoft.Foundation.AuditCodes;
 using Microsoft.Foundation.NoSeries;
 
+/// <summary>
+/// Report for transferring bank reconciliation lines to general journal.
+/// Converts reconciliation discrepancies into journal entries for posting.
+/// </summary>
 report 1497 "Trans. Bank Rec. to Gen. Jnl."
 {
     Caption = 'Trans. Bank Rec. to Gen. Jnl.';
@@ -39,6 +43,7 @@ report 1497 "Trans. Bank Rec. to Gen. Jnl."
                             CurrReport.Skip();
 
                     GenJnlLine.Init();
+                    OnAfterGenJnlLineInit(GenJnlLine, "Bank Acc. Reconciliation Line");
                     GenJnlLine."Line No." := GenJnlLine."Line No." + 10000;
                     GenJnlLine.Validate("Posting Date", "Transaction Date");
                     SourceCodeSetup.Get();
@@ -205,6 +210,17 @@ report 1497 "Trans. Bank Rec. to Gen. Jnl."
     begin
         GenJnlLine."Journal Template Name" := GenJnlTemplateName;
         GenJnlLine."Journal Batch Name" := GenJnlBatchName;
+    end;
+
+    /// <summary>
+    /// Raised after the General Journal Line is initialized, before the document number and balance account are assigned.
+    /// Use this event to populate custom fields on the journal line.
+    /// </summary>
+    /// <param name="GenJournalLine">The General Journal Line that was initialized.</param>
+    /// <param name="BankAccReconciliationLine">The Bank Account Reconciliation Line being transferred.</param>
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterGenJnlLineInit(var GenJournalLine: Record "Gen. Journal Line"; BankAccReconciliationLine: Record "Bank Acc. Reconciliation Line")
+    begin
     end;
 
     [IntegrationEvent(false, false)]

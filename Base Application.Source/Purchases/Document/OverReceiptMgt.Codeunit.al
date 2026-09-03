@@ -9,9 +9,9 @@ using Microsoft.Inventory.Item;
 using Microsoft.Purchases.Vendor;
 using Microsoft.Warehouse.Activity;
 using Microsoft.Warehouse.Document;
-using System.Utilities;
 using Microsoft.Warehouse.Request;
 using System.Environment.Configuration;
+using System.Utilities;
 
 codeunit 8510 "Over-Receipt Mgt."
 {
@@ -48,6 +48,22 @@ codeunit 8510 "Over-Receipt Mgt."
         if not WarehouseReceiptLine.FindFirst() then
             exit(false);
         exit(PurchaseLine.Quantity = WarehouseReceiptLine.Quantity);
+    end;
+
+    procedure IsOverReceiptPendingOnWarehouseReceiptLine(PurchaseLine: Record "Purchase Line"): Boolean
+    var
+        WarehouseReceiptLine: Record "Warehouse Receipt Line";
+        WhseManagement: Codeunit "Whse. Management";
+    begin
+        if not IsOverReceiptAllowed() then
+            exit(false);
+        if PurchaseLine."Over-Receipt Quantity" = 0 then
+            exit(false);
+        WhseManagement.SetSourceFilterForWhseRcptLine(
+            WarehouseReceiptLine, Database::"Purchase Line", PurchaseLine."Document Type".AsInteger(),
+            PurchaseLine."Document No.", PurchaseLine."Line No.", false);
+        WarehouseReceiptLine.SetFilter("Over-Receipt Quantity", '>0');
+        exit(not WarehouseReceiptLine.IsEmpty());
     end;
 
     procedure IsQuantityUpdatedFromInvtPutAwayOverReceipt(PurchaseLine: Record "Purchase Line"): Boolean
@@ -165,7 +181,6 @@ codeunit 8510 "Over-Receipt Mgt."
 
     procedure GetDefaultOverReceiptCode(PurchaseLine: Record "Purchase Line") DefaultOverReceiptCode: Code[20]
     var
-        PurchaseHeader: Record "Purchase Header";
         Item: Record Item;
         Vendor: Record Vendor;
         OverReceiptCode: Record "Over-Receipt Code";
@@ -183,8 +198,7 @@ codeunit 8510 "Over-Receipt Mgt."
             exit;
         end;
 
-        PurchaseHeader.Get(PurchaseLine."Document Type", PurchaseLine."Document No.");
-        Vendor.Get(PurchaseHeader."Buy-from Vendor No.");
+        Vendor.Get(PurchaseLine.GetPurchHeader()."Buy-from Vendor No.");
         if Vendor."Over-Receipt Code" <> '' then begin
             DefaultOverReceiptCode := Vendor."Over-Receipt Code";
             exit;

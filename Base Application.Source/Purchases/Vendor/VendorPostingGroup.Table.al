@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
@@ -22,11 +22,13 @@ table 93 "Vendor Posting Group"
         field(1; "Code"; Code[20])
         {
             Caption = 'Code';
+            ToolTip = 'Specifies an identifier for the vendor posting group.';
             NotBlank = true;
         }
         field(2; "Payables Account"; Code[20])
         {
             Caption = 'Payables Account';
+            ToolTip = 'Specifies the general ledger account to use when you post payables due to vendors in this posting group.';
             TableRelation = "G/L Account";
 
             trigger OnLookup()
@@ -47,11 +49,14 @@ table 93 "Vendor Posting Group"
                 else
                     CheckGLAccount(
                       FieldNo("Payables Account"), "Payables Account", false, false, GLAccountCategory."Account Category"::Liabilities, GLAccountCategoryMgt.GetCurrentLiabilities());
+
+                CheckGLAccSourceCurrencyRevaluation("Payables Account");
             end;
         }
         field(7; "Service Charge Acc."; Code[20])
         {
             Caption = 'Service Charge Acc.';
+            ToolTip = 'Specifies the general ledger account to use when you post service charges due to vendors in this posting group.';
             TableRelation = "G/L Account";
 
             trigger OnLookup()
@@ -77,6 +82,7 @@ table 93 "Vendor Posting Group"
         field(8; "Payment Disc. Debit Acc."; Code[20])
         {
             Caption = 'Payment Disc. Debit Acc.';
+            ToolTip = 'Specifies the general ledger account to use when you post reductions in payment discounts received from vendors in this posting group.';
             TableRelation = "G/L Account";
 
             trigger OnLookup()
@@ -100,6 +106,7 @@ table 93 "Vendor Posting Group"
         field(9; "Invoice Rounding Account"; Code[20])
         {
             Caption = 'Invoice Rounding Account';
+            ToolTip = 'Specifies the general ledger account to use when amounts result from invoice rounding when you post transactions that involve vendors.';
             TableRelation = "G/L Account";
 
             trigger OnLookup()
@@ -123,6 +130,7 @@ table 93 "Vendor Posting Group"
         field(10; "Debit Curr. Appln. Rndg. Acc."; Code[20])
         {
             Caption = 'Debit Curr. Appln. Rndg. Acc.';
+            ToolTip = 'Specifies the general ledger account to use when you post rounding differences. These differences can occur when you apply entries in different currencies to one another.';
             TableRelation = "G/L Account";
 
             trigger OnLookup()
@@ -147,6 +155,7 @@ table 93 "Vendor Posting Group"
         field(11; "Credit Curr. Appln. Rndg. Acc."; Code[20])
         {
             Caption = 'Credit Curr. Appln. Rndg. Acc.';
+            ToolTip = 'Specifies the general ledger account to use when you post rounding differences. These differences can occur when you apply entries in different currencies to one another.';
             TableRelation = "G/L Account";
 
             trigger OnLookup()
@@ -171,6 +180,7 @@ table 93 "Vendor Posting Group"
         field(12; "Debit Rounding Account"; Code[20])
         {
             Caption = 'Debit Rounding Account';
+            ToolTip = 'Specifies the general ledger account number to use when you post rounding differences from a remaining amount.';
             TableRelation = "G/L Account";
 
             trigger OnLookup()
@@ -194,6 +204,7 @@ table 93 "Vendor Posting Group"
         field(13; "Credit Rounding Account"; Code[20])
         {
             Caption = 'Credit Rounding Account';
+            ToolTip = 'Specifies the general ledger account number to use when you post rounding differences from a remaining amount.';
             TableRelation = "G/L Account";
 
             trigger OnLookup()
@@ -217,6 +228,7 @@ table 93 "Vendor Posting Group"
         field(16; "Payment Disc. Credit Acc."; Code[20])
         {
             Caption = 'Payment Disc. Credit Acc.';
+            ToolTip = 'Specifies the general ledger account to use when you post payment discounts received from vendors in this posting group.';
             TableRelation = "G/L Account";
 
             trigger OnLookup()
@@ -240,6 +252,7 @@ table 93 "Vendor Posting Group"
         field(17; "Payment Tolerance Debit Acc."; Code[20])
         {
             Caption = 'Payment Tolerance Debit Acc.';
+            ToolTip = 'Specifies the general ledger account number to use when you post purchase tolerance amounts and payments for purchases. This applies to this particular combination of business posting group and product posting group.';
             TableRelation = "G/L Account";
 
             trigger OnLookup()
@@ -266,6 +279,7 @@ table 93 "Vendor Posting Group"
         field(18; "Payment Tolerance Credit Acc."; Code[20])
         {
             Caption = 'Payment Tolerance Credit Acc.';
+            ToolTip = 'Specifies the general ledger account number to use when you post purchase tolerance amounts and payments for purchases. This applies to this particular combination of business posting group and product posting group.';
             TableRelation = "G/L Account";
 
             trigger OnLookup()
@@ -292,10 +306,12 @@ table 93 "Vendor Posting Group"
         field(20; Description; Text[100])
         {
             Caption = 'Description';
+            ToolTip = 'Specifies the description for the vendor posting group.';
         }
         field(21; "View All Accounts on Lookup"; Boolean)
         {
             Caption = 'View All Accounts on Lookup';
+            ToolTip = 'Specifies that all possible accounts are shown when you look up from a field. If the check box is not selected, then only accounts related to the involved account category are shown.';
         }
     }
 
@@ -325,6 +341,19 @@ table 93 "Vendor Posting Group"
         GLAccountCategoryMgt: Codeunit "G/L Account Category Mgt.";
         PostingSetupMgt: Codeunit PostingSetupManagement;
         YouCannotDeleteErr: Label 'You cannot delete %1.', Comment = '%1 = Code';
+        SourceCurrRevalNotAllowedErr: Label 'G/L Account %1 has Source Currency Revaluation enabled or has a Source Currency Code and cannot be used as a Payables Account.', Comment = '%1 = G/L Account No.';
+
+    local procedure CheckGLAccSourceCurrencyRevaluation(AccNo: Code[20])
+    var
+        GLAccount: Record "G/L Account";
+    begin
+        if AccNo = '' then
+            exit;
+
+        if GLAccount.Get(AccNo) then
+            if (GLAccount."Source Currency Revaluation") or (GLAccount."Source Currency Code" <> '') then
+                Error(SourceCurrRevalNotAllowedErr, AccNo);
+    end;
 
     local procedure CheckGroupUsage()
     var

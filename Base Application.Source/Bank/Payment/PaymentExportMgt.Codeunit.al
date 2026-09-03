@@ -147,6 +147,15 @@ codeunit 1210 "Payment Export Mgt"
         until DataExchFieldMapping.Next() = 0;
     end;
 
+    /// <summary>
+    /// Processes column mapping for payment export data exchange with FlowField grouping support.
+    /// </summary>
+    /// <param name="DataExch">Data exchange record</param>
+    /// <param name="RecRef">Record reference containing source data</param>
+    /// <param name="DataExchFlowFieldGrBuff">FlowField grouping buffer for aggregated fields</param>
+    /// <param name="LineNo">Line number in the data exchange</param>
+    /// <param name="DataExchLineDefCode">Data exchange line definition code</param>
+    /// <param name="TableID">Table ID of the source record</param>
     procedure ProcessColumnMapping(var DataExch: Record "Data Exch."; RecRef: RecordRef; var DataExchFlowFieldGrBuff: Record "Data Exch. FlowField Gr. Buff."; LineNo: Integer; DataExchLineDefCode: Code[20]; TableID: Integer)
     var
         DataExchDef: Record "Data Exch. Def";
@@ -237,6 +246,107 @@ codeunit 1210 "Payment Export Mgt"
                       DataExchEntryNo, DataExchLineNo, ColumnIndex, DataExchColumnDef.Constant, DataExchLineDefCode)
                 else
                     DataExchField.InsertRec(DataExchEntryNo, DataExchLineNo, ColumnIndex, '', DataExchLineDefCode);
+        end;
+    end;
+
+    /// <summary>
+    /// Processes column mapping for payment export data exchange.
+    /// </summary>
+    /// <param name="DataExch">Data exchange record</param>
+    /// <param name="RecRef">Record reference containing source data</param>
+    /// <param name="DataExchFlowFieldGrBuff">FlowField grouping buffer for aggregated fields</param>
+    /// <param name="LineNo">Line number in the data exchange</param>
+    /// <param name="DataExchLineDefCode">Data exchange line definition code</param>
+    /// <param name="TableID">Table ID of the source record</param>
+    /// <param name="TempDataExchField">Temporary record for data exchange fields</param>
+    procedure ProcessColumnMapping(var DataExch: Record "Data Exch."; RecRef: RecordRef; var DataExchFlowFieldGrBuff: Record "Data Exch. FlowField Gr. Buff."; LineNo: Integer; DataExchLineDefCode: Code[20]; TableID: Integer; var TempDataExchField: Record "Data Exch. Field" temporary)
+    var
+        DataExchDef: Record "Data Exch. Def";
+        DataExchColumnDef: Record "Data Exch. Column Def";
+        DataExchFieldMapping: Record "Data Exch. Field Mapping";
+        TransformationRule: Record "Transformation Rule";
+        StringConversionManagement: Codeunit StringConversionManagement;
+        FieldRef: FieldRef;
+        ValueAsDestType: Variant;
+        ValueAsString: Text[250];
+    begin
+        if not DataExchDef.Get(DataExch."Data Exch. Def Code") then
+            Error(FormatNotDefinedErr, DataExch."Data Exch. Def Code");
+
+        PrepopulateColumns(DataExchDef, DataExchLineDefCode, DataExch."Entry No.", LineNo, TempDataExchField);
+
+        DataExchFieldMapping.SetRange("Data Exch. Def Code", DataExchDef.Code);
+        DataExchFieldMapping.SetRange("Data Exch. Line Def Code", DataExchLineDefCode);
+        DataExchFieldMapping.SetRange("Table ID", TableID);
+        DataExchFieldMapping.FindSet();
+
+        repeat
+            DataExchColumnDef.Get(DataExchDef.Code, DataExchLineDefCode, DataExchFieldMapping."Column No.");
+
+            if DataExchFieldMapping."Use Default Value" then
+                ValueAsString := DataExchFieldMapping."Default Value"
+            else begin
+                FieldRef := RecRef.Field(DataExchFieldMapping."Field ID");
+                if FieldRef.Class = FieldRef.Class::FlowField then
+                    if DataExchFlowFieldGrBuff.Get(RecRef.RecordId, FieldRef.Number) then
+                        FieldRef.Value := DataExchFlowFieldGrBuff.Value
+                    else
+                        FieldRef.CalcField();
+
+                CheckOptional(DataExchFieldMapping.Optional, FieldRef);
+                CastToDestinationType(ValueAsDestType, FieldRef.Value, DataExchColumnDef, DataExchFieldMapping.Multiplier);
+                ValueAsString := FormatToText(ValueAsDestType, DataExchDef, DataExchColumnDef);
+
+                if TransformationRule.Get(DataExchFieldMapping."Transformation Rule") then
+                    ValueAsString := CopyStr(TransformationRule.TransformText(ValueAsString), 1, 250);
+
+                if DataExchColumnDef."Text Padding Required" and (DataExchColumnDef."Pad Character" <> '') and (not DataExchColumnDef."Blank Zero") then
+                    ValueAsString :=
+                        StringConversionManagement.GetPaddedString(
+                            ValueAsString,
+                            DataExchColumnDef.Length,
+                            DataExchColumnDef."Pad Character",
+                            DataExchColumnDef.Justification);
+            end;
+
+            OnProcessColumnMappingOnBeforeCheckLength(ValueAsString, DataExchFieldMapping, DataExchColumnDef);
+            CheckLength(ValueAsString, RecRef.Field(DataExchFieldMapping."Field ID"), DataExchDef, DataExchColumnDef);
+
+            TempDataExchField.Get(DataExch."Entry No.", LineNo, DataExchFieldMapping."Column No.");
+            TempDataExchField.SetValueWithoutModifying(ValueAsString);
+            TempDataExchField.Modify();
+        until DataExchFieldMapping.Next() = 0;
+    end;
+
+    local procedure PrepopulateColumns(DataExchDef: Record "Data Exch. Def"; DataExchLineDefCode: Code[20]; DataExchEntryNo: Integer; DataExchLineNo: Integer; var TempDataExchField: Record "Data Exch. Field" temporary)
+    var
+        DataExchLineDef: Record "Data Exch. Line Def";
+        DataExchColumnDef: Record "Data Exch. Column Def";
+        ColumnIndex: Integer;
+    begin
+        if DataExchDef."File Type" in
+           [DataExchDef."File Type"::"Fixed Text",
+            DataExchDef."File Type"::Xml,
+            DataExchDef."File Type"::Json]
+        then begin
+            DataExchColumnDef.SetRange("Data Exch. Def Code", DataExchDef.Code);
+            DataExchColumnDef.SetRange("Data Exch. Line Def Code", DataExchLineDefCode);
+            if not DataExchColumnDef.FindSet() then
+                Error(DataExchLineDefNotFoundErr, DataExchDef.Name, DataExchLineDefCode);
+            repeat
+                TempDataExchField.InsertRec(
+                  DataExchEntryNo, DataExchLineNo, DataExchColumnDef."Column No.",
+                  PadStr(DataExchColumnDef.Constant, DataExchColumnDef.Length), DataExchLineDefCode)
+            until DataExchColumnDef.Next() = 0;
+        end else begin
+            if not DataExchLineDef.Get(DataExchDef.Code, DataExchLineDefCode) then
+                Error(DataExchLineDefNotFoundErr, DataExchDef.Name, DataExchLineDefCode);
+            for ColumnIndex := 1 to DataExchLineDef."Column Count" do
+                if DataExchColumnDef.Get(DataExchDef.Code, DataExchLineDef.Code, ColumnIndex) then
+                    TempDataExchField.InsertRec(
+                      DataExchEntryNo, DataExchLineNo, ColumnIndex, DataExchColumnDef.Constant, DataExchLineDefCode)
+                else
+                    TempDataExchField.InsertRec(DataExchEntryNo, DataExchLineNo, ColumnIndex, '', DataExchLineDefCode);
         end;
     end;
 
@@ -362,6 +472,10 @@ codeunit 1210 "Payment Export Mgt"
         exit(Format(DataExchDef.Type));
     end;
 
+    /// <summary>
+    /// Exports payment data to a file using the specified data exchange entry.
+    /// </summary>
+    /// <param name="EntryNo">Data exchange entry number containing the payment data to export</param>
     [Scope('OnPrem')]
     procedure ExportToFile(EntryNo: Integer)
     var
@@ -382,6 +496,11 @@ codeunit 1210 "Payment Export Mgt"
         DataExch.Delete();
     end;
 
+    /// <summary>
+    /// Enables export to server temporary file mode instead of client download.
+    /// </summary>
+    /// <param name="NewMode">True to enable server temp file mode, false for client download</param>
+    /// <param name="NewExtension">File extension for the server temp file</param>
     procedure EnableExportToServerTempFile(NewMode: Boolean; NewExtension: Text[3])
     begin
         SilentServerMode := NewMode;
@@ -404,6 +523,10 @@ codeunit 1210 "Payment Export Mgt"
         ExportFile.Close();
     end;
 
+    /// <summary>
+    /// Returns the temporary file name created on the server during export operations.
+    /// </summary>
+    /// <returns>Full path and filename of the server temporary file</returns>
     procedure GetServerTempFileName(): Text[1024]
     begin
         exit(ServerFileName);

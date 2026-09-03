@@ -5,11 +5,12 @@
 namespace Microsoft.Finance.VAT.Calculation;
 
 using Microsoft.Finance.GeneralLedger.Ledger;
+using Microsoft.Finance.GeneralLedger.Posting;
 using Microsoft.Finance.GeneralLedger.Setup;
 using Microsoft.Finance.VAT.Ledger;
 using Microsoft.Finance.VAT.Reporting;
-using Microsoft.Purchases.History;
 using Microsoft.Finance.VAT.Setup;
+using Microsoft.Purchases.History;
 using Microsoft.Sales.FinanceCharge;
 using Microsoft.Sales.History;
 using Microsoft.Sales.Reminder;
@@ -18,6 +19,14 @@ using System.Security.User;
 using System.Telemetry;
 using System.Utilities;
 
+/// <summary>
+/// Manages VAT reporting date functionality including validation, modification controls, and linked entry updates.
+/// Provides comprehensive VAT date handling for compliance with VAT reporting requirements and period controls.
+/// </summary>
+/// <remarks>
+/// Key functionality: VAT date validation, linked entry updates, VAT period control integration.
+/// Extensibility: Multiple integration events for custom VAT date processing and validation logic.
+/// </remarks>
 codeunit 799 "VAT Reporting Date Mgt"
 {
     SingleInstance = true;
@@ -50,7 +59,14 @@ codeunit 799 "VAT Reporting Date Mgt"
         VATDateNotAllowedErr: Label 'The VAT Date is not within the range of allowed VAT dates.';
         VATDateInPeriodNotAllowedErr: Label 'The specified VAT Date is in a %1 VAT Return Period which was not allowed', Comment = '%1 - VAT Return Period status';
         VATDateFromPeriodNotAllowedErr: Label 'The VAT Date is in a %1 VAT Return Period and was not allowed to change', Comment = '%1 - VAT Return Period status';
+        ConfirmedVATReturnPeriodDates: List of [Date];
+        RejectedVATReturnPeriodDates: List of [Date];
 
+    /// <summary>
+    /// Updates linked entries when VAT entry VAT reporting date is modified.
+    /// Synchronizes VAT date changes across related general ledger and document entries.
+    /// </summary>
+    /// <param name="VATEntry">VAT entry with updated VAT reporting date</param>
     procedure UpdateLinkedEntries(VATEntry: Record "VAT Entry")
     var
         IsHandled: Boolean;
@@ -68,6 +84,10 @@ codeunit 799 "VAT Reporting Date Mgt"
         OnAfterUpdateLinkedEntries(VATEntry);
     end;
 
+    /// <summary>
+    /// Determines whether VAT reporting dates can be modified based on system configuration and permissions.
+    /// </summary>
+    /// <returns>True if VAT dates are modifiable, false otherwise</returns>
     procedure IsVATDateModifiable() IsModifiable: Boolean
     var
         IsHandled: Boolean;
@@ -80,18 +100,30 @@ codeunit 799 "VAT Reporting Date Mgt"
             IsModifiable := GLSetup."VAT Reporting Date Usage" = GLSetup."VAT Reporting Date Usage"::Enabled;
     end;
 
+    /// <summary>
+    /// Checks whether VAT reporting date usage is configured to use posting date as default.
+    /// </summary>
+    /// <returns>True if VAT date usage is set to posting date, false otherwise</returns>
     procedure IsVATDateUsageSetToPostingDate() IsPostingDate: Boolean
     begin
         if GLSetup.Get() then
             IsPostingDate := GLSetup."VAT Reporting Date" = GLSetup."VAT Reporting Date"::"Posting Date";
     end;
 
+    /// <summary>
+    /// Checks whether VAT reporting date usage is configured to use document date as default.
+    /// </summary>
+    /// <returns>True if VAT date usage is set to document date, false otherwise</returns>
     procedure IsVATDateUsageSetToDocumentDate() IsDocumentDate: Boolean
     begin
         if GLSetup.Get() then
             IsDocumentDate := GLSetup."VAT Reporting Date" = GLSetup."VAT Reporting Date"::"Document Date";
     end;
 
+    /// <summary>
+    /// Determines whether VAT reporting date functionality is enabled in the system.
+    /// </summary>
+    /// <returns>True if VAT date feature is enabled, false otherwise</returns>
     procedure IsVATDateEnabled() IsEnabled: Boolean
     var
         IsHandled: Boolean;
@@ -110,6 +142,13 @@ codeunit 799 "VAT Reporting Date Mgt"
         exit(IsValidDate(Variant, VATDateFieldNo, false));
     end;
 
+    /// <summary>
+    /// Validates VAT reporting date against configured VAT periods and date restrictions.
+    /// </summary>
+    /// <param name="Variant">Record variant containing the VAT date to validate</param>
+    /// <param name="VATDateFieldNo">Field number of the VAT date field in the record</param>
+    /// <param name="ThrowError">Whether to throw error on validation failure or collect in error messages</param>
+    /// <returns>True if validation errors found, false if date is valid</returns>
     procedure IsValidDate(Variant: Variant; VATDateFieldNo: Integer; ThrowError: Boolean) HasErrors: Boolean
     var
         TempErrorMessage: Record "Error Message" temporary;
@@ -142,16 +181,31 @@ codeunit 799 "VAT Reporting Date Mgt"
         exit(not HasErrors);
     end;
 
+    /// <summary>
+    /// Validates VAT reporting date in the specified VAT entry against period restrictions.
+    /// </summary>
+    /// <param name="VATEntry">VAT entry containing the VAT reporting date to validate</param>
+    /// <returns>True if VAT date is valid, false otherwise</returns>
     procedure IsValidVATDate(VATEntry: Record "VAT Entry"): Boolean
     begin
         exit(IsValidDate(VATEntry, VATEntry.FieldNo("VAT Reporting Date")));
     end;
 
+    /// <summary>
+    /// Validates specified VAT date against configured VAT period restrictions and date ranges.
+    /// </summary>
+    /// <param name="VATDate">VAT date to validate</param>
+    /// <returns>True if VAT date is valid, false otherwise</returns>
     procedure IsValidDate(VATDate: Date): Boolean
     begin
         exit(IsValidDate(VATDate, 0));
     end;
 
+    /// <summary>
+    /// Validates and enforces VAT date restrictions, throwing errors for invalid dates.
+    /// </summary>
+    /// <param name="VATDate">VAT date to check for compliance</param>
+    /// <param name="ContextFieldNo">Field number for error context tracking</param>
     procedure CheckDateAllowed(VATDate: Date; ContextFieldNo: Integer)
     begin
         CheckDateAllowed(VATDate, ContextFieldNo, false, true);
@@ -202,7 +256,7 @@ codeunit 799 "VAT Reporting Date Mgt"
                         end;
                         VATReturnPeriod.CalcFields("VAT Return Status");
                         if VATReturnPeriod."VAT Return Status" in [VATReturnPeriod."VAT Return Status"::Released, VATReturnPeriod."VAT Return Status"::Submitted] then
-                            if not ConfirmManagement.GetResponseOrDefault(StrSubstNo(VATReturnWarning, Format(VATReturnPeriod."VAT Return Status")), true) then
+                            if not GetVATReturnPeriodWarningResponse(VATDate, StrSubstNo(VATReturnWarning, Format(VATReturnPeriod."VAT Return Status"))) then
                                 ErrorMessageManagement.LogContextFieldError(ContextFieldNo, StrSubstNo(VATPeriodErr, VATReturnPeriod."VAT Return Status"), VATReturnPeriod, VATReturnPeriod.FieldNo(VATReturnPeriod."VAT Return Status"), ForwardLinkMgt.GetHelpCodeForAllowedVATDate());
                     end;
                 GLSetup."Control VAT Period"::"Block posting within closed period":
@@ -210,9 +264,45 @@ codeunit 799 "VAT Reporting Date Mgt"
                         ErrorMessageManagement.LogContextFieldError(ContextFieldNo, ClosedError, VATReturnPeriod, VATReturnPeriod.FieldNo(VATReturnPeriod.Status), ForwardLinkMgt.GetHelpCodeForAllowedVATDate());
                 GLSetup."Control VAT Period"::"Warn when posting in closed period":
                     if VATReturnPeriod.Status = VATReturnPeriod.Status::Closed then
-                        if not ConfirmManagement.GetResponseOrDefault(StrSubstNo(VATReturnWarning, Format(VATReturnPeriod.Status::Closed)), true) then
+                        if not GetVATReturnPeriodWarningResponse(VATDate, StrSubstNo(VATReturnWarning, Format(VATReturnPeriod.Status::Closed))) then
                             ErrorMessageManagement.LogContextFieldError(ContextFieldNo, StrSubstNo(VATPeriodErr, VATReturnPeriod.Status), VATReturnPeriod, VATReturnPeriod.FieldNo(VATReturnPeriod.Status), ForwardLinkMgt.GetHelpCodeForAllowedVATDate());
             end;
+    end;
+
+    local procedure GetVATReturnPeriodWarningResponse(VATDate: Date; WarningMsg: Text): Boolean
+    begin
+        if ConfirmedVATReturnPeriodDates.Contains(VATDate) then
+            exit(true);
+        if RejectedVATReturnPeriodDates.Contains(VATDate) then
+            exit(false);
+
+        if ConfirmManagement.GetResponseOrDefault(WarningMsg, true) then begin
+            ConfirmedVATReturnPeriodDates.Add(VATDate);
+            exit(true);
+        end;
+
+        RejectedVATReturnPeriodDates.Add(VATDate);
+        exit(false);
+    end;
+
+    procedure ResetVATReturnPeriodWarning()
+    begin
+        Clear(ConfirmedVATReturnPeriodDates);
+        Clear(RejectedVATReturnPeriodDates);
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", OnBeforeCode, '', false, false)]
+    local procedure ResetVATReturnPeriodWarningOnBeforeGenJnlPostLineCode(var GLEntryNo: Integer)
+    begin
+        if GLEntryNo = 0 then
+            ResetVATReturnPeriodWarning();
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", OnAfterFinishPosting, '', false, false)]
+    local procedure ResetVATReturnPeriodWarningOnAfterFinishPosting(var IsTransactionConsistent: Boolean)
+    begin
+        if IsTransactionConsistent then
+            ResetVATReturnPeriodWarning();
     end;
 
     local procedure UpdateGLEntries(VATEntry: Record "VAT Entry")
@@ -384,31 +474,66 @@ codeunit 799 "VAT Reporting Date Mgt"
         Rec.Modify();
     end;
 
+    /// <summary>
+    /// Integration event raised before determining if VAT reporting dates are modifiable.
+    /// Enables custom logic to control VAT date modification permissions.
+    /// </summary>
+    /// <param name="IsModifiable">Set to true to allow VAT date modification</param>
+    /// <param name="IsHandled">Set to true to skip standard modification check</param>
     [IntegrationEvent(false, false)]
     local procedure OnBeforeIsVATDateModifiable(var IsModifiable: Boolean; var IsHandled: Boolean);
     begin
     end;
 
+    /// <summary>
+    /// Integration event raised before determining if VAT reporting date feature is enabled.
+    /// Enables custom logic to control VAT date feature availability.
+    /// </summary>
+    /// <param name="IsEnabled">Set to true to enable VAT date feature</param>
+    /// <param name="IsHandled">Set to true to skip standard enablement check</param>
     [IntegrationEvent(false, false)]
     local procedure OnBeforeIsVATDateEnabledForUse(var IsEnabled: Boolean; var IsHandled: Boolean);
     begin
     end;
 
+    /// <summary>
+    /// Integration event raised before updating linked entries for VAT date changes.
+    /// Enables custom processing or replacement of standard linked entry updates.
+    /// </summary>
+    /// <param name="VATEntry">VAT entry with updated VAT reporting date</param>
+    /// <param name="IsHandled">Set to true to skip standard linked entry updates</param>
     [IntegrationEvent(false, false)]
     local procedure OnBeforeUpdateLinkedEntries(VATEntry: Record "VAT Entry"; var IsHandled: Boolean);
     begin
     end;
 
+    /// <summary>
+    /// Integration event raised after updating linked entries for VAT date changes.
+    /// Enables custom post-processing after standard linked entry updates are completed.
+    /// </summary>
+    /// <param name="VATEntry">VAT entry with updated VAT reporting date</param>
     [IntegrationEvent(false, false)]
     local procedure OnAfterUpdateLinkedEntries(VATEntry: Record "VAT Entry");
     begin
     end;
 
+    /// <summary>
+    /// Integration event raised after updating sales invoice header during linked entry processing.
+    /// Enables custom actions after VAT date updates in posted sales invoices.
+    /// </summary>
+    /// <param name="VATEntry">VAT entry triggering the document update</param>
+    /// <param name="Updated">Indicates whether the sales invoice was successfully updated</param>
     [IntegrationEvent(false, false)]
     local procedure OnUpdatePostedDocumentsOnAfterUpdateSalesInvoice(VATEntry: Record "VAT Entry"; var Updated: Boolean)
     begin
     end;
 
+    /// <summary>
+    /// Integration event raised after updating sales credit memo header during linked entry processing.
+    /// Enables custom actions after VAT date updates in posted sales credit memos.
+    /// </summary>
+    /// <param name="VATEntry">VAT entry triggering the document update</param>
+    /// <param name="Updated">Indicates whether the sales credit memo was successfully updated</param>
     [IntegrationEvent(false, false)]
     local procedure OnUpdatePostedDocumentsOnAfterUpdateSalesCreditMemo(VATEntry: Record "VAT Entry"; var Updated: Boolean)
     begin

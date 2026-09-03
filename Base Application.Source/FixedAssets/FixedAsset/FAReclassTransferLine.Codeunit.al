@@ -63,9 +63,11 @@ codeunit 5642 "FA Reclass. Transfer Line"
     procedure FAReclassLine(var FAReclassJnlLine: Record "FA Reclass. Journal Line"; var Done: Boolean)
     var
         IsHandled: Boolean;
+        SkipTestFieldInactive: Boolean;
     begin
         IsHandled := false;
-        OnBeforeFAReclassLine(FAReclassJnlLine, Done, IsHandled);
+        SkipTestFieldInactive := false;
+        OnBeforeFAReclassLine(FAReclassJnlLine, Done, IsHandled, SkipTestFieldInactive);
         if IsHandled then
             exit;
 
@@ -77,8 +79,11 @@ codeunit 5642 "FA Reclass. Transfer Line"
         FADeprBook2.Get(FAReclassJnlLine."New FA No.", FAReclassJnlLine."Depreciation Book Code");
         OldFA.TestField(Blocked, false);
         NewFA.TestField(Blocked, false);
-        OldFA.TestField(Inactive, false);
-        NewFA.TestField(Inactive, false);
+
+        if not SkipTestFieldInactive then begin
+            OldFA.TestField(Inactive, false);
+            NewFA.TestField(Inactive, false);
+        end;
 
         if OldFA."Budgeted Asset" and not NewFA."Budgeted Asset" then
             FAReclassJnlLine.FieldError(
@@ -276,6 +281,9 @@ codeunit 5642 "FA Reclass. Transfer Line"
 
         FAJnlLine."Posting No. Series" := FAJnlSetup.GetFANoSeries(FAJnlLine);
         FAJnlLine.Validate("Depreciation Book Code", FAReclassJnlLine."Depreciation Book Code");
+        if FAJnlLine."FA Posting Type" = FAJnlLine."FA Posting Type"::Depreciation then
+            EntryAmount := DepreciationCalc.CalcRounding(FAReclassJnlLine."Depreciation Book Code", EntryAmount);
+
         FAJnlLine.Validate(Amount, EntryAmount);
         FAJnlLine.Description := FAReclassJnlLine.Description;
         FAJnlLine."FA Reclassification Entry" := true;
@@ -301,7 +309,10 @@ codeunit 5642 "FA Reclass. Transfer Line"
         GenJnlLine."Line No." := 0;
         FAJnlSetup.SetGenJnlTrailCodes(GenJnlLine);
         GenJnlLine."Account Type" := GenJnlLine."Account Type"::"Fixed Asset";
-        GenJnlLine."FA Posting Type" := Enum::"Gen. Journal Line FA Posting Type".FromInteger(FAPostingType.AsInteger() + 1);
+        if FAPostingType = FAPostingType::"Bonus Depreciation" then
+            GenJnlLine."FA Posting Type" := GenJnlLine."FA Posting Type"::"Bonus Depreciation"
+        else
+            GenJnlLine."FA Posting Type" := Enum::"Gen. Journal Line FA Posting Type".FromInteger(FAPostingType.AsInteger() + 1);
         GenJnlLine.Validate("Account No.", FANo);
         GenJnlLine.Validate("Depreciation Book Code", FAReclassJnlLine."Depreciation Book Code");
         GenJnlLine."FA Posting Date" := FAReclassJnlLine."FA Posting Date";
@@ -458,7 +469,7 @@ codeunit 5642 "FA Reclass. Transfer Line"
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnBeforeFAReclassLine(var FAReclassJnlLine: Record "FA Reclass. Journal Line"; var Done: Boolean; var IsHandled: Boolean)
+    local procedure OnBeforeFAReclassLine(var FAReclassJnlLine: Record "FA Reclass. Journal Line"; var Done: Boolean; var IsHandled: Boolean; var SkipTestFieldInactive: Boolean)
     begin
     end;
 

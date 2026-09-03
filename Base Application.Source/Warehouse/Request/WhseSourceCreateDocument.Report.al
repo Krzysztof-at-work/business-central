@@ -541,9 +541,9 @@ report 7305 "Whse.-Source - Create Document"
 
                     OnPreDataItemJobPlanningLineOnAfterSetFilters("Job Planning Line", JobHeader);
 
+                    // Check for existing WhseWorksheetLines with both old format (Database::Job) and new format (Database::"Job Planning Line")
                     WhseWkshLine.SetCurrentKey("Source Type", "Source Subtype", "Source No.", "Source Line No.", "Source Subline No.");
-                    WhseWkshLine.SetRange("Source Type", Database::Job);
-                    WhseWkshLine.SetRange("Source Subtype", 0);
+                    WhseWkshLine.SetFilter("Source Type", '%1|%2', Database::Job, Database::"Job Planning Line");
                     WhseWkshLine.SetRange("Source No.", JobHeader."No.");
                 end;
             }
@@ -692,6 +692,7 @@ report 7305 "Whse.-Source - Create Document"
             WhseDoc::"Posted Receipt", WhseDoc::"Put-away Worksheet", WhseDoc::"Internal Put-away":
                 WarehouseActivityHeader.SetRange(Type, WarehouseActivityHeader.Type::"Put-away");
         end;
+        OnPostReportOnAfterSetWhseActivHeaderTypeFilter(WarehouseActivityHeader, WhseDoc);
 
         if WarehouseActivityHeader.Find('-') then begin
             IsHandled := false;
@@ -1224,6 +1225,7 @@ report 7305 "Whse.-Source - Create Document"
             Database::"Posted Whse. Receipt Line":
                 ItemTrackingMgt.SplitPostedWhseRcptLine(PostedWhseRcptLine, TempPostedWhseReceiptLine);
         end;
+        OnCreatePutAwayFromDiffSourceOnAfterSplitPerSourceType(PostedWhseRcptLine, TempPostedWhseReceiptLine, SourceType);
         RemQtyToHandleBase := PostedWhseRcptLine."Qty. (Base)";
 
         TempPostedWhseReceiptLine.Reset();
@@ -1269,14 +1271,19 @@ report 7305 "Whse.-Source - Create Document"
     end;
 
     local procedure GetHeaderLocationCode(): Code[10]
+    var
+        LocationCode: Code[10];
     begin
         case WhseDoc of
             WhseDoc::"Put-away Worksheet",
             WhseDoc::"Whse. Mov.-Worksheet":
-                exit(WhseWkshLine."Location Code");
+                LocationCode := WhseWkshLine."Location Code";
             else
-                exit(SourceLocationCode);
+                LocationCode := SourceLocationCode;
         end;
+
+        OnAfterGetHeaderLocationCode(WhseDoc, LocationCode);
+        exit(LocationCode);
     end;
 
     local procedure PrintWarehouseDocument(var WarehouseActivityHeader: Record "Warehouse Activity Header")
@@ -1295,6 +1302,11 @@ report 7305 "Whse.-Source - Create Document"
 
     [IntegrationEvent(false, false)]
     local procedure OnAfterCreatePutAwayDeleteBlankBinContent(var WarehouseActivityHeader: Record "Warehouse Activity Header")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterGetHeaderLocationCode(WhseDoc: Option "Whse. Mov.-Worksheet","Posted Receipt","Internal Pick","Internal Put-away",Production,"Put-away Worksheet",Assembly,"Service Order",Job; var LocationCode: Code[10])
     begin
     end;
 
@@ -1444,6 +1456,11 @@ report 7305 "Whse.-Source - Create Document"
     end;
 
     [IntegrationEvent(false, false)]
+    local procedure OnCreatePutAwayFromDiffSourceOnAfterSplitPerSourceType(var PostedWhseReceiptLine: Record "Posted Whse. Receipt Line"; var TempPostedWhseReceiptLine: Record "Posted Whse. Receipt Line" temporary; SourceType: Integer)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
     local procedure OnCreatePutawayFromProduction(var WhsePutawayWorksheetLine: Record "Whse. Worksheet Line"; SourceType: Integer; var EverythingHandled: Boolean; var QtyHandledBase: Decimal)
     begin
     end;
@@ -1460,6 +1477,11 @@ report 7305 "Whse.-Source - Create Document"
 
     [IntegrationEvent(false, false)]
     local procedure OnAfterCreatePutawayGetWhseActivHeaderNo(var FirstActivityNo: Code[20]; var LastActivityNo: Code[20])
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnPostReportOnAfterSetWhseActivHeaderTypeFilter(var WarehouseActivityHeader: Record "Warehouse Activity Header"; WhseDoc: Option "Whse. Mov.-Worksheet","Posted Receipt","Internal Pick","Internal Put-away",Production,"Put-away Worksheet",Assembly,"Service Order",Job)
     begin
     end;
 }

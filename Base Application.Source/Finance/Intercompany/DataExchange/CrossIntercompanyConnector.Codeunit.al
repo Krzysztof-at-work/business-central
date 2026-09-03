@@ -9,6 +9,10 @@ using Microsoft.Intercompany.Partner;
 using System.Environment;
 using System.Security.Authentication;
 
+/// <summary>
+/// Manages secure API connections and data exchange between intercompany partners across different environments.
+/// Handles authentication, HTTP communication, and data validation for cross-environment intercompany operations.
+/// </summary>
 codeunit 560 "CrossIntercompany Connector"
 {
     trigger OnRun()
@@ -67,16 +71,23 @@ codeunit 560 "CrossIntercompany Connector"
     internal procedure FinishICPartnerSetup(var TempICPartner: Record "IC Partner" temporary): Boolean
     var
         GeneralLedgerSetup: Record "General Ledger Setup";
+        CompanyJsonObject: JsonObject;
         JsonResponse: JsonArray;
+        DisplayNameToken: JsonToken;
+        NameToken: JsonToken;
         DisplayName: Text;
+        CompanyName: Text;
         CurrencyCode: Code[10];
     begin
         StoreTokenInICPartner := false;
         JsonResponse := RequestICPartnerCompanyInformation(TempICPartner);
-
-        DisplayName := FindValueFromJsonAttribute(JsonResponse, 'displayName');
+        CompanyJsonObject := RequestICPartnerCompany(TempICPartner);
+        CompanyJsonObject.Get('displayName', DisplayNameToken);
+        DisplayName := DisplayNameToken.AsValue().AsText();
+        CompanyJsonObject.Get('name', NameToken);
+        CompanyName := NameToken.AsValue().AsText();
         StoreTokenInICPartner := true;
-        if DisplayName = TempICPartner.Name then begin
+        if (DisplayName = TempICPartner.Name) or (CompanyName = TempICPartner.Name) then begin
 #pragma warning disable AA0139
             CurrencyCode := FindValueFromJsonAttribute(JsonResponse, 'currencyCode');
 #pragma warning restore AA0139
@@ -120,6 +131,17 @@ codeunit 560 "CrossIntercompany Connector"
         exit(GetRequest(QueryURL, HttpResponseBodyText, ICPartner));
     end;
 
+    [NonDebuggable]
+    internal procedure RequestICPartnerCompany(ICPartner: Record "IC Partner"): JsonObject
+    var
+        QueryURL: Text;
+        HttpResponseBodyText: Text;
+    begin
+        QueryURL := ICPartner.GetSecret(ICPartner."Connection Url Key").Unwrap() + GeneralAPIsPathTok + '(' + RemoveCurlyBracketsAndUpperCases(ICPartner.GetSecret(ICPartner."Company Id Key").Unwrap()) + ')';
+        Send('GET', QueryURL, '', HttpResponseBodyText, ICPartner);
+        exit(ParseObjectData(HttpResponseBodyText));
+    end;
+
     internal procedure RequestICPartnerBankAccount(ICPartner: Record "IC Partner"): JsonArray
     var
         QueryURL: Text;
@@ -146,6 +168,16 @@ codeunit 560 "CrossIntercompany Connector"
         exit(ParseArrayData(HttpResponseBodyText));
     end;
 
+    /// <summary>
+    /// Submits record data to an intercompany partner via API using entity name routing.
+    /// Validates response against expected JSON field values for operation confirmation.
+    /// </summary>
+    /// <param name="ICPartner">Target partner to receive the record data</param>
+    /// <param name="Content">JSON content containing the records to submit</param>
+    /// <param name="EntityName">API entity name for routing the submission request</param>
+    /// <param name="JsonFieldKey">JSON field key to validate in the response</param>
+    /// <param name="JsonFieldExpectedValue">Expected value for response validation</param>
+    /// <returns>True if submission successful and response contains expected values</returns>
     procedure SubmitRecordsToICPartnerFromEntityName(ICPartner: Record "IC Partner"; Content: Text; EntityName: Text; JsonFieldKey: Text; JsonFieldExpectedValue: Text): Boolean
     var
         ResultResponse: JsonObject;
@@ -158,6 +190,15 @@ codeunit 560 "CrossIntercompany Connector"
         exit(false);
     end;
 
+    /// <summary>
+    /// Submits record data to an intercompany partner via API and returns the full response object.
+    /// Provides complete response data for detailed processing and error handling.
+    /// </summary>
+    /// <param name="ICPartner">Target partner to receive the record data</param>
+    /// <param name="Content">JSON content containing the records to submit</param>
+    /// <param name="EntityName">API entity name for routing the submission request</param>
+    /// <param name="ResultResponse">JSON response object containing API result data</param>
+    /// <returns>True if submission successful, false if operation failed</returns>
     [TryFunction]
     procedure SubmitRecordsToICPartnerFromEntityName(ICPartner: Record "IC Partner"; Content: Text; EntityName: Text; var ResultResponse: JsonObject)
     var
@@ -179,6 +220,15 @@ codeunit 560 "CrossIntercompany Connector"
         PostRequest(QueryURL, '', HttpResponseBodyText, ICPartner);
     end;
 
+    /// <summary>
+    /// Submits job queue entry data to intercompany partner via API and validates response.
+    /// Processes asynchronous operations and verifies completion status from partner system.
+    /// </summary>
+    /// <param name="ICPartner">Target intercompany partner for job submission</param>
+    /// <param name="Content">JSON content payload for the job queue entry</param>
+    /// <param name="JsonFieldKey">Key field name to validate in the response</param>
+    /// <param name="JsonFieldExpectedValue">Expected value for validation field</param>
+    /// <returns>True if job was successfully submitted and validated, false otherwise</returns>
     procedure SubmitJobQueueEntryToICPartner(ICPartner: Record "IC Partner"; Content: Text; JsonFieldKey: Text; JsonFieldExpectedValue: Text): Boolean
     var
         QueryURL: Text;

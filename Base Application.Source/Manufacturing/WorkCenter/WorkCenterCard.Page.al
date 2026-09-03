@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
@@ -27,7 +27,6 @@ page 99000754 "Work Center Card"
                 {
                     ApplicationArea = Manufacturing;
                     Importance = Promoted;
-                    ToolTip = 'Specifies the number of the involved entry or record, according to the specified number series.';
 
                     trigger OnAssistEdit()
                     begin
@@ -39,23 +38,25 @@ page 99000754 "Work Center Card"
                 {
                     ApplicationArea = Manufacturing;
                     Importance = Promoted;
-                    ToolTip = 'Specifies the name of the work center.';
+                }
+                field("Name 2"; Rec."Name 2")
+                {
+                    ApplicationArea = Manufacturing;
+                    Importance = Additional;
+                    Visible = false;
                 }
                 field("Work Center Group Code"; Rec."Work Center Group Code")
                 {
                     ApplicationArea = Manufacturing;
                     Importance = Promoted;
-                    ToolTip = 'Specifies the work center group, if the work center or underlying machine center is assigned to a work center group.';
                 }
                 field("Alternate Work Center"; Rec."Alternate Work Center")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies an alternate work center.';
                 }
                 field("Search Name"; Rec."Search Name")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies an alternate name that you can use to search for the record in question when you cannot remember the value in the Name field.';
                 }
                 field(Blocked; Rec.Blocked)
                 {
@@ -64,7 +65,6 @@ page 99000754 "Work Center Card"
                 field("Last Date Modified"; Rec."Last Date Modified")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies when the work center card was last modified.';
                 }
             }
             group(Posting)
@@ -74,48 +74,39 @@ page 99000754 "Work Center Card"
                 {
                     ApplicationArea = Manufacturing;
                     Importance = Promoted;
-                    ToolTip = 'Specifies the cost of one unit of the selected item or resource.';
                 }
                 field("Indirect Cost %"; Rec."Indirect Cost %")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the percentage of the center''s cost that includes indirect costs, such as machine maintenance.';
                 }
                 field("Overhead Rate"; Rec."Overhead Rate")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the overhead rate of this work center.';
                 }
                 field("Unit Cost"; Rec."Unit Cost")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the cost of one unit of the item or resource on the line.';
                 }
                 field("Unit Cost Calculation"; Rec."Unit Cost Calculation")
                 {
                     ApplicationArea = Manufacturing;
                     Importance = Promoted;
-                    ToolTip = 'Specifies the unit cost calculation that is to be made.';
                 }
                 field("Specific Unit Cost"; Rec."Specific Unit Cost")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies where to define the unit costs. If you place a check mark in this field, you can define the unit costs on the routing line. This allows you to have individual costs on every routing line. This is useful for subcontracting operations with varying rates.';
                 }
                 field("Global Dimension 1 Code"; Rec."Global Dimension 1 Code")
                 {
                     ApplicationArea = Dimensions;
-                    ToolTip = 'Specifies the code for the global dimension that is linked to the record or entry for analysis purposes. Two global dimensions, typically for the company''s most important activities, are available on all cards, documents, reports, and lists.';
                 }
                 field("Global Dimension 2 Code"; Rec."Global Dimension 2 Code")
                 {
                     ApplicationArea = Dimensions;
-                    ToolTip = 'Specifies the code for the global dimension that is linked to the record or entry for analysis purposes. Two global dimensions, typically for the company''s most important activities, are available on all cards, documents, reports, and lists.';
                 }
                 field("Subcontractor No."; Rec."Subcontractor No.")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the number of a subcontractor who supplies this work center.';
                 }
                 field("Flushing Method"; Rec."Flushing Method")
                 {
@@ -126,7 +117,6 @@ page 99000754 "Work Center Card"
                 {
                     ApplicationArea = Manufacturing;
                     Importance = Promoted;
-                    ToolTip = 'Specifies the item''s product type to link transactions made for this item with the appropriate general ledger account according to the general posting setup.';
                 }
             }
             group(Scheduling)
@@ -136,7 +126,6 @@ page 99000754 "Work Center Card"
                 {
                     ApplicationArea = Manufacturing;
                     Importance = Promoted;
-                    ToolTip = 'Specifies how each unit of the item or resource is measured, such as in pieces or hours. By default, the value in the Base Unit of Measure field on the item or resource card is inserted.';
                 }
                 field(Capacity; Rec.Capacity)
                 {
@@ -147,34 +136,28 @@ page 99000754 "Work Center Card"
                 field(Efficiency; Rec.Efficiency)
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the efficiency factor as a percentage of the work center.';
                 }
                 field("Consolidated Calendar"; Rec."Consolidated Calendar")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies whether the consolidated calendar is used.';
                 }
                 field("Shop Calendar Code"; Rec."Shop Calendar Code")
                 {
                     ApplicationArea = Planning;
                     Importance = Promoted;
-                    ToolTip = 'Specifies the shop calendar code that the planning of this work center refers to.';
                 }
                 field("Calendar Rounding Precision"; Rec."Calendar Rounding Precision")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies how calendar entries are rounded, such as whether minutes are rounded to hours.';
                     Visible = false;
                 }
                 field("Queue Time"; Rec."Queue Time")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the queue time of the work center.';
                 }
                 field("Queue Time Unit of Meas. Code"; Rec."Queue Time Unit of Meas. Code")
                 {
                     ApplicationArea = Manufacturing;
-                    ToolTip = 'Specifies the queue time unit of measure code.';
                 }
             }
             group(Warehouse)
@@ -183,7 +166,6 @@ page 99000754 "Work Center Card"
                 field("Location Code"; Rec."Location Code")
                 {
                     ApplicationArea = Location;
-                    ToolTip = 'Specifies the location where the work center operates by default.';
 
                     trigger OnValidate()
                     begin
@@ -194,19 +176,16 @@ page 99000754 "Work Center Card"
                 {
                     ApplicationArea = Warehouse;
                     Enabled = OpenShopFloorBinCodeEnable;
-                    ToolTip = 'Specifies the bin that functions as the default open shop floor bin at the work center.';
                 }
                 field("To-Production Bin Code"; Rec."To-Production Bin Code")
                 {
                     ApplicationArea = Warehouse;
                     Enabled = ToProductionBinCodeEnable;
-                    ToolTip = 'Specifies the bin in the production area where components that are picked for production are placed by default before they can be consumed.';
                 }
                 field("From-Production Bin Code"; Rec."From-Production Bin Code")
                 {
                     ApplicationArea = Warehouse;
                     Enabled = FromProductionBinCodeEnable;
-                    ToolTip = 'Specifies the bin in the production area where finished end items are taken by default when the process involves warehouse activity.';
                 }
             }
         }
@@ -328,6 +307,26 @@ page 99000754 "Work Center Card"
                 }
             }
         }
+        area(processing)
+        {
+            action("Calculate Work Center Calendar")
+            {
+                ApplicationArea = Manufacturing;
+                Caption = 'Calculate Work Center Calendar';
+                Image = CalcWorkCenterCalendar;
+                ToolTip = 'Create new calendar entries for the work center to define the available daily capacity.';
+
+                trigger OnAction()
+                var
+                    WorkCenter: Record "Work Center";
+                    CalculateWorkCenterCalendar: Report "Calculate Work Center Calendar";
+                begin
+                    WorkCenter.SetRange("No.", Rec."No.");
+                    CalculateWorkCenterCalendar.SetTableView(WorkCenter);
+                    CalculateWorkCenterCalendar.RunModal();
+                end;
+            }
+        }
         area(reporting)
         {
             action("Subcontractor - Dispatch List")
@@ -347,6 +346,9 @@ page 99000754 "Work Center Card"
             {
                 Caption = 'Process', Comment = 'Generated from the PromotedActionCategories property index 1.';
 
+                actionref("Calculate Work Center Calendar_Promoted"; "Calculate Work Center Calendar")
+                {
+                }
                 actionref("Lo&ad_Promoted"; "Lo&ad")
                 {
                 }

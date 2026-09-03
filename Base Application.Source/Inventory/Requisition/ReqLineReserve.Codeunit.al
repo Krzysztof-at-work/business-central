@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
@@ -397,6 +397,7 @@ codeunit 99000833 "Req. Line-Reserve"
 
                 for ReservStatus := ReservStatus::Reservation to ReservStatus::Prospect do begin
                     OldReservationEntry.SetRange("Reservation Status", ReservStatus);
+                    OldReservationEntry.SetRange("Item No.", RequisitionLine."No.");
 
                     if OldReservationEntry.FindSet() then
                         repeat
@@ -870,9 +871,6 @@ codeunit 99000833 "Req. Line-Reserve"
           ReqLine."Quantity (Base)", ReqLine.Quantity, ReqLine."Quantity (Base)", ReqLine.Quantity, ReqLine."Quantity (Base)", 0, 0);
 
         OnAfterInitFromReqLine(TrackingSpecification, ReqLine);
-#if not CLEAN25
-        TrackingSpecification.RunOnAfterInitFromReqLine(TrackingSpecification, ReqLine);
-#endif
     end;
 
     [IntegrationEvent(false, false)]
@@ -940,9 +938,6 @@ codeunit 99000833 "Req. Line-Reserve"
         InventoryProfile."Planning Flexibility" := RequisitionLine."Planning Flexibility";
 
         OnAfterTransferInventoryProfileFromRequisitionLine(InventoryProfile, RequisitionLine);
-#if not CLEAN25
-        InventoryProfile.RunOnAfterTransferFromRequisitionLine(InventoryProfile, RequisitionLine);
-#endif
     end;
 
     [IntegrationEvent(false, false)]

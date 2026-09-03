@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
@@ -29,20 +29,17 @@ page 1351 "Posted Purch. Invoice - Update"
                 {
                     ApplicationArea = Basic, Suite;
                     Editable = false;
-                    ToolTip = 'Specifies the posted invoice number.';
                 }
                 field("Buy-from Vendor Name"; Rec."Buy-from Vendor Name")
                 {
                     ApplicationArea = Basic, Suite;
                     Caption = 'Vendor';
                     Editable = false;
-                    ToolTip = 'Specifies the name of the vendor who shipped the items.';
                 }
                 field("Posting Date"; Rec."Posting Date")
                 {
                     ApplicationArea = Basic, Suite;
                     Editable = false;
-                    ToolTip = 'Specifies the date the purchase header was posted.';
                 }
             }
             group("Invoice Details")
@@ -52,25 +49,26 @@ page 1351 "Posted Purch. Invoice - Update"
                 {
                     ApplicationArea = Basic, Suite;
                     Editable = true;
-                    ToolTip = 'Specifies the payment of the purchase invoice.';
                 }
                 field("Payment Method Code"; Rec."Payment Method Code")
                 {
                     ApplicationArea = Basic, Suite;
-                    ToolTip = 'Specifies how to make payment, such as with bank transfer, cash, or check.';
                     Visible = IsPaymentMethodCodeVisible;
                 }
                 field("Creditor No."; Rec."Creditor No.")
                 {
                     ApplicationArea = Basic, Suite;
                     Editable = true;
-                    ToolTip = 'Specifies the number of the vendor.';
                 }
                 field("Posting Description"; Rec."Posting Description")
                 {
                     ApplicationArea = Basic, Suite;
                     Editable = true;
-                    ToolTip = 'Specifies any text that is entered to accompany the posting, for example for information to auditors.';
+                }
+                field("Dispute Status"; Rec."Dispute Status")
+                {
+                    ApplicationArea = Basic, Suite;
+                    ToolTip = 'Specifies if there is an ongoing dispute for this document.';
                 }
             }
             group(Shipping)
@@ -81,7 +79,6 @@ page 1351 "Posted Purch. Invoice - Update"
                     ApplicationArea = Basic, Suite;
                     Caption = 'Ship-to Address Code';
                     Editable = true;
-                    ToolTip = 'Specifies the address on purchase orders shipped with a drop shipment directly from the vendor to a customer.';
                 }
             }
         }
@@ -117,7 +114,8 @@ page 1351 "Posted Purch. Invoice - Update"
             (Rec."Payment Method Code" <> xPurchInvHeader."Payment Method Code") or
             (Rec."Creditor No." <> xPurchInvHeader."Creditor No.") or
             (Rec."Ship-to Code" <> xPurchInvHeader."Ship-to Code") or
-            (Rec."Posting Description" <> xPurchInvHeader."Posting Description");
+            (Rec."Posting Description" <> xPurchInvHeader."Posting Description") or
+            (Rec."Dispute Status" <> xPurchInvHeader."Dispute Status");
 
         OnAfterRecordChanged(Rec, xRec, IsChanged, xPurchInvHeader);
     end;

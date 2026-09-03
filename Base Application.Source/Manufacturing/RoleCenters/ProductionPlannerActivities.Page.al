@@ -8,7 +8,6 @@ using Microsoft.Foundation.Navigate;
 using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Requisition;
 using Microsoft.Manufacturing.Document;
-using Microsoft.Manufacturing.Journal;
 using Microsoft.Manufacturing.ProductionBOM;
 using Microsoft.Manufacturing.Routing;
 using Microsoft.Purchases.Document;
@@ -33,25 +32,21 @@ page 9038 "Production Planner Activities"
                 {
                     ApplicationArea = Manufacturing;
                     DrillDownPageID = "Simulated Production Orders";
-                    ToolTip = 'Specifies the number of simulated production orders that are displayed in the Manufacturing Cue on the Role Center. The documents are filtered by today''s date.';
                 }
                 field("Planned Prod. Orders - All"; Rec."Planned Prod. Orders - All")
                 {
                     ApplicationArea = Manufacturing;
                     DrillDownPageID = "Planned Production Orders";
-                    ToolTip = 'Specifies the number of planned production orders that are displayed in the Manufacturing Cue on the Role Center. The documents are filtered by today''s date.';
                 }
                 field("Firm Plan. Prod. Orders - All"; Rec."Firm Plan. Prod. Orders - All")
                 {
                     ApplicationArea = Manufacturing;
                     DrillDownPageID = "Firm Planned Prod. Orders";
-                    ToolTip = 'Specifies the number of firm planned production orders that are displayed in the Manufacturing Cue on the Role Center. The documents are filtered by today''s date.';
                 }
                 field("Released Prod. Orders - All"; Rec."Released Prod. Orders - All")
                 {
                     ApplicationArea = Manufacturing;
                     DrillDownPageID = "Released Production Orders";
-                    ToolTip = 'Specifies the number of released production orders that are displayed in the Manufacturing Cue on the Role Center. The documents are filtered by today''s date.';
                 }
 
                 actions
@@ -90,7 +85,6 @@ page 9038 "Production Planner Activities"
                     Caption = 'My Purchase Orders';
                     DrillDown = true;
                     DrillDownPageID = "Purchase Order List";
-                    ToolTip = 'Specifies the number of purchase orders that are displayed in the Manufacturing Cue on the Role Center. The documents are filtered by today''s date.';
                 }
 
                 actions
@@ -110,13 +104,20 @@ page 9038 "Production Planner Activities"
                         RunObject = Page "Planning Worksheet";
                         ToolTip = 'Plan supply orders automatically to fulfill new demand.';
                     }
+#if not CLEAN28
                     action("Edit Subcontracting Worksheet")
                     {
                         ApplicationArea = Manufacturing;
-                        Caption = 'Edit Subcontracting Worksheet';
-                        RunObject = Page "Subcontracting Worksheet";
+                        Caption = 'Edit Subcontracting Worksheet (Obsolete)';
+#pragma warning disable AL0432
+                        RunObject = Page Microsoft.Manufacturing.Journal."Subcontracting Worksheet";
+#pragma warning restore AL0432
+                        ObsoleteReason = 'Will be replaced by the Subcontracting App.';
+                        ObsoleteState = Pending;
+                        ObsoleteTag = '28.0';
                         ToolTip = 'Plan outsourcing of operation on released production orders.';
                     }
+#endif
                 }
             }
             cuegroup(Design)
@@ -126,13 +127,11 @@ page 9038 "Production Planner Activities"
                 {
                     ApplicationArea = Manufacturing;
                     DrillDownPageID = "Production BOM List";
-                    ToolTip = 'Specifies the number of production BOMs that are under development that are displayed in the Manufacturing Cue on the Role Center. The documents are filtered by today''s date.';
                 }
                 field("Routings under Development"; Rec."Routings under Development")
                 {
                     ApplicationArea = Manufacturing;
                     DrillDownPageID = "Routing List";
-                    ToolTip = 'Specifies the routings under development that are displayed in the Manufacturing Cue on the Role Center. The documents are filtered by today''s date.';
                 }
 
                 actions
@@ -206,4 +205,3 @@ page 9038 "Production Planner Activities"
         EnvironmentInfo: Codeunit "Environment Information";
         ShowIntelligentCloud: Boolean;
 }
-
