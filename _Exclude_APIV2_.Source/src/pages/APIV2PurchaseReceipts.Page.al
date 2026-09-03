@@ -1,7 +1,7 @@
 namespace Microsoft.API.V2;
 
-using Microsoft.Purchases.History;
 using Microsoft.Integration.Graph;
+using Microsoft.Purchases.History;
 
 page 30064 "APIV2 - Purchase Receipts"
 {
@@ -184,6 +184,28 @@ page 30064 "APIV2 - Purchase Receipts"
                     EntityName = 'dimensionSetLine';
                     EntitySetName = 'dimensionSetLines';
                     SubPageLink = "Parent Id" = field(SystemId), "Parent Type" = const("Purchase Receipt");
+                }
+                part(pdfDocument; "APIV2 - PDF Document")
+                {
+                    Caption = 'PDF Document';
+                    Multiplicity = ZeroOrOne;
+                    EntityName = 'pdfDocument';
+                    EntitySetName = 'pdfDocument';
+                    SubPageLink = "Document Id" = field(SystemId), "Document Type" = const("Purchase Receipt");
+                }
+                part(attachments; "APIV2 - Attachments")
+                {
+                    Caption = 'Attachments';
+                    EntityName = 'attachment';
+                    EntitySetName = 'attachments';
+                    SubPageLink = "Document Id" = field(SystemId), "Document Type" = const("Purchase Receipt");
+                }
+                part(documentAttachments; "APIV2 - Document Attachments")
+                {
+                    Caption = 'Document Attachments';
+                    EntityName = 'documentAttachment';
+                    EntitySetName = 'documentAttachments';
+                    SubPageLink = "Document Id" = field(SystemId), "Document Type" = const("Purchase Receipt");
                 }
             }
         }

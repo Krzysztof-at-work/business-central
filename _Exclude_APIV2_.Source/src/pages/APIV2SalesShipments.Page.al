@@ -1,7 +1,7 @@
 namespace Microsoft.API.V2;
 
-using Microsoft.Sales.History;
 using Microsoft.Integration.Graph;
+using Microsoft.Sales.History;
 
 page 30062 "APIV2 - Sales Shipments"
 {
@@ -215,6 +215,28 @@ page 30062 "APIV2 - Sales Shipments"
                 field(email; Rec."Sell-to E-Mail")
                 {
                     Caption = 'Email';
+                }
+                part(pdfDocument; "APIV2 - PDF Document")
+                {
+                    Caption = 'PDF Document';
+                    Multiplicity = ZeroOrOne;
+                    EntityName = 'pdfDocument';
+                    EntitySetName = 'pdfDocument';
+                    SubPageLink = "Document Id" = field(SystemId), "Document Type" = const("Sales Shipment");
+                }
+                part(attachments; "APIV2 - Attachments")
+                {
+                    Caption = 'Attachments';
+                    EntityName = 'attachment';
+                    EntitySetName = 'attachments';
+                    SubPageLink = "Document Id" = field(SystemId), "Document Type" = const("Sales Shipment");
+                }
+                part(documentAttachments; "APIV2 - Document Attachments")
+                {
+                    Caption = 'Document Attachments';
+                    EntityName = 'documentAttachment';
+                    EntitySetName = 'documentAttachments';
+                    SubPageLink = "Document Id" = field(SystemId), "Document Type" = const("Sales Shipment");
                 }
                 part(dimensionSetLines; "APIV2 - Dimension Set Lines")
                 {

@@ -1,8 +1,8 @@
 namespace Microsoft.API.V2;
 
-using System.Environment;
-using System.Apps;
 using Microsoft.API;
+using System.Apps;
+using System.Environment;
 
 page 30006 "APIV2 - Aut. Extension Upload"
 {
@@ -70,6 +70,7 @@ page 30006 "APIV2 - Aut. Extension Upload"
         FileInStream: InStream;
     begin
         if Rec.Content.HasValue() then begin
+            Rec.CalcFields(Content);
             Rec.Content.CreateInStream(FileInStream);
             ExtensionManagement.UploadExtensionToVersion(FileInStream, GlobalLanguage(), Rec.Schedule, Rec."Schema Sync Mode");
             Rec.Delete();
